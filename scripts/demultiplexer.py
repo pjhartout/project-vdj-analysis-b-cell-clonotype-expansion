@@ -6,7 +6,6 @@
 This script demultiplex the data, i.e. it creates a separate file for each
 cell containing the contigs.
 
-DO NOT RUN MORE THAN ONCE!!!
 From: https://github.com/Teichlab/bracer/issues/21
 
 """

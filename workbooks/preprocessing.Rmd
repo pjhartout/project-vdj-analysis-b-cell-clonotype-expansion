@@ -1,0 +1,13 @@
+# Preprocessing
+
+```{r}
+library(dplyr)
+experiment = readRDS("sce_B.rds", refhook = NULL)
+cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, patient_id, Sample.Type)
+```
+
+Command to run bracer in docker container for one demultiplexed fasta file
+`docker run -it --rm -v $PWD:/scratch -w /scratch teichlab/bracer assemble TCGCGTTAGTACTTGC out --assembled_file TCGCGTTAGTACTTGC.fasta`
+This command can be executed in e.g. `project-vdj-analysis/data/demultiplexed/IJ014B_POOL1-preprocessed`
+
+`docker run -it --rm -v $PWD:/scratch -w /scratch teichlab/bracer summarise out`

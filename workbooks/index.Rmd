@@ -1,0 +1,8 @@
+---
+title: "Autoproliferation analysis B cells"
+author: "Richard Affolter, Martin Emons, Philip Hartout"
+output:
+  bookdown::html_book:
+    toc: yes
+---
+

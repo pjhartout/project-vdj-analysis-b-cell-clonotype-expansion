@@ -27,3 +27,8 @@ Output:
 
 ## Useful links
 [FASTA v FASTQ][https://compgenomr.github.io/book/fasta-and-fastq-formats.html]
+
+
+## Notes
+- Demultiplex all the fasta/fatsq files.
+- sce_B.rds: info about barcodes/sample/etc is in the colData

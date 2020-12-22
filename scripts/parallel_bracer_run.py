@@ -8,10 +8,14 @@ This executes multiple instances of docker in parallel to execute the bracer pip
 
 import subprocess
 import os
+import dotenv
 from joblib import Parallel, delayed
 
+# Load values from .env
+DOTENV_KEY2VAL = dotenv.dotenv_values()
+
 N_JOBS = -1
-HOME_DIR = "/home/pjh/project-vdj-analysis"
+DOTENV_KEY2VAL["HOME_DIR"] = "/home/pjh/project-vdj-analysis"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):
@@ -26,14 +30,14 @@ def execute_docker_bracer(row, list_of_cells, patient):
         None
     """
     cell = list_of_cells[row].split(".")[0:1]
-    os.chdir(f"{HOME_DIR}/data/demultiplexed/{patient}")
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}")
     subprocess.call(
         [
             "docker",
             "run",
             "--rm",
             "-v",
-            f"{HOME_DIR}/data/demultiplexed/{patient}:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
@@ -65,9 +69,13 @@ def main():
     Returns:
         None
     """
-    list_of_patients = os.listdir(HOME_DIR + "/data/demultiplexed")
+    list_of_patients = os.listdir(
+        DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
+    )
     for patient in list_of_patients:
-        list_of_cells = files(HOME_DIR + f"/data/demultiplexed/{patient}")
+        list_of_cells = files(
+            DOTENV_KEY2VAL["HOME_DIR"] + f"/data/demultiplexed/{patient}"
+        )
         Parallel(n_jobs=N_JOBS, verbose=1)(
             delayed(execute_docker_bracer)(row, list_of_cells, patient)
             for row in range(len(list_of_cells))

@@ -11,7 +11,7 @@ import os
 from joblib import Parallel, delayed
 
 N_JOBS = -1
-HOME_DIR = "/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local"
+HOME_DIR = "/home/pjh/Documents/Git/project-vdj-analysis"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):
@@ -39,11 +39,20 @@ def execute_docker_bracer(row, list_of_cells, patient):
             "teichlab/bracer",
             "assemble",
             f"{cell[0]}",
-            f"{HOME_DIR}/data/demultiplexed/{patient}/{patient}-out/{cell[0]}_output",
+            f"{cell[0]}",
             "--assembled_file",
             f"{cell[0]}.fasta",
+            "-r",
         ]
     )
+
+
+def files(path):
+    list_of_files = list()
+    for file in os.listdir(path):
+        if os.path.isfile(os.path.join(path, file)):
+            list_of_files.append(file)
+    return list_of_files
 
 
 def main():
@@ -58,11 +67,7 @@ def main():
     """
     list_of_patients = os.listdir(HOME_DIR + "/data/demultiplexed")
     for patient in list_of_patients:
-        list_of_cells = os.listdir(f"{HOME_DIR}/data/demultiplexed/{patient}")
-        if not os.path.exists(
-                    f"{HOME_DIR}/data/demultiplexed/{patient}/{patient}-out"
-                ):
-                    os.mkdir(f"{HOME_DIR}/data/demultiplexed/{patient}/{patient}-out")
+        list_of_cells = files(HOME_DIR + f"/data/demultiplexed/{patient}")
         Parallel(n_jobs=N_JOBS, verbose=1)(
             delayed(execute_docker_bracer)(row, list_of_cells, patient)
             for row in range(len(list_of_cells))

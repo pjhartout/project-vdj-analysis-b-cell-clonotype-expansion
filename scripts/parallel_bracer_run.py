@@ -15,14 +15,15 @@ HOME_DIR = "/home/pjh/Documents/Git/project-vdj-analysis"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):
-    """
+    """Call docker in a subprocess for each cell
 
     Args:
-        row:
-        list_of_cells:
-
+        row (list): row containing the cell to be processed
+        list_of_cells (list): list of cells containing all UMIs belonging to
+        patients
+        patient (str): patient to be processed
     Returns:
-
+        None
     """
     cell = list_of_cells[row].split(".")[0:1]
     os.chdir(f"{HOME_DIR}/data/demultiplexed/{patient}")
@@ -46,14 +47,14 @@ def execute_docker_bracer(row, list_of_cells, patient):
 
 
 def main():
-    """Description
+    """Main function - lists patients and loop through patients. Each cell is
+    processed in parallel using joblib
 
     Args:
-        input_shape (type): description
-        num_classes (type): description
+        None
 
     Returns:
-        type: description
+        None
     """
     list_of_patients = os.listdir(HOME_DIR + "/data/demultiplexed")
     for patient in list_of_patients:

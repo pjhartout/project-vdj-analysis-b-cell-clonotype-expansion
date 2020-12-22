@@ -11,7 +11,7 @@ import os
 from joblib import Parallel, delayed
 
 N_JOBS = -1
-HOME_DIR = "/home/pjh/Documents/Git/project-vdj-analysis"
+HOME_DIR = "/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):
@@ -39,10 +39,10 @@ def execute_docker_bracer(row, list_of_cells, patient):
             "teichlab/bracer",
             "assemble",
             f"{cell[0]}",
-            f"{cell[0]}",
+            "-r",
+            f"{patient}-out",
             "--assembled_file",
             f"{cell[0]}.fasta",
-            "-r",
         ]
     )
 

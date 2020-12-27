@@ -37,12 +37,12 @@ def execute_docker_bracer(row, list_of_cells, patient):
             "run",
             "--rm",
             "-v",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out:/scratch",
+            f"$PWD:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
             "summarise",
-            f"{cell[0]}",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out",
         ]
     )
 

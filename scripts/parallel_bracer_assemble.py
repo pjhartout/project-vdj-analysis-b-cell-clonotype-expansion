@@ -30,23 +30,21 @@ def execute_docker_bracer(row, list_of_cells, patient):
         None
     """
     cell = list_of_cells[row].split(".")[0:1]
-    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}")
+    os.chdir(
+        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out"
+    )
     subprocess.call(
         [
             "docker",
             "run",
             "--rm",
             "-v",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}:/scratch",
+            f"$PWD:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
-            "assemble",
-            f"{cell[0]}",
-            "-r",
-            f"{patient}-out",
-            "--assembled_file",
-            f"{cell[0]}.fasta",
+            "summarise",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out",
         ]
     )
 

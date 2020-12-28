@@ -22,13 +22,13 @@ N_JOBS = -1
 def execute_docker_bracer(patient):
     """Call docker in a subprocess for each cell
 
-    Args:
+    PRE:
         row (list): row containing the cell to be processed
         list_of_cells (list): list of cells containing all UMIs belonging to
         patients
         patient (str): patient to be processed
-    Returns:
-        None
+    POST:
+        envokes docker instance for summarise
     """
     os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/")
     subprocess.call(
@@ -48,14 +48,9 @@ def execute_docker_bracer(patient):
 
 
 def main():
-    """Main function - lists patients and loop through patients. Each cell is
-    processed in parallel using joblib
+    """Main function - lists patients and run summarise via docker in parallel for
+        each patient.
 
-    Args:
-        None
-
-    Returns:
-        None
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"

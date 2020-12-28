@@ -13,6 +13,13 @@ cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, pa
 
 The files presented were derived from 10x-genomics. Since the pipeline BraCeR requires single cells in separate files the 10x genomics data had to be demultiplexed. This was done using the following python script
 
+
+```{r setup, include = FALSE}
+library (reticulate)
+use_python("usr/local/bin/python")
+```
+
+
 ```{python}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-

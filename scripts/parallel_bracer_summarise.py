@@ -1,24 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""parallel_bracer.py
+"""parallel_bracer_summarise.py
 
-This executes multiple instances of docker in parallel to execute the bracer pipeline
+This executes multiple instances of docker in parallel to execute the bracer summarise pipeline
 """
 
 import subprocess
 import os
 import dotenv
 from joblib import Parallel, delayed
+from tqdm import tqdm
+
 
 # Load values from .env
 DOTENV_KEY2VAL = dotenv.dotenv_values()
 
 N_JOBS = -1
-DOTENV_KEY2VAL["HOME_DIR"] = "/home/pjh/project-vdj-analysis"
 
 
-def execute_docker_bracer(row, list_of_cells, patient):
+def execute_docker_bracer(patient):
     """Call docker in a subprocess for each cell
 
     Args:
@@ -29,30 +30,21 @@ def execute_docker_bracer(row, list_of_cells, patient):
     Returns:
         None
     """
-    cell = list_of_cells[row].split(".")[0:1]
-    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out")
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/")
     subprocess.call(
         [
             "docker",
             "run",
             "--rm",
             "-v",
-            f"$PWD:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
             "summarise",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out",
+            f"{patient}-out",
         ]
     )
-
-
-def files(path):
-    list_of_files = list()
-    for file in os.listdir(path):
-        if os.path.isfile(os.path.join(path, file)):
-            list_of_files.append(file)
-    return list_of_files
 
 
 def main():
@@ -68,14 +60,10 @@ def main():
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
     )
-    for patient in list_of_patients:
-        list_of_cells = files(
-            DOTENV_KEY2VAL["HOME_DIR"] + f"/data/demultiplexed/{patient}/{patient}-out"
-        )
-        Parallel(n_jobs=N_JOBS, verbose=1)(
-            delayed(execute_docker_bracer)(row, list_of_cells, patient)
-            for row in range(len(list_of_cells))
-        )
+    print(list_of_patients)
+    Parallel(n_jobs=N_JOBS, verbose=1)(
+        delayed(execute_docker_bracer)(row) for row in list_of_patients
+    )
 
 
 if __name__ == "__main__":

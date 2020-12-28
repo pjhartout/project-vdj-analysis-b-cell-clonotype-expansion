@@ -3,7 +3,7 @@
 ```{r}
 library(dplyr)
 experiment = readRDS("/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds", refhook = NULL)
-cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, patient_id, Sample.Type) %>% unique()
+cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, patient_id, Sample.Type, Diagnosis) %>% unique()
 ```
 
 Command to run bracer in docker container for one demultiplexed fasta file

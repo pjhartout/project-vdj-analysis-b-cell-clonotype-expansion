@@ -3,7 +3,7 @@
 ### Meta-data preparation
 
 The patient meta-data was provided in an Rds file and was prepared with the following commands:
-```{r}
+```{r, message=FALSE}
 library(dplyr)
 library(SummarizedExperiment)
 experiment = readRDS("/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds", refhook = NULL)

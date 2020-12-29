@@ -152,163 +152,163 @@ img {
 <div id="assemble" class="section level3" number="3.0.1">
 <h3><span class="header-section-number">3.0.1</span> Assemble</h3>
 <p>Assemble was performed by using the pre-assembled file from cellranger output and preparing the necessary files for the subsequent summarise step to function</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb37-1"><a href="3-bracer.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
-<span id="cb37-2"><a href="3-bracer.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
-<span id="cb37-3"><a href="3-bracer.html#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="3-bracer.html#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;parallel_bracer.py</span></span>
-<span id="cb37-5"><a href="3-bracer.html#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="3-bracer.html#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer pipeline</span></span>
-<span id="cb37-7"><a href="3-bracer.html#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb37-8"><a href="3-bracer.html#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-9"><a href="3-bracer.html#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
-<span id="cb37-10"><a href="3-bracer.html#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb37-11"><a href="3-bracer.html#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dotenv</span>
-<span id="cb37-12"><a href="3-bracer.html#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
-<span id="cb37-13"><a href="3-bracer.html#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-14"><a href="3-bracer.html#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load values from .env</span></span>
-<span id="cb37-15"><a href="3-bracer.html#cb37-15" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
-<span id="cb37-16"><a href="3-bracer.html#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-17"><a href="3-bracer.html#cb37-17" aria-hidden="true" tabindex="-1"></a>N_JOBS <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb37-18"><a href="3-bracer.html#cb37-18" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">=</span> <span class="st">&quot;/home/pjh/project-vdj-analysis&quot;</span></span>
-<span id="cb37-19"><a href="3-bracer.html#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-20"><a href="3-bracer.html#cb37-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-21"><a href="3-bracer.html#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> execute_docker_bracer(row, list_of_cells, patient):</span>
-<span id="cb37-22"><a href="3-bracer.html#cb37-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
-<span id="cb37-23"><a href="3-bracer.html#cb37-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-24"><a href="3-bracer.html#cb37-24" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb37-25"><a href="3-bracer.html#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
-<span id="cb37-26"><a href="3-bracer.html#cb37-26" aria-hidden="true" tabindex="-1"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
-<span id="cb37-27"><a href="3-bracer.html#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="co">        patients</span></span>
-<span id="cb37-28"><a href="3-bracer.html#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="co">        patient (str): patient to be processed</span></span>
-<span id="cb37-29"><a href="3-bracer.html#cb37-29" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb37-30"><a href="3-bracer.html#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb37-31"><a href="3-bracer.html#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb37-32"><a href="3-bracer.html#cb37-32" aria-hidden="true" tabindex="-1"></a>    cell <span class="op">=</span> list_of_cells[row].split(<span class="st">&quot;.&quot;</span>)[<span class="dv">0</span>:<span class="dv">1</span>]</span>
-<span id="cb37-33"><a href="3-bracer.html#cb37-33" aria-hidden="true" tabindex="-1"></a>    os.chdir(</span>
-<span id="cb37-34"><a href="3-bracer.html#cb37-34" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span></span>
-<span id="cb37-35"><a href="3-bracer.html#cb37-35" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb37-36"><a href="3-bracer.html#cb37-36" aria-hidden="true" tabindex="-1"></a>    subprocess.call(</span>
-<span id="cb37-37"><a href="3-bracer.html#cb37-37" aria-hidden="true" tabindex="-1"></a>        [</span>
-<span id="cb37-38"><a href="3-bracer.html#cb37-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;docker&quot;</span>,</span>
-<span id="cb37-39"><a href="3-bracer.html#cb37-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;run&quot;</span>,</span>
-<span id="cb37-40"><a href="3-bracer.html#cb37-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
-<span id="cb37-41"><a href="3-bracer.html#cb37-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-v&quot;</span>,</span>
-<span id="cb37-42"><a href="3-bracer.html#cb37-42" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;$PWD:/scratch&quot;</span>,</span>
-<span id="cb37-43"><a href="3-bracer.html#cb37-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-w&quot;</span>,</span>
-<span id="cb37-44"><a href="3-bracer.html#cb37-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
-<span id="cb37-45"><a href="3-bracer.html#cb37-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
-<span id="cb37-46"><a href="3-bracer.html#cb37-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;summarise&quot;</span>,</span>
-<span id="cb37-47"><a href="3-bracer.html#cb37-47" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
-<span id="cb37-48"><a href="3-bracer.html#cb37-48" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb37-49"><a href="3-bracer.html#cb37-49" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb37-50"><a href="3-bracer.html#cb37-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-51"><a href="3-bracer.html#cb37-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-52"><a href="3-bracer.html#cb37-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> files(path):</span>
-<span id="cb37-53"><a href="3-bracer.html#cb37-53" aria-hidden="true" tabindex="-1"></a>    list_of_files <span class="op">=</span> <span class="bu">list</span>()</span>
-<span id="cb37-54"><a href="3-bracer.html#cb37-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> os.listdir(path):</span>
-<span id="cb37-55"><a href="3-bracer.html#cb37-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> os.path.isfile(os.path.join(path, <span class="bu">file</span>)):</span>
-<span id="cb37-56"><a href="3-bracer.html#cb37-56" aria-hidden="true" tabindex="-1"></a>            list_of_files.append(<span class="bu">file</span>)</span>
-<span id="cb37-57"><a href="3-bracer.html#cb37-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> list_of_files</span>
-<span id="cb37-58"><a href="3-bracer.html#cb37-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-59"><a href="3-bracer.html#cb37-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-60"><a href="3-bracer.html#cb37-60" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb37-61"><a href="3-bracer.html#cb37-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and loop through patients. Each cell is</span></span>
-<span id="cb37-62"><a href="3-bracer.html#cb37-62" aria-hidden="true" tabindex="-1"></a><span class="co">    processed in parallel using joblib</span></span>
-<span id="cb37-63"><a href="3-bracer.html#cb37-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-64"><a href="3-bracer.html#cb37-64" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb37-65"><a href="3-bracer.html#cb37-65" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb37-66"><a href="3-bracer.html#cb37-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-67"><a href="3-bracer.html#cb37-67" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb37-68"><a href="3-bracer.html#cb37-68" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb37-69"><a href="3-bracer.html#cb37-69" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb37-70"><a href="3-bracer.html#cb37-70" aria-hidden="true" tabindex="-1"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
-<span id="cb37-71"><a href="3-bracer.html#cb37-71" aria-hidden="true" tabindex="-1"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
-<span id="cb37-72"><a href="3-bracer.html#cb37-72" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb37-73"><a href="3-bracer.html#cb37-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> patient <span class="kw">in</span> list_of_patients:</span>
-<span id="cb37-74"><a href="3-bracer.html#cb37-74" aria-hidden="true" tabindex="-1"></a>        list_of_cells <span class="op">=</span> files(</span>
-<span id="cb37-75"><a href="3-bracer.html#cb37-75" aria-hidden="true" tabindex="-1"></a>            DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="ss">f&quot;/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span></span>
-<span id="cb37-76"><a href="3-bracer.html#cb37-76" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb37-77"><a href="3-bracer.html#cb37-77" aria-hidden="true" tabindex="-1"></a>        Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
-<span id="cb37-78"><a href="3-bracer.html#cb37-78" aria-hidden="true" tabindex="-1"></a>            delayed(execute_docker_bracer)(row, list_of_cells, patient)</span>
-<span id="cb37-79"><a href="3-bracer.html#cb37-79" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> row <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(list_of_cells))</span>
-<span id="cb37-80"><a href="3-bracer.html#cb37-80" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb37-81"><a href="3-bracer.html#cb37-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-82"><a href="3-bracer.html#cb37-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-83"><a href="3-bracer.html#cb37-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb37-84"><a href="3-bracer.html#cb37-84" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="3-bracer.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb3-2"><a href="3-bracer.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb3-3"><a href="3-bracer.html#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="3-bracer.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;parallel_bracer.py</span></span>
+<span id="cb3-5"><a href="3-bracer.html#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="3-bracer.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer pipeline</span></span>
+<span id="cb3-7"><a href="3-bracer.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb3-8"><a href="3-bracer.html#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="3-bracer.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb3-10"><a href="3-bracer.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-11"><a href="3-bracer.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dotenv</span>
+<span id="cb3-12"><a href="3-bracer.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
+<span id="cb3-13"><a href="3-bracer.html#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="3-bracer.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load values from .env</span></span>
+<span id="cb3-15"><a href="3-bracer.html#cb3-15" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
+<span id="cb3-16"><a href="3-bracer.html#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="3-bracer.html#cb3-17" aria-hidden="true" tabindex="-1"></a>N_JOBS <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb3-18"><a href="3-bracer.html#cb3-18" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">=</span> <span class="st">&quot;/home/pjh/project-vdj-analysis&quot;</span></span>
+<span id="cb3-19"><a href="3-bracer.html#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="3-bracer.html#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="3-bracer.html#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> execute_docker_bracer(row, list_of_cells, patient):</span>
+<span id="cb3-22"><a href="3-bracer.html#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
+<span id="cb3-23"><a href="3-bracer.html#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="3-bracer.html#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb3-25"><a href="3-bracer.html#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
+<span id="cb3-26"><a href="3-bracer.html#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
+<span id="cb3-27"><a href="3-bracer.html#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">        patients</span></span>
+<span id="cb3-28"><a href="3-bracer.html#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">        patient (str): patient to be processed</span></span>
+<span id="cb3-29"><a href="3-bracer.html#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb3-30"><a href="3-bracer.html#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb3-31"><a href="3-bracer.html#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-32"><a href="3-bracer.html#cb3-32" aria-hidden="true" tabindex="-1"></a>    cell <span class="op">=</span> list_of_cells[row].split(<span class="st">&quot;.&quot;</span>)[<span class="dv">0</span>:<span class="dv">1</span>]</span>
+<span id="cb3-33"><a href="3-bracer.html#cb3-33" aria-hidden="true" tabindex="-1"></a>    os.chdir(</span>
+<span id="cb3-34"><a href="3-bracer.html#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span></span>
+<span id="cb3-35"><a href="3-bracer.html#cb3-35" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-36"><a href="3-bracer.html#cb3-36" aria-hidden="true" tabindex="-1"></a>    subprocess.call(</span>
+<span id="cb3-37"><a href="3-bracer.html#cb3-37" aria-hidden="true" tabindex="-1"></a>        [</span>
+<span id="cb3-38"><a href="3-bracer.html#cb3-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;docker&quot;</span>,</span>
+<span id="cb3-39"><a href="3-bracer.html#cb3-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;run&quot;</span>,</span>
+<span id="cb3-40"><a href="3-bracer.html#cb3-40" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
+<span id="cb3-41"><a href="3-bracer.html#cb3-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-v&quot;</span>,</span>
+<span id="cb3-42"><a href="3-bracer.html#cb3-42" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;$PWD:/scratch&quot;</span>,</span>
+<span id="cb3-43"><a href="3-bracer.html#cb3-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-w&quot;</span>,</span>
+<span id="cb3-44"><a href="3-bracer.html#cb3-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
+<span id="cb3-45"><a href="3-bracer.html#cb3-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
+<span id="cb3-46"><a href="3-bracer.html#cb3-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;summarise&quot;</span>,</span>
+<span id="cb3-47"><a href="3-bracer.html#cb3-47" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
+<span id="cb3-48"><a href="3-bracer.html#cb3-48" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb3-49"><a href="3-bracer.html#cb3-49" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-50"><a href="3-bracer.html#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="3-bracer.html#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="3-bracer.html#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> files(path):</span>
+<span id="cb3-53"><a href="3-bracer.html#cb3-53" aria-hidden="true" tabindex="-1"></a>    list_of_files <span class="op">=</span> <span class="bu">list</span>()</span>
+<span id="cb3-54"><a href="3-bracer.html#cb3-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> os.listdir(path):</span>
+<span id="cb3-55"><a href="3-bracer.html#cb3-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> os.path.isfile(os.path.join(path, <span class="bu">file</span>)):</span>
+<span id="cb3-56"><a href="3-bracer.html#cb3-56" aria-hidden="true" tabindex="-1"></a>            list_of_files.append(<span class="bu">file</span>)</span>
+<span id="cb3-57"><a href="3-bracer.html#cb3-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> list_of_files</span>
+<span id="cb3-58"><a href="3-bracer.html#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="3-bracer.html#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="3-bracer.html#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb3-61"><a href="3-bracer.html#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and loop through patients. Each cell is</span></span>
+<span id="cb3-62"><a href="3-bracer.html#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">    processed in parallel using joblib</span></span>
+<span id="cb3-63"><a href="3-bracer.html#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="3-bracer.html#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb3-65"><a href="3-bracer.html#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb3-66"><a href="3-bracer.html#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="3-bracer.html#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb3-68"><a href="3-bracer.html#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb3-69"><a href="3-bracer.html#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-70"><a href="3-bracer.html#cb3-70" aria-hidden="true" tabindex="-1"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
+<span id="cb3-71"><a href="3-bracer.html#cb3-71" aria-hidden="true" tabindex="-1"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
+<span id="cb3-72"><a href="3-bracer.html#cb3-72" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-73"><a href="3-bracer.html#cb3-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> patient <span class="kw">in</span> list_of_patients:</span>
+<span id="cb3-74"><a href="3-bracer.html#cb3-74" aria-hidden="true" tabindex="-1"></a>        list_of_cells <span class="op">=</span> files(</span>
+<span id="cb3-75"><a href="3-bracer.html#cb3-75" aria-hidden="true" tabindex="-1"></a>            DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="ss">f&quot;/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb3-76"><a href="3-bracer.html#cb3-76" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb3-77"><a href="3-bracer.html#cb3-77" aria-hidden="true" tabindex="-1"></a>        Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
+<span id="cb3-78"><a href="3-bracer.html#cb3-78" aria-hidden="true" tabindex="-1"></a>            delayed(execute_docker_bracer)(row, list_of_cells, patient)</span>
+<span id="cb3-79"><a href="3-bracer.html#cb3-79" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> row <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(list_of_cells))</span>
+<span id="cb3-80"><a href="3-bracer.html#cb3-80" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb3-81"><a href="3-bracer.html#cb3-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-82"><a href="3-bracer.html#cb3-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-83"><a href="3-bracer.html#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb3-84"><a href="3-bracer.html#cb3-84" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
 </div>
 <div id="summarise" class="section level3" number="3.0.2">
 <h3><span class="header-section-number">3.0.2</span> Summarise</h3>
-<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="3-bracer.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
-<span id="cb38-2"><a href="3-bracer.html#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
-<span id="cb38-3"><a href="3-bracer.html#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="3-bracer.html#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;parallel_bracer_summarise.py</span></span>
-<span id="cb38-5"><a href="3-bracer.html#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="3-bracer.html#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer summarise pipeline</span></span>
-<span id="cb38-7"><a href="3-bracer.html#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb38-8"><a href="3-bracer.html#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-9"><a href="3-bracer.html#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
-<span id="cb38-10"><a href="3-bracer.html#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb38-11"><a href="3-bracer.html#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dotenv</span>
-<span id="cb38-12"><a href="3-bracer.html#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
-<span id="cb38-13"><a href="3-bracer.html#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
-<span id="cb38-14"><a href="3-bracer.html#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-15"><a href="3-bracer.html#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-16"><a href="3-bracer.html#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load values from .env</span></span>
-<span id="cb38-17"><a href="3-bracer.html#cb38-17" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
-<span id="cb38-18"><a href="3-bracer.html#cb38-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-19"><a href="3-bracer.html#cb38-19" aria-hidden="true" tabindex="-1"></a>N_JOBS <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb38-20"><a href="3-bracer.html#cb38-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-21"><a href="3-bracer.html#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-22"><a href="3-bracer.html#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> execute_docker_bracer(patient):</span>
-<span id="cb38-23"><a href="3-bracer.html#cb38-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
-<span id="cb38-24"><a href="3-bracer.html#cb38-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-25"><a href="3-bracer.html#cb38-25" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb38-26"><a href="3-bracer.html#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
-<span id="cb38-27"><a href="3-bracer.html#cb38-27" aria-hidden="true" tabindex="-1"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
-<span id="cb38-28"><a href="3-bracer.html#cb38-28" aria-hidden="true" tabindex="-1"></a><span class="co">        patients</span></span>
-<span id="cb38-29"><a href="3-bracer.html#cb38-29" aria-hidden="true" tabindex="-1"></a><span class="co">        patient (str): patient to be processed</span></span>
-<span id="cb38-30"><a href="3-bracer.html#cb38-30" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb38-31"><a href="3-bracer.html#cb38-31" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb38-32"><a href="3-bracer.html#cb38-32" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb38-33"><a href="3-bracer.html#cb38-33" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/&quot;</span>)</span>
-<span id="cb38-34"><a href="3-bracer.html#cb38-34" aria-hidden="true" tabindex="-1"></a>    subprocess.call(</span>
-<span id="cb38-35"><a href="3-bracer.html#cb38-35" aria-hidden="true" tabindex="-1"></a>        [</span>
-<span id="cb38-36"><a href="3-bracer.html#cb38-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;docker&quot;</span>,</span>
-<span id="cb38-37"><a href="3-bracer.html#cb38-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;run&quot;</span>,</span>
-<span id="cb38-38"><a href="3-bracer.html#cb38-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
-<span id="cb38-39"><a href="3-bracer.html#cb38-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-v&quot;</span>,</span>
-<span id="cb38-40"><a href="3-bracer.html#cb38-40" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/:/scratch&quot;</span>,</span>
-<span id="cb38-41"><a href="3-bracer.html#cb38-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-w&quot;</span>,</span>
-<span id="cb38-42"><a href="3-bracer.html#cb38-42" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
-<span id="cb38-43"><a href="3-bracer.html#cb38-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
-<span id="cb38-44"><a href="3-bracer.html#cb38-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;summarise&quot;</span>,</span>
-<span id="cb38-45"><a href="3-bracer.html#cb38-45" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
-<span id="cb38-46"><a href="3-bracer.html#cb38-46" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb38-47"><a href="3-bracer.html#cb38-47" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb38-48"><a href="3-bracer.html#cb38-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-49"><a href="3-bracer.html#cb38-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-50"><a href="3-bracer.html#cb38-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb38-51"><a href="3-bracer.html#cb38-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and loop through patients. Each cell is</span></span>
-<span id="cb38-52"><a href="3-bracer.html#cb38-52" aria-hidden="true" tabindex="-1"></a><span class="co">    processed in parallel using joblib</span></span>
-<span id="cb38-53"><a href="3-bracer.html#cb38-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-54"><a href="3-bracer.html#cb38-54" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb38-55"><a href="3-bracer.html#cb38-55" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb38-56"><a href="3-bracer.html#cb38-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-57"><a href="3-bracer.html#cb38-57" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb38-58"><a href="3-bracer.html#cb38-58" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
-<span id="cb38-59"><a href="3-bracer.html#cb38-59" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb38-60"><a href="3-bracer.html#cb38-60" aria-hidden="true" tabindex="-1"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
-<span id="cb38-61"><a href="3-bracer.html#cb38-61" aria-hidden="true" tabindex="-1"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
-<span id="cb38-62"><a href="3-bracer.html#cb38-62" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb38-63"><a href="3-bracer.html#cb38-63" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(list_of_patients)</span>
-<span id="cb38-64"><a href="3-bracer.html#cb38-64" aria-hidden="true" tabindex="-1"></a>    Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
-<span id="cb38-65"><a href="3-bracer.html#cb38-65" aria-hidden="true" tabindex="-1"></a>        delayed(execute_docker_bracer)(row) <span class="cf">for</span> row <span class="kw">in</span> list_of_patients</span>
-<span id="cb38-66"><a href="3-bracer.html#cb38-66" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb38-67"><a href="3-bracer.html#cb38-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-68"><a href="3-bracer.html#cb38-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-69"><a href="3-bracer.html#cb38-69" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb38-70"><a href="3-bracer.html#cb38-70" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="3-bracer.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb4-2"><a href="3-bracer.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb4-3"><a href="3-bracer.html#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="3-bracer.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;parallel_bracer_summarise.py</span></span>
+<span id="cb4-5"><a href="3-bracer.html#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="3-bracer.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer summarise pipeline</span></span>
+<span id="cb4-7"><a href="3-bracer.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb4-8"><a href="3-bracer.html#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="3-bracer.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb4-10"><a href="3-bracer.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-11"><a href="3-bracer.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dotenv</span>
+<span id="cb4-12"><a href="3-bracer.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
+<span id="cb4-13"><a href="3-bracer.html#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb4-14"><a href="3-bracer.html#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="3-bracer.html#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="3-bracer.html#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load values from .env</span></span>
+<span id="cb4-17"><a href="3-bracer.html#cb4-17" aria-hidden="true" tabindex="-1"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
+<span id="cb4-18"><a href="3-bracer.html#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="3-bracer.html#cb4-19" aria-hidden="true" tabindex="-1"></a>N_JOBS <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb4-20"><a href="3-bracer.html#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="3-bracer.html#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="3-bracer.html#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> execute_docker_bracer(patient):</span>
+<span id="cb4-23"><a href="3-bracer.html#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
+<span id="cb4-24"><a href="3-bracer.html#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="3-bracer.html#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb4-26"><a href="3-bracer.html#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
+<span id="cb4-27"><a href="3-bracer.html#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
+<span id="cb4-28"><a href="3-bracer.html#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">        patients</span></span>
+<span id="cb4-29"><a href="3-bracer.html#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">        patient (str): patient to be processed</span></span>
+<span id="cb4-30"><a href="3-bracer.html#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb4-31"><a href="3-bracer.html#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb4-32"><a href="3-bracer.html#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb4-33"><a href="3-bracer.html#cb4-33" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/&quot;</span>)</span>
+<span id="cb4-34"><a href="3-bracer.html#cb4-34" aria-hidden="true" tabindex="-1"></a>    subprocess.call(</span>
+<span id="cb4-35"><a href="3-bracer.html#cb4-35" aria-hidden="true" tabindex="-1"></a>        [</span>
+<span id="cb4-36"><a href="3-bracer.html#cb4-36" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;docker&quot;</span>,</span>
+<span id="cb4-37"><a href="3-bracer.html#cb4-37" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;run&quot;</span>,</span>
+<span id="cb4-38"><a href="3-bracer.html#cb4-38" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
+<span id="cb4-39"><a href="3-bracer.html#cb4-39" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-v&quot;</span>,</span>
+<span id="cb4-40"><a href="3-bracer.html#cb4-40" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/:/scratch&quot;</span>,</span>
+<span id="cb4-41"><a href="3-bracer.html#cb4-41" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;-w&quot;</span>,</span>
+<span id="cb4-42"><a href="3-bracer.html#cb4-42" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
+<span id="cb4-43"><a href="3-bracer.html#cb4-43" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
+<span id="cb4-44"><a href="3-bracer.html#cb4-44" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;summarise&quot;</span>,</span>
+<span id="cb4-45"><a href="3-bracer.html#cb4-45" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
+<span id="cb4-46"><a href="3-bracer.html#cb4-46" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-47"><a href="3-bracer.html#cb4-47" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-48"><a href="3-bracer.html#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="3-bracer.html#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-50"><a href="3-bracer.html#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb4-51"><a href="3-bracer.html#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and loop through patients. Each cell is</span></span>
+<span id="cb4-52"><a href="3-bracer.html#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="co">    processed in parallel using joblib</span></span>
+<span id="cb4-53"><a href="3-bracer.html#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-54"><a href="3-bracer.html#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb4-55"><a href="3-bracer.html#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb4-56"><a href="3-bracer.html#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="3-bracer.html#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb4-58"><a href="3-bracer.html#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="co">        None</span></span>
+<span id="cb4-59"><a href="3-bracer.html#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb4-60"><a href="3-bracer.html#cb4-60" aria-hidden="true" tabindex="-1"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
+<span id="cb4-61"><a href="3-bracer.html#cb4-61" aria-hidden="true" tabindex="-1"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
+<span id="cb4-62"><a href="3-bracer.html#cb4-62" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-63"><a href="3-bracer.html#cb4-63" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(list_of_patients)</span>
+<span id="cb4-64"><a href="3-bracer.html#cb4-64" aria-hidden="true" tabindex="-1"></a>    Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
+<span id="cb4-65"><a href="3-bracer.html#cb4-65" aria-hidden="true" tabindex="-1"></a>        delayed(execute_docker_bracer)(row) <span class="cf">for</span> row <span class="kw">in</span> list_of_patients</span>
+<span id="cb4-66"><a href="3-bracer.html#cb4-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-67"><a href="3-bracer.html#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="3-bracer.html#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="3-bracer.html#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb4-70"><a href="3-bracer.html#cb4-70" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
 </div>
 </div>
 <p style="text-align: center;">

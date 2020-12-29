@@ -5,6 +5,7 @@
 The patient meta-data was provided in an Rds file and was prepared with the following commands:
 ```{r}
 library(dplyr)
+library(SummarizedExperiment)
 experiment = readRDS("/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds", refhook = NULL)
 cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, patient_id, Sample.Type, Diagnosis) %>% unique()
 ```
@@ -20,7 +21,7 @@ use_python("usr/local/bin/python")
 ```
 
 
-```{python}
+```{python, eval = FALSE}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -84,7 +85,7 @@ With these demultiplexed cells one could run the BraCeR workflow with the two fu
 
 Assemble was performed by using the pre-assembled file from cellranger output and preparing the necessary files for the subsequent summarise step to function
 
-```{python}
+```{python, eval = FALSE}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -173,7 +174,7 @@ if __name__ == "__main__":
 
 ### Summarise
 
-```{python}
+```{python, eval = FALSE}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 

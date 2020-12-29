@@ -6,3 +6,10 @@ output:
     toc: yes
 ---
 
+
+```{r child = 'Introduction.Rmd'}
+```
+
+
+```{r child = 'preprocessing.Rmd'}
+```

@@ -1,2 +1,3 @@
 # Introduction
 
+Multiple sclerosis (MS) is an automimmune disease affecting the central nervous system. It attacks the myelein-sheet of neurons affects alone in the US $\sim$ 1 Mio. patients.[@ramesh] 

@@ -12,6 +12,11 @@ bibliography: ["citations.bib"]
 ```{r child = 'Introduction.Rmd'}
 ```
 
+```{r child = 'exploratory-meta-data-analysis.Rmd'}
+```
 
-```{r child = 'preprocessing.Rmd'}
+```{r child = 'preprocessing-of-raw-data.Rmd'}
+```
+
+```{r child = 'bracer.Rmd'}
 ```

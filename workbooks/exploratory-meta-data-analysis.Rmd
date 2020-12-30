@@ -1,0 +1,18 @@
+# Exploratory Meta-Data Analysis
+
+The patient meta-data was provided in an Rds file and was prepared with the following commands:
+```{r, message=FALSE}
+library(dplyr)
+library(SummarizedExperiment)
+library(stringr)
+
+#loading the data and selecting the relevant columns
+experiment = readRDS("/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds", refhook = NULL)
+cellUMI2SampleType = colData(experiment) %>% as.data.frame %>% select(lib_id, patient_id, Sample.Type, Diagnosis) %>% unique()
+
+#counting the number of AP and nonAP patients
+count_ap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEhi CD19+"))
+count_nonap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEdim CD19+"))
+```
+
+The number of AP patients in the dataset is `r count_ap` and the number of nonAP patients is `r count_nonap`. 

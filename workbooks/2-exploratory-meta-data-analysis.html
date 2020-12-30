@@ -5,7 +5,7 @@
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Autoproliferation Analysis B Cells" />
+<meta property="og:title" content="2 Exploratory Meta-Data Analysis | Autoproliferation Analysis B Cells" />
 <meta property="og:type" content="book" />
 
 
@@ -22,9 +22,9 @@ MathJax.Hub.Config({
 </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta name="description" content="Autoproliferation Analysis B Cells">
+<meta name="description" content="2 Exploratory Meta-Data Analysis | Autoproliferation Analysis B Cells">
 
-<title>Autoproliferation Analysis B Cells</title>
+<title>2 Exploratory Meta-Data Analysis | Autoproliferation Analysis B Cells</title>
 
 <script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-1.11.3/jquery.min.js"></script>
@@ -152,21 +152,25 @@ img {
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="header">
-<h1 class="title">Autoproliferation Analysis B Cells</h1>
-<h4 class="author"><em>Richard Affolter, Martin Emons, Philip Hartout</em></h4>
-</div>
-<div id="introduction" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Introduction</h1>
-<p>Multiple sclerosis (MS) is an automimmune disease affecting the central nervous system. It attacks the myelein-sheet of neurons affects alone in the US <span class="math inline">\(\sim\)</span> 1 Mio. patients. <span class="citation">(Ramesh et al. 2020)</span> Patients often experience impairments of visual, sensory, motor, neurocognitive and autonomic functions. One form of MS is the relapsing-remitting MS (RRMS) which is characterised by active phases of the disease (relapse; REL) and inactive phases (remission; REM). <span class="citation">(Jelcic et al. 2018)</span></p>
-<p>There is a broad consensus that MS is in fact due to a dysregulated adaptive immunity. In the immune response of MS several cells are known to be important LIKE CD4+ T-Cells, CD8+ T-cells as well as B-cells and autoantibodies. A phenomenon called autoproliferation (AP) (self-reactivity) of T cells and B cells seems to play an important role in MS. Autoproliferation is mediated by memory B-cells, as the depletion of B-cells leads to reduced T cell autoproliferation. This is as well one of the principles behind B cell-depleting therapies, underlining the importance of pro-inflammatory B-cells. Previous studies have found that the frequency of AP cells was different between stages of RRMS, being higher in REL than in REM. <span class="citation">(Jelcic et al. 2018)</span> In this project we focused on the analysis of B cells.</p>
-<p>B cells are lymphocytes and part of the adaptive immune response. At its surface is the B-cell receptor (BCR) that can bind to antigens. Upon binding the B-cell will differentiate into plasma cells (a type of effector cell) that later on produce immunoglobulins (Ig) and those will target the object whose antigen bound to the BCR. <span class="citation">(Murphy 2012)</span></p>
-<p>The general process of adaptive immunity was developed as the clonal selection theory. This theory states that in the body are many different B cells each capable of producing specific antibodies and correspondinc specific BCRs. In this pool of many different B cells, those that bind an antigen upon infection are activated to divide will produces many identical copies of themselves, so called clones. This process is called clonal expansion producing clonotypes. <span class="citation">(Murphy 2012)</span></p>
-<p>In order to make inferences about the clonality and clonal expansion it is important to reconstruct the sequence of the BCR from single cell RNA sequencing data (scRNA seq). This will allow for usage of the entire transcriptomic identity of the B-cell without the need to use special targeted sequencing protocols like repertoire sequencing (Rep Seq). The tool employed in this project that can achieve BCR reconstruction from scRNA seq data is BraCeR, an extension to the previously developed TraCeR for TCR reconstruction. <span class="citation">(Lindeman et al. 2018)</span> <span class="citation">(Stubbington et al. 2016)</span></p>
-<p>In the context of this project the were provided with B-cell sequencing data from 31 patients which were categorised as being either autoproliferating (AP) or non-autoproliferating (nonAP). The disease status (RRMS NAT - treated with monoclonal antibodies, RRMS nihil - untreated and Healthy Donors) was recorded for each. More information on the dataset will be available in the next chapter.</p>
+<div id="exploratory-meta-data-analysis" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Exploratory Meta-Data Analysis</h1>
+<p>The patient meta-data was provided in an Rds file and was prepared with the following commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="2-exploratory-meta-data-analysis.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="2-exploratory-meta-data-analysis.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SummarizedExperiment)</span>
+<span id="cb1-3"><a href="2-exploratory-meta-data-analysis.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-4"><a href="2-exploratory-meta-data-analysis.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="2-exploratory-meta-data-analysis.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#loading the data and selecting the relevant columns</span></span>
+<span id="cb1-6"><a href="2-exploratory-meta-data-analysis.html#cb1-6" aria-hidden="true" tabindex="-1"></a>experiment <span class="ot">=</span> <span class="fu">readRDS</span>(<span class="st">&quot;/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds&quot;</span>, <span class="at">refhook =</span> <span class="cn">NULL</span>)</span>
+<span id="cb1-7"><a href="2-exploratory-meta-data-analysis.html#cb1-7" aria-hidden="true" tabindex="-1"></a>cellUMI2SampleType <span class="ot">=</span> <span class="fu">colData</span>(experiment) <span class="sc">%&gt;%</span> as.data.frame <span class="sc">%&gt;%</span> <span class="fu">select</span>(lib_id, patient_id, Sample.Type, Diagnosis) <span class="sc">%&gt;%</span> <span class="fu">unique</span>()</span>
+<span id="cb1-8"><a href="2-exploratory-meta-data-analysis.html#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="2-exploratory-meta-data-analysis.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#counting the number of AP and nonAP patients</span></span>
+<span id="cb1-10"><a href="2-exploratory-meta-data-analysis.html#cb1-10" aria-hidden="true" tabindex="-1"></a>count_ap <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">str_count</span>(cellUMI2SampleType<span class="sc">$</span>Sample.Type, <span class="st">&quot;CFSEhi CD19+&quot;</span>))</span>
+<span id="cb1-11"><a href="2-exploratory-meta-data-analysis.html#cb1-11" aria-hidden="true" tabindex="-1"></a>count_nonap <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">str_count</span>(cellUMI2SampleType<span class="sc">$</span>Sample.Type, <span class="st">&quot;CFSEdim CD19+&quot;</span>))</span></code></pre></div>
+<p>The number of AP patients in the dataset is 15 and the number of nonAP patients is 16.</p>
 </div>
 <p style="text-align: center;">
-<a href="2-exploratory-meta-data-analysis.html"><button class="btn btn-default">Next</button></a>
+<a href="1-introduction.html"><button class="btn btn-default">Previous</button></a>
+<a href="3-preprocessing-of-the-raw-data.html"><button class="btn btn-default">Next</button></a>
 </p>
 </div>
 </div>

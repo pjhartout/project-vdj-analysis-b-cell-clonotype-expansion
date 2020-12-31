@@ -1,18 +1,22 @@
 # BraCeR
 
-With these demultiplexed cells one could run the BraCeR workflow with the two functionalities "assemble" and "summarise".
+With these demultiplexed cells one could run the BraCeR workflow with the two
+functionalities "assemble" and "summarise".
 
 ## Assemble
 
-Assemble was performed by using the pre-assembled file from cellranger output and preparing the necessary files for the subsequent summarise step to function
+Assemble was performed by using the pre-assembled file from the cellranger
+output and preparing the necessary files for the subsequent summarise step to
+function. Further documentation is provided in the code.
 
 ```{python, eval = FALSE}
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""parallel_bracer.py
+"""parallel_bracer_assemble.py
 
-This executes multiple instances of docker in parallel to execute the bracer pipeline
+This executes multiple instances of docker in parallel to execute the bracer
+pipeline
 """
 
 import subprocess
@@ -24,7 +28,6 @@ from joblib import Parallel, delayed
 DOTENV_KEY2VAL = dotenv.dotenv_values()
 
 N_JOBS = -1
-DOTENV_KEY2VAL["HOME_DIR"] = "/home/pjh/project-vdj-analysis"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):
@@ -40,7 +43,8 @@ def execute_docker_bracer(row, list_of_cells, patient):
     """
     cell = list_of_cells[row].split(".")[0:1]
     os.chdir(
-        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out"
+        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+        f"{patient}-out"
     )
     subprocess.call(
         [
@@ -53,12 +57,22 @@ def execute_docker_bracer(row, list_of_cells, patient):
             "/scratch",
             "teichlab/bracer",
             "summarise",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+            f"{patient}-out",
         ]
     )
 
 
 def files(path):
+    """Adds all files in current directory to a list that is returned
+
+    Args:
+        path (str): path to file returned
+
+    Returns:
+        (list) list of files in path
+    """
+
     list_of_files = list()
     for file in os.listdir(path):
         if os.path.isfile(os.path.join(path, file)):
@@ -94,6 +108,7 @@ if __name__ == "__main__":
 ```
 
 ## Summarise
+This documented script shows how the summary of each patient is obtained
 
 ```{python, eval = FALSE}
 #!/usr/bin/env python
@@ -101,7 +116,8 @@ if __name__ == "__main__":
 
 """parallel_bracer_summarise.py
 
-This executes multiple instances of docker in parallel to execute the bracer summarise pipeline
+This executes multiple instances of docker in parallel to execute the bracer
+summarise pipeline
 """
 
 import subprocess
@@ -126,7 +142,7 @@ def execute_docker_bracer(patient):
         patients
         patient (str): patient to be processed
     Returns:
-        None
+        envokes docker instance for summarise
     """
     os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/")
     subprocess.call(
@@ -135,7 +151,8 @@ def execute_docker_bracer(patient):
             "run",
             "--rm",
             "-v",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/"
+            f"{patient}/:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
@@ -146,14 +163,9 @@ def execute_docker_bracer(patient):
 
 
 def main():
-    """Main function - lists patients and loop through patients. Each cell is
-    processed in parallel using joblib
+    """Main function - lists patients and run summarise via docker in parallel
+        for each patient.
 
-    Args:
-        None
-
-    Returns:
-        None
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
@@ -167,4 +179,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-

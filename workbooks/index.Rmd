@@ -9,7 +9,7 @@ bibliography: ["citations.bib"]
 ---
 
 
-```{r child = 'Introduction.Rmd'}
+```{r child = 'introduction.Rmd'}
 ```
 
 ```{r child = 'exploratory-data-analysis.Rmd'}

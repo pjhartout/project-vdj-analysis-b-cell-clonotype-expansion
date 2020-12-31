@@ -2,12 +2,20 @@
 
 The patient meta-data was provided in an Rds file and was prepared with the following commands:
 ```{r, message=FALSE}
+# Loads environment variables for host-agnostic execution
+# Variables in .env can be accessed using Sys.getenv(c("VAR")) 
+# See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
+# Make sure that the knit directory is set to the home directory of the project 
+# prior to knitting
+library(dotenv)
+load_dot_env(file = ".env")
+
 library(dplyr)
 library(SummarizedExperiment)
 library(stringr)
 
-#loading the data and selecting the relevant columns
-experiment = readRDS("/Users/martinemons/polybox/Universitaet/MSc_CBB/HS2020/Statistical Analysis of HSD/vdj-analysis-local/sce_B.rds", refhook = NULL)
+# Load data, note that sce_B.rds should be in data/
+experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"), refhook = NULL)
 cellUMI2SampleType_raw = colData(experiment) %>% as.data.frame 
 
 

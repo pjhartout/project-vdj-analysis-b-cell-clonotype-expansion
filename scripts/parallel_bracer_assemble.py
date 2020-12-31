@@ -15,7 +15,6 @@ from joblib import Parallel, delayed
 DOTENV_KEY2VAL = dotenv.dotenv_values()
 
 N_JOBS = -1
-DOTENV_KEY2VAL["HOME_DIR"] = "/home/pjh/project-vdj-analysis"
 
 
 def execute_docker_bracer(row, list_of_cells, patient):

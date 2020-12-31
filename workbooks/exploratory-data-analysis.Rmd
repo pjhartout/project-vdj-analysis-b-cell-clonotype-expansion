@@ -3,10 +3,11 @@
 The patient meta-data was provided in an Rds file and was prepared with the following commands:
 ```{r, message=FALSE, warning=FALSE}
 # Loads environment variables for host-agnostic execution
-# Variables in .env can be accessed using Sys.getenv(c("VAR")) 
+# Variables in .env can be accessed using Sys.getenv(c("VAR"))
 # See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
-# Make sure that the knit directory is set to the home directory of the project 
+# Make sure that the knit directory is set to the home directory of the project
 # prior to knitting
+
 library(dotenv)
 setwd('..')
 load_dot_env(file = ".env")
@@ -16,18 +17,22 @@ library(SummarizedExperiment)
 library(stringr)
 
 # Load data, note that sce_B.rds should be in data/
-experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"), refhook = NULL)
-cellUMI2SampleType_raw = colData(experiment) %>% as.data.frame 
+experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
+                     refhook = NULL)
+cellUMI2SampleType_raw = colData(experiment) %>% as.data.frame
 
 
-cellUMI2SampleType = cellUMI2SampleType_raw %>% select(lib_id, patient_id, Sample.Type, Diagnosis) %>% unique()
+cellUMI2SampleType = cellUMI2SampleType_raw %>% select(lib_id, patient_id,
+                                                       Sample.Type,
+                                                       Diagnosis) %>% unique()
 
 #counting the number of AP and nonAP patients
 count_nonap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEhi CD19+"))
 count_ap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEdim CD19+"))
 ```
 
-The number of AP patients in the dataset is `r count_ap` and the number of nonAP patients is `r count_nonap`. 
+The number of AP patients in the dataset is `r count_ap` and the number of nonAP
+patients is `r count_nonap`.
 
 Next the composition of the dataset will be visualised
 
@@ -44,15 +49,17 @@ for(i in 1:31){
   }
 }
 
-#visualisation of the patient composition 
-p <- ggplot(cellUMI2SampleType, aes(x = type, fill = Diagnosis)) + 
-    geom_bar(position="dodge")  + 
+#visualisation of the patient composition
+p <- ggplot(cellUMI2SampleType, aes(x = type, fill = Diagnosis)) +
+    geom_bar(position="dodge")  +
     ggtitle("Patient Dataset (n = 31)")
 
 p
 ```
 
-We see that the composition is quite homogeneous, we have a similar number of patients for both conditions (AP vs. nonAP) and for the diagnosis/treatment (RRMS (NAT), RMS (REM; nihil), Healthy Donor). 
+We see that the composition is quite homogeneous, we have a similar number of
+patients for both conditions (AP vs. nonAP) and for the diagnosis/treatment
+(RRMS (NAT), RMS (REM; nihil), Healthy Donor).
 
 Next we want to inspect how many cells we have per patient
 
@@ -86,7 +93,10 @@ for(i in 1:31){
 }
 
 #visualisation of the cell counts per patient
-p <- ggplot(countlabel, aes(x = variable, y= value, fill = label)) + geom_bar(stat='identity') + theme(axis.text.x = element_text(angle = 90)) + xlab("Patient ID") + ylab ("Count") + ggtitle("Visualisation of cell count per patient")
+p <- ggplot(countlabel, aes(x = variable, y= value, fill = label)) +
+  geom_bar(stat='identity') + theme(axis.text.x = element_text(angle = 90)) +
+  xlab("Patient ID") + ylab ("Count") + ggtitle("Visualisation of cell count per
+                                                patient")
 
 p
 ```

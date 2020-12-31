@@ -71,12 +71,6 @@ def files(path):
 def main():
     """Main function - lists patients and loop through patients. Each cell is
     processed in parallel using joblib
-
-    Args:
-        None
-
-    Returns:
-        None
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"

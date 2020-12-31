@@ -6,6 +6,14 @@
 # R package: bookdown caching files
 /*_files/
 
+# Build files
+/workbooks/libs/
+/workbooks/index_files/
+
+# FOR NOW
+/workbooks/*.html
+
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

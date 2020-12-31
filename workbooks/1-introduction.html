@@ -20,13 +20,12 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 
 <meta name="description" content="Autoproliferation Analysis B Cells">
 
 <title>Autoproliferation Analysis B Cells</title>
 
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -34,22 +33,24 @@ MathJax.Hub.Config({
 <script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -69,7 +70,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -137,14 +138,12 @@ img {
 <ul>
 <li><a href="1-introduction.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
 <li><a href="2-exploratory-data-analysis.html#exploratory-data-analysis"><span class="toc-section-number">2</span> Exploratory Data Analysis</a></li>
-<li><a href="3-preprocessing-of-the-raw-data.html#preprocessing-of-the-raw-data"><span class="toc-section-number">3</span> Preprocessing of the raw Data</a>
-<ul>
+<li class="has-sub"><a href="3-preprocessing-of-the-raw-data.html#preprocessing-of-the-raw-data"><span class="toc-section-number">3</span> Preprocessing of the raw Data</a><ul>
 <li><a href="3-preprocessing-of-the-raw-data.html#demultiplexing"><span class="toc-section-number">3.0.1</span> Demultiplexing</a></li>
 </ul></li>
-<li><a href="4-bracer.html#bracer"><span class="toc-section-number">4</span> BraCeR</a>
-<ul>
-<li><a href="4-bracer.html#assemble"><span class="toc-section-number">4.0.1</span> Assemble</a></li>
-<li><a href="4-bracer.html#summarise"><span class="toc-section-number">4.0.2</span> Summarise</a></li>
+<li class="has-sub"><a href="4-bracer.html#bracer"><span class="toc-section-number">4</span> BraCeR</a><ul>
+<li><a href="4-1-assemble.html#assemble"><span class="toc-section-number">4.1</span> Assemble</a></li>
+<li><a href="4-2-summarise.html#summarise"><span class="toc-section-number">4.2</span> Summarise</a></li>
 </ul></li>
 </ul>
 </div>
@@ -156,7 +155,7 @@ img {
 <h1 class="title">Autoproliferation Analysis B Cells</h1>
 <h4 class="author"><em>Richard Affolter, Martin Emons, Philip Hartout</em></h4>
 </div>
-<div id="introduction" class="section level1" number="1">
+<div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>Multiple sclerosis (MS) is an automimmune disease affecting the central nervous system. It attacks the myelein-sheet of neurons affects alone in the US <span class="math inline">\(\sim\)</span> 1 Mio. patients. <span class="citation">(Ramesh et al. 2020)</span> Patients often experience impairments of visual, sensory, motor, neurocognitive and autonomic functions. One form of MS is the relapsing-remitting MS (RRMS) which is characterised by active phases of the disease (relapse; REL) and inactive phases (remission; REM). <span class="citation">(Jelcic et al. 2018)</span></p>
 <p>There is a broad consensus that MS is in fact due to a dysregulated adaptive immunity. In the immune response of MS several cells are known to be important LIKE CD4+ T-Cells, CD8+ T-cells as well as B-cells and autoantibodies. A phenomenon called autoproliferation (AP) (self-reactivity) of T cells and B cells seems to play an important role in MS. Autoproliferation is mediated by memory B-cells, as the depletion of B-cells leads to reduced T cell autoproliferation. This is as well one of the principles behind B cell-depleting therapies, underlining the importance of pro-inflammatory B-cells. Previous studies have found that the frequency of AP cells was different between stages of RRMS, being higher in REL than in REM. <span class="citation">(Jelcic et al. 2018)</span> In this project we focused on the analysis of B cells.</p>

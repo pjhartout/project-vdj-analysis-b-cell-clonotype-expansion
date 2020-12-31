@@ -5,7 +5,7 @@ output:
   bookdown::html_book:
     toc: yes
     citation_package: pandoc-citeproc
-    split_by: "section+number"
+    split_by: "chapter"
 bibliography: ["citations.bib"]
 ---
 

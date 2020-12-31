@@ -1,13 +1,14 @@
 # Exploratory Data Analysis
 
 The patient meta-data was provided in an Rds file and was prepared with the following commands:
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 # Loads environment variables for host-agnostic execution
 # Variables in .env can be accessed using Sys.getenv(c("VAR")) 
 # See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
 # Make sure that the knit directory is set to the home directory of the project 
 # prior to knitting
 library(dotenv)
+setwd('..')
 load_dot_env(file = ".env")
 
 library(dplyr)
@@ -30,7 +31,7 @@ The number of AP patients in the dataset is `r count_ap` and the number of nonAP
 
 Next the composition of the dataset will be visualised
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 
 #adding a column specifying AP vs nonAP
@@ -55,7 +56,7 @@ We see that the composition is quite homogeneous, we have a similar number of pa
 
 Next we want to inspect how many cells we have per patient
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning=FALSE}
 library(reshape)
 
 labels <- cellUMI2SampleType$lib_id
@@ -90,4 +91,4 @@ p <- ggplot(countlabel, aes(x = variable, y= value, fill = label)) + geom_bar(st
 p
 ```
 
-We see that we have in the range of cell counts in the range of $\sim$ 1000 up to $\sim$ 5000. Over the two conditions AP and nonAP we see that the distribution is quite similar with `r cells_ap`AP cells and `r cells_nonap` nonAP cells, which again points to a well balanced dataset.
+We see that we have in the range of cell counts in the range of $\sim$ 1000 up to $\sim$ 5000. Over the two conditions AP and nonAP we see that the distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells, which again points to a well balanced dataset.

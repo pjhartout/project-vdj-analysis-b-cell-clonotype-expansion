@@ -3,7 +3,8 @@
 
 """parallel_bracer_summarise.py
 
-This executes multiple instances of docker in parallel to execute the bracer summarise pipeline
+This executes multiple instances of docker in parallel to execute the bracer
+summarise pipeline
 """
 
 import subprocess
@@ -22,12 +23,12 @@ N_JOBS = -1
 def execute_docker_bracer(patient):
     """Call docker in a subprocess for each cell
 
-    PRE:
+    Args:
         row (list): row containing the cell to be processed
         list_of_cells (list): list of cells containing all UMIs belonging to
         patients
         patient (str): patient to be processed
-    POST:
+    Returns:
         envokes docker instance for summarise
     """
     os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/")
@@ -37,7 +38,8 @@ def execute_docker_bracer(patient):
             "run",
             "--rm",
             "-v",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/"
+            f"{patient}/:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
@@ -48,8 +50,8 @@ def execute_docker_bracer(patient):
 
 
 def main():
-    """Main function - lists patients and run summarise via docker in parallel for
-        each patient.
+    """Main function - lists patients and run summarise via docker in parallel
+        for each patient.
 
     """
     list_of_patients = os.listdir(

@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""parallel_bracer.py
+"""parallel_bracer_assemble.py
 
-This executes multiple instances of docker in parallel to execute the bracer pipeline
+This executes multiple instances of docker in parallel to execute the bracer
+pipeline
 """
 
 import subprocess
@@ -30,7 +31,8 @@ def execute_docker_bracer(row, list_of_cells, patient):
     """
     cell = list_of_cells[row].split(".")[0:1]
     os.chdir(
-        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out"
+        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+        f"{patient}-out"
     )
     subprocess.call(
         [
@@ -43,12 +45,22 @@ def execute_docker_bracer(row, list_of_cells, patient):
             "/scratch",
             "teichlab/bracer",
             "summarise",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/{patient}-out",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+            f"{patient}-out",
         ]
     )
 
 
 def files(path):
+    """Adds all files in current directory to a list that is returned
+
+    Args:
+        path (str): path to file returned
+
+    Returns:
+        (list) list of files in path
+    """
+
     list_of_files = list()
     for file in os.listdir(path):
         if os.path.isfile(os.path.join(path, file)):

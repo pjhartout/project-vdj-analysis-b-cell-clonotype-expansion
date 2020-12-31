@@ -9,7 +9,6 @@ The patient meta-data was provided in an Rds file and was prepared with the foll
 # prior to knitting
 
 library(dotenv)
-setwd('..')
 load_dot_env(file = ".env")
 
 library(dplyr)

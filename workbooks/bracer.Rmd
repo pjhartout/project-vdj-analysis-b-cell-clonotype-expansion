@@ -2,7 +2,7 @@
 
 With these demultiplexed cells one could run the BraCeR workflow with the two functionalities "assemble" and "summarise".
 
-### Assemble
+## Assemble
 
 Assemble was performed by using the pre-assembled file from cellranger output and preparing the necessary files for the subsequent summarise step to function
 
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     main()
 ```
 
-### Summarise
+## Summarise
 
 ```{python, eval = FALSE}
 #!/usr/bin/env python

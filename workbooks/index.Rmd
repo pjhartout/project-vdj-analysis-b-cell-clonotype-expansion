@@ -5,9 +5,9 @@ output:
   bookdown::html_book:
     toc: yes
     citation_package: pandoc-citeproc
+    split_by: "section+number"
 bibliography: ["citations.bib"]
 ---
-
 
 ```{r child = 'introduction.Rmd'}
 ```

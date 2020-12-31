@@ -11,7 +11,7 @@ to a separate archive.
 import os
 import dotenv
 from tqdm import tqdm
-from shutil import copyfile, rmtree
+from shutil import copyfile, rmtree, make_archive
 
 # Load values from .env
 DOTENV_KEY2VAL = dotenv.dotenv_values()
@@ -45,6 +45,8 @@ def main():
         files_to_copy = ["BCR_summary.txt", "clonotype_sizes.txt"]
         for file in files_to_copy:
             copyfile(src + "/" + file, destination + "/" + file)
+
+    make_archive("summarise_data", "zip", "summarize_data")
 
 
 if __name__ == "__main__":

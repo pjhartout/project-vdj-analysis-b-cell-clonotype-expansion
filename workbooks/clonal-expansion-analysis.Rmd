@@ -75,3 +75,7 @@ p
 wilcox.test(expansion_frequency ~ Sample.Type, data=df) 
 ```
 
+```{r}
+# clean up to free up memory
+rm(list = ls())
+```

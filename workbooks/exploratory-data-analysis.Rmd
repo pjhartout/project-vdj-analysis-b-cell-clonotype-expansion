@@ -113,3 +113,9 @@ colnames(summary.df) <- c("Type", "X2", "value")
 p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + geom_bar(stat = "identity") + xlab ("Cumsum of Cells") + ggtitle("Proportion of overall AP vs nonAP cells")
 p
 ```
+
+```{r}
+# clean up to free up memory
+rm(list = ls())
+```
+

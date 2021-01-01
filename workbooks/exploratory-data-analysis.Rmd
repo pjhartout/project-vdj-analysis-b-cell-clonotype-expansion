@@ -94,8 +94,7 @@ for(i in 1:31){
 #visualisation of the cell counts per patient
 p <- ggplot(countlabel, aes(x = variable, y= value, fill = label)) +
   geom_bar(stat='identity') + theme(axis.text.x = element_text(angle = 90)) +
-  xlab("Patient ID") + ylab ("Count") + ggtitle("Visualisation of cell count per
-                                                patient")
+  xlab("Patient ID") + ylab ("Count") + ggtitle("Cell count per patient")
 
 p
 ```
@@ -111,6 +110,6 @@ summary.df <- melt(summary.df)
 
 colnames(summary.df) <- c("Type", "X2", "value")
 
-p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + geom_bar(stat = "identity") + xlab ("Cumsum of Cells")
+p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + geom_bar(stat = "identity") + xlab ("Cumsum of Cells") + ggtitle("Proportion of overall AP vs nonAP cells")
 p
 ```

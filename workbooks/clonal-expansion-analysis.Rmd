@@ -7,14 +7,45 @@
 # Make sure that the knit directory is set to the home directory of the project
 # prior to knitting
 
+library(magrittr)
 library(dotenv)
-setwd('..')
+library(dplyr)
+library(SummarizedExperiment)
+
 load_dot_env(file = ".env")
 
-library(magrittr)
+
 # Load data, note that summarise_data should be in data/
 file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
+
+
+# prepare empty data frame
+df = data.frame(lib_id = character(), expansion_frequency = double())
+
+
 for (i in list.files(path = file_path)){
-  strsplit(i, "[-_]+") %>% unlist() %>% .[1] %>% print()
-}
+  
+  tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
+  tmp = read.table(tmp_path, header = TRUE)
+  
+  freq=tmp$clonotype_size*tmp$clonotype_count
+  sum_freq=sum(freq)
+  freq=(sum_freq - freq[1])/sum_freq
+  
+  #split the string at "-" to remove "-preprocessed" and remove the "B
+  patient_name = strsplit(i, "-") %>% unlist() %>% .[1]
+  sub("B","",patient_name)
+  
+  expand_tmp = list(lib_id = patient_name, expansion_frequency = freq)
+  df = rbind(df,expand_tmp)
+  }
+
+
 ```
+
+```{r}
+library(SingleCellExperiment)
+experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
+                     refhook = NULL)
+```
+

@@ -1,6 +1,6 @@
 # Frequency of clonal expansion
 
-```{r, message=FALSE, warning=FALSE}
+```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
 # Loads environment variables for host-agnostic execution
 # Variables in .env can be accessed using Sys.getenv(c("VAR"))
 # See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
@@ -32,9 +32,10 @@ for (i in list.files(path = file_path)){
   sum_freq=sum(freq)
   freq=(sum_freq - freq[1])/sum_freq
   
-  #split the string at "-" to remove "-preprocessed" and remove the "B
-  patient_name = strsplit(i, "-") %>% unlist() %>% .[1]
-  sub("B","",patient_name)
+  #split the string at "-" or "_" to remove "-preprocessed" and "POOL*" and 
+  # remove the "B
+  patient_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
+  patient_name = sub("B","",patient_name)
   
   expand_tmp = list(lib_id = patient_name, expansion_frequency = freq)
   df = rbind(df,expand_tmp)
@@ -43,9 +44,34 @@ for (i in list.files(path = file_path)){
 
 ```
 
-```{r}
+```{r load the annotation data, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
                      refhook = NULL)
+```
+
+```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
+library(tidyr)
+experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type) %>% 
+  unique() -> annotation_df
+
+separate(data = annotation_df, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
+
+df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
+```
+
+
+
+```{r plot the frequencies, message=FALSE, warning=FALSE}
+library(ggplot2)
+p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Sample.Type)) + geom_point() +
+  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) + 
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+```
+
+```{r Mann-Whitney-Wilcoxon Test}
+wilcox.test(expansion_frequency ~ Sample.Type, data=df) 
 ```
 

@@ -46,7 +46,7 @@ def main():
         for file in files_to_copy:
             copyfile(src + "/" + file, destination + "/" + file)
 
-    make_archive("summarise_data", "zip", "summarize_data")
+    make_archive(output_folder, "zip", output_folder)
 
 
 if __name__ == "__main__":

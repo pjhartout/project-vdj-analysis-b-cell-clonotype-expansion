@@ -52,7 +52,7 @@ experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
 
 ```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
 library(tidyr)
-experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type) %>% 
+experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type, Diagnosis) %>% 
   unique() -> annotation_df
 
 separate(data = annotation_df, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
@@ -64,7 +64,7 @@ df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
 
 ```{r plot the frequencies, message=FALSE, warning=FALSE}
 library(ggplot2)
-p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Sample.Type)) + geom_point() +
+p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)) + geom_point() +
   xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) + 
   theme_bw() + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())

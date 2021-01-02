@@ -92,8 +92,8 @@ for(i in 1:31){
 }
 
 #visualisation of the cell counts per patient
-p <- ggplot(countlabel, aes(x = variable, y= value, fill = label)) +
-  geom_bar(stat='identity') + theme(axis.text.x = element_text(angle = 90)) +
+p <- ggplot(countlabel, aes(x = variable, y= value, shape = label, colour = label)) +
+  geom_point(stat='identity') + theme(axis.text.x = element_text(angle = 90)) +
   xlab("Patient ID") + ylab ("Count") + ggtitle("Cell count per patient")
 
 p
@@ -114,7 +114,7 @@ p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + geom_bar(stat = "
 p
 ```
 
-```{r}
+```{r, include=FALSE}
 # clean up to free up memory
 rm(list = ls())
 ```

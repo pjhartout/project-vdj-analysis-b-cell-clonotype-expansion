@@ -10,7 +10,9 @@
 library(magrittr)
 library(dotenv)
 library(dplyr)
+library(plyr)
 library(SummarizedExperiment)
+library(reshape2)
 
 load_dot_env(file = ".env")
 
@@ -18,31 +20,65 @@ load_dot_env(file = ".env")
 # Load data, note that summarise_data should be in data/
 file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
 
-
-# prepare empty data frame
-df = data.frame(lib_id = character(), expansion_frequency = double())
-
-
+# determine the highest clonotype size in the data
+max_clonotype_size = 0
 for (i in list.files(path = file_path)){
   
   tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
   tmp = read.table(tmp_path, header = TRUE)
   
+  
+  if (max(tmp$clonotype_size) > max_clonotype_size){
+    max_clonotype_size = max(tmp$clonotype_size)
+  }
+}
+
+# prepare empty data frame (df for frequency and df_complete for clonotype counts)
+df = data.frame(lib_id = character(), expansion_frequency = double())  
+df_complete = data.frame()
+lib_ids = c()
+
+# loop over all files and fill the dataframes
+for (i in list.files(path = file_path)){
+  
+  tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
+  tmp = read.table(tmp_path, header = TRUE)
+  
+  # calculate frequency of clonal expansion (clonotype size >= 2)
   freq=tmp$clonotype_size*tmp$clonotype_count
   sum_freq=sum(freq)
   freq=(sum_freq - freq[1])/sum_freq
   
   #split the string at "-" or "_" to remove "-preprocessed" and "POOL*" and 
   # remove the "B
-  patient_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
-  patient_name = sub("B","",patient_name)
+  lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
+  lib_name = sub("B","",lib_name)
   
-  expand_tmp = list(lib_id = patient_name, expansion_frequency = freq)
+  expand_tmp = list(lib_id = lib_name, expansion_frequency = freq)
   df = rbind(df,expand_tmp)
+  
+  lib_ids = c(lib_ids,lib_name) 
+  
+  # fill vector with zeros up to max clonotype size to have equal lengths
+  adjusted_clonotype_count = c(tmp$clonotype_count, 
+                              rep(0,(max_clonotype_size -
+                              max(tmp$clonotype_size))))
+  
+  df_complete = rbind(df_complete, adjusted_clonotype_count)
   }
 
-
+colnames(df_complete) = 1:max_clonotype_size
+rownames(df_complete) = lib_ids
 ```
+
+
+```{r condensing dataframe}
+# condense all clonotypes > 4 into one category and make a new data frame
+condensed_sum = rowSums(df_complete[-c(1:4)])
+df_summarized = cbind(df_complete[c(1:4)],condensed_sum)
+colnames(df_summarized) = c(1:4, "> 4")
+```
+
 
 ```{r load the annotation data, message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
@@ -52,12 +88,38 @@ experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
 
 ```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
 library(tidyr)
-experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type, Diagnosis) %>% 
-  unique() -> annotation_df
+library(gtable)
 
+# make an annotation data frame
+experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type, Diagnosis) %>% unique() -> annotation_df
+
+# cut the lib id string and keep only the first part
 separate(data = annotation_df, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
 
+# change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
+simplified_annotation = simplified_annotation %>% 
+  mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
+
+# merge the annotation with the data frames
 df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
+rownames(simplified_annotation) = simplified_annotation$lib_id
+
+df_summarized = merge(df_summarized, simplified_annotation, by = "row.names")
+
+rownames(df_summarized) = df_summarized$Row.names
+df_summarized = subset(df_summarized, select = -Row.names)
+```
+
+
+```{r, plot the clonal expansion}
+library(ggplot2)
+melted = melt(df_summarized, id.vars = c("lib_id", "Sample.Type", "Diagnosis"))
+ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) + 
+  geom_bar(stat="identity", position = position_stack(reverse = TRUE)) + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  facet_grid(.~Sample.Type, scales = "free_x") +
+  labs(fill = "Clonal expansion") +
+  xlab("Sample Id") + ylab("Count")
 ```
 
 
@@ -74,6 +136,8 @@ p
 ```{r Mann-Whitney-Wilcoxon Test}
 wilcox.test(expansion_frequency ~ Sample.Type, data=df) 
 ```
+
+
 
 ```{r}
 # clean up to free up memory

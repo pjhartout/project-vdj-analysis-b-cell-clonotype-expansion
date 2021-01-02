@@ -23,11 +23,13 @@ def main():
     patients = os.listdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/")
     output_folder = f"{DOTENV_KEY2VAL['HOME_DIR']}/data/summarise_data/"
 
+    # Removes output directory if it already exists
     if os.path.exists(output_folder):
         rmtree(output_folder)
 
     os.mkdir(output_folder)
 
+    # Loop through patients and copy only the files_to_copy.
     for patient in tqdm(patients):
         if os.path.exists(output_folder + f"/{patient}"):
             rmtree(output_folder + f"/{patient}")
@@ -46,6 +48,7 @@ def main():
         for file in files_to_copy:
             copyfile(src + "/" + file, destination + "/" + file)
 
+    # Make zip archive of destination
     make_archive(output_folder, "zip", output_folder)
 
 

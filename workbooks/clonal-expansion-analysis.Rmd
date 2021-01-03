@@ -119,7 +119,7 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
   theme(axis.text.x = element_text(angle = 90)) + 
   facet_grid(.~Sample.Type, scales = "free_x") +
   labs(fill = "Clonal expansion") +
-  xlab("Sample Id") + ylab("Count")
+  xlab("Sample Id") + ylab("Clonotype Count")
 ```
 
 

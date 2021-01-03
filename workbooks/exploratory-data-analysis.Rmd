@@ -38,18 +38,12 @@ Next the composition of the dataset will be visualised
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
 
-#adding a column specifying AP vs nonAP
-for(i in 1:31){
-  if(cellUMI2SampleType$Sample.Type[i] == "CFSEhi CD19+"){
-    cellUMI2SampleType$type[i] = "nonAP"
-  }
-  else{
-    cellUMI2SampleType$type[i] = "AP"
-  }
-}
+# change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
+cellUMI2SampleType = cellUMI2SampleType %>% 
+  mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
 #visualisation of the patient composition
-p <- ggplot(cellUMI2SampleType, aes(x = type, fill = Diagnosis)) +
+p <- ggplot(cellUMI2SampleType, aes(x = Sample.Type, fill = Diagnosis)) +
     geom_bar(position="dodge")  +
     ggtitle("Sample Dataset (n = 31)")
 
@@ -77,7 +71,7 @@ for(label in labels){
 
 countlabel <- melt(countlabel)
 
-countlabel$label <- cellUMI2SampleType$type
+countlabel$label <- cellUMI2SampleType$Sample.Type
 
 #counting the number of cells per condition
 cells_ap = 0

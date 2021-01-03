@@ -23,3 +23,6 @@ bibliography: ["citations.bib"]
 
 ```{r child = 'clonal-expansion-analysis.Rmd'}
 ```
+
+```{r child = 'conclusion.Rmd'}
+```

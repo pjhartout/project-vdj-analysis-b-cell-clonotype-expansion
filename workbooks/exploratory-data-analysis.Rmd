@@ -88,8 +88,8 @@ p <- ggplot(countlabel, aes(x = variable, y= value, colour = label)) +
 p
 ```
 
-We see that we have in the range of cell counts in the range of $\approx 1000 up
-to $\approx 5000. Over the two conditions AP and nonAP we see that the
+We see that we have in the range of cell counts in the range of $\approx$ 1000 up
+to $\approx$ 5000. Over the two conditions AP and nonAP we see that the
 distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
 cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells, which again
 points to a well balanced dataset.
@@ -103,8 +103,8 @@ summary.df <- melt(summary.df)
 
 colnames(summary.df) <- c("Type", "X2", "value")
 
-p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + 
-  geom_bar(stat = "identity") + xlab ("Cumsum of Cells") + 
+p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
+  geom_bar(stat = "identity") + xlab ("Cumsum of Cells") +
   ggtitle("Proportion of overall AP vs nonAP cells")
 p
 ```

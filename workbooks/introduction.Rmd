@@ -48,5 +48,9 @@ In the context of this project the were provided with B-cell sequencing data
 from 31 patients which were categorised as being either autoproliferating (AP)
 or non-autoproliferating (nonAP). The disease status (RRMS NAT - treated with
 the monoclonal antibody Natalizumab, RRMS nihil - untreated and Healthy Donors)
-was recorded for each. More information on the dataset will be available in the
-next chapter.
+was recorded for each.
+
+This report is structured as follows: first, we perform an exploratory data
+analysis on the data where we lay out the experimental setting; second, we
+expound our preprocessing pipeline using BraCer; third, we perform an analysis
+of clonotype frequency in AP and nonAP.

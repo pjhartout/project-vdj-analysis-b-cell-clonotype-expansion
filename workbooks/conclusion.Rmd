@@ -11,7 +11,7 @@ divide. First, as expected, we saw increased and statistically significant
 expanded B cell clonotypes among samples labeled as AP. Second, we saw that
 Natalizumab did not have an effect on B cell clonotype expansion. Third, we saw
 that there was a higher amount of clonotypes distributed among the AP samples
-than the nonAP samples. We also saw that there was no change in B cell clonotype
+than the nonAP samples. Fourth, we saw that there was no change in B cell clonotype
 expansion depending on whether or not the patient from which the cells were
 sampled contained the HLA-DR15 variant, which primarily affects T cells and is
-hypothesized to be involved in MS.
+hypothesized to be involved in RRMMS.

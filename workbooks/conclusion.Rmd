@@ -2,7 +2,7 @@
 
 In this project, we have preprocessed scRNA-seq data of B cells sampled from a
 population of healthy donors and patients affected by RRMS. A fraction of these
-patients were administered with Natalizumad, a therapeutic drug for MS aiming to
+patients were administered with Natalizumab, a therapeutic drug for MS aiming to
 lower autoreactive T cell intrusion in the CNS. These samples were then further
 incubated in the lab and annotated as AP vs. nonAP according to the staining
 with the dye CFSE, the dye being more dim among expanding cell populations,
@@ -14,4 +14,4 @@ that there was a higher amount of clonotypes distributed among the AP samples
 than the nonAP samples. Fourth, we saw that there was no change in B cell clonotype
 expansion depending on whether or not the patient from which the cells were
 sampled contained the HLA-DR15 variant, which primarily affects T cells and is
-hypothesized to be involved in RRMMS.
+hypothesized to be involved in RRMS.

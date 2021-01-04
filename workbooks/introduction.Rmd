@@ -5,7 +5,12 @@ system. It attacks the myelin sheet of neurons and affects $\approx$ 1M patients
 in the US alone. [@ramesh] Patients often experience impairments of visual,
 sensory, motor, neurocognitive and autonomic functions. The most common form of
 MS is the relapsing-remitting MS (RRMS) which is characterised by active phases
-of the disease (relapse; REL) and inactive phases (remission; REM) [@jelcic].
+of the disease (relapse; REL) and inactive phases (remission; REM). [@jelcic]
+
+MS is due to a variety of genetic types (> 100 loci). One important haplotype 
+is HLA-DR15 which has been shown to have a strong association with MS. Since 
+HLA-class II molecules restrict the space of T-cells, a strong argument for 
+HLA-DR15 and the role of adaptive immunity in MS is being made. [@jelcic]
 
 There is a broad consensus that MS is due to a dysregulated adaptive immunity.
 During the relapsing phases of MS, several cells are known to be important, such

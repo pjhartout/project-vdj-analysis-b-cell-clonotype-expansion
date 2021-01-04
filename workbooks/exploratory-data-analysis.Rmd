@@ -109,7 +109,7 @@ p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
 p
 ```
 
-```{r message=FALSE, warning=FALSE, include=FALSE, echo=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
 # clean up to free up memory
 rm(list = ls())
 ```

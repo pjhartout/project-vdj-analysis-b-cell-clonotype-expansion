@@ -1,10 +1,8 @@
 # Frequency of clonal expansion
 
 ```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
-library(magrittr)
 library(dotenv)
 library(dplyr)
-library(plyr)
 library(SummarizedExperiment)
 library(reshape2)
 
@@ -140,6 +138,58 @@ p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_fr
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
 ```
+
+```{r Isotype analysis}
+# prepare empty df
+isotype_df = data.frame()
+
+# loop over all files and fill the dataframes
+for (i in list.files(path = file_path)){
+  tmp_path = paste0(file_path,"/",i,"/BCR_summary.txt")
+  
+  # read the file line by line
+  l = readLines(tmp_path)
+  
+  # find the start about the section about the isotypes
+  start_line = grep("##Isotype of cells with productive heavy chain##",l)+2
+  
+  # find empty lines in file
+  empty_lines = which(!nzchar(l))
+  
+  # find first empty line after starting line
+  end_line = empty_lines[empty_lines > start_line][1]-1
+
+  tmp_table = read.table(tmp_path, skip = start_line, nrows =
+                          (end_line-start_line), header = FALSE) %>%
+    as.data.frame()
+  
+  colnames(tmp_table) = c("Isotype", "cells", "% of cells")
+  
+  #split the string at "-" or "_" to remove "-preprocessed" and "POOL*"
+  # and remove the "B
+  lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
+  lib_name = sub("B","",lib_name)
+  
+  tmp_table$lib_id = lib_name
+  
+  isotype_df = rbind(isotype_df, tmp_table)
+}
+
+# merge the annotation with the data frames
+isotype_df = merge(isotype_df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
+```
+
+```{r}
+library(ggplot2)
+p <- ggplot(isotype_df %>% subset(Isotype != "Unknown"), aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
+  geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")
+  #facet_grid(.~Sample.Type, scales = "free_x") +
+    
+#theme_bw() + 
+  #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+```
+
 
 
 ```{r clean up, include=FALSE}

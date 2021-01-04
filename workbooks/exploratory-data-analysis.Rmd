@@ -1,13 +1,8 @@
 # Exploratory Data Analysis
 
-The patient meta-data was provided in an Rds file and was prepared with the following commands:
+The patient meta-data was provided in an Rds file and was prepared with the
+following commands:
 ```{r, message=FALSE, warning=FALSE}
-# Loads environment variables for host-agnostic execution
-# Variables in .env can be accessed using Sys.getenv(c("VAR"))
-# See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
-# Make sure that the knit directory is set to the home directory of the project
-# prior to knitting
-
 library(dotenv)
 load_dot_env(file = ".env")
 
@@ -39,7 +34,7 @@ Next the composition of the dataset will be visualised
 library(ggplot2)
 
 # change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
-cellUMI2SampleType = cellUMI2SampleType %>% 
+cellUMI2SampleType = cellUMI2SampleType %>%
   mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
 #visualisation of the patient composition
@@ -93,7 +88,11 @@ p <- ggplot(countlabel, aes(x = variable, y= value, colour = label)) +
 p
 ```
 
-We see that we have in the range of cell counts in the range of $\sim$ 1000 up to $\sim$ 5000. Over the two conditions AP and nonAP we see that the distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells, which again points to a well balanced dataset.
+We see that we have in the range of cell counts in the range of $\approx 1000 up
+to $\approx 5000. Over the two conditions AP and nonAP we see that the
+distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
+cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells, which again
+points to a well balanced dataset.
 
 ```{r, message = FALSE}
 #showing the proportion of the cumulative sum of AP vs nonAP cells
@@ -104,7 +103,9 @@ summary.df <- melt(summary.df)
 
 colnames(summary.df) <- c("Type", "X2", "value")
 
-p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + geom_bar(stat = "identity") + xlab ("Cumsum of Cells") + ggtitle("Proportion of overall AP vs nonAP cells")
+p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) + 
+  geom_bar(stat = "identity") + xlab ("Cumsum of Cells") + 
+  ggtitle("Proportion of overall AP vs nonAP cells")
 p
 ```
 
@@ -112,4 +113,3 @@ p
 # clean up to free up memory
 rm(list = ls())
 ```
-

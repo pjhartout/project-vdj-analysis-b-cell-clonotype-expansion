@@ -1,12 +1,6 @@
 # Frequency of clonal expansion
 
 ```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
-# Loads environment variables for host-agnostic execution
-# Variables in .env can be accessed using Sys.getenv(c("VAR"))
-# See https://stat.ethz.ch/R-manual/R-devel/library/base/html/Sys.getenv.html
-# Make sure that the knit directory is set to the home directory of the project
-# prior to knitting
-
 library(magrittr)
 library(dotenv)
 library(dplyr)

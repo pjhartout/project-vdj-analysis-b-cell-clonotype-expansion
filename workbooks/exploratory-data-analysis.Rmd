@@ -100,6 +100,18 @@ distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
 cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells. One thing to
 note is, that for each patient both conditions (AP and nonAP) were recorded.
 
+A check for normality is done via a QQ plot
+```{r, message = FALSE}
+#adding Q-Q plot to check for normality of data
+
+p <- ggplot(countlabel, aes(sample = value)) +
+  stat_qq(col = "blue") + stat_qq_line(col = "red" ) +
+  ggtitle("Normal Q-Q plot")
+p
+```
+From our QQ plot above we see that the data is not normally distributed showing
+the need for a nonparametric statistical test later on.
+
 In a last step the cumulative fraction of AP cells vs nonAP cells is analysed.
 ```{r, message = FALSE}
 #showing the proportion of the cumulative sum of AP vs nonAP cells

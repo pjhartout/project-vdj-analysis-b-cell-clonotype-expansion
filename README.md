@@ -20,7 +20,7 @@ A full overview, analysis and summary of this project can be found in the [workb
 ## Dependencies
 
 ### R
-Most dependencies are managed through [Packrat](https://rstudio.github.io/packrat/). Use `packrat::restore()` to install R dependencies.
+Most dependencies are managed through [renv](https://rstudio.github.io/renv). Use `renv::restore()` to install R dependencies. Make sure you enable `Bioc software` in `setRepositories()` to allow to install `Bioconductor` packages using `install.packages()`.
 
 ### Python
 

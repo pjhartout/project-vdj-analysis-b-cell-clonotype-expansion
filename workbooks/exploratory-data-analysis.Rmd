@@ -135,8 +135,8 @@ one patient accounts for the majority of cells per condition but that these cell
 are quite nicely mixed from different samples. Since we recorded from each
 patient both AP and nonAP samples we are in a paired setting. From the 
 cell counts visible in the plot above it is not clearly visible whether the data
-is parametric, therefore we will employ a nonparametric statistical test, being
-the wilcoxon rank test for paired samples. 
+is parametric. In the QQ plot we see though quite clearly that the data is not
+normally distributed, indicating the need for a nonparametric test.
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
 # clean up to free up memory

@@ -1,5 +1,8 @@
 # Exploratory Data Analysis
 
+In the following section the composition of the data will be analysed and
+discussed.
+
 The patient meta-data was provided in an Rds file and was prepared with the
 following commands:
 ```{r, message=FALSE, warning=FALSE}
@@ -28,7 +31,9 @@ count_ap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEdim CD19+"))
 The number of AP samples in the dataset is `r count_ap` and the number of nonAP
 samples is `r count_nonap`.
 
-Next the composition of the dataset will be visualised
+Next the composition of the dataset will be visualised. First we set CFSEdim to
+be AP and CFSEhi to be nonAP. Then the total number of patients per condition
+(Healthy Donor, RRMS nihil, RRMS NAT) was visualised.
 
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -49,7 +54,8 @@ We see that the composition is quite homogeneous, we have a similar number of
 samples for both conditions (AP vs. nonAP) and for the diagnosis/treatment
 (RRMS (NAT), RMS (REM; nihil), Healthy Donor).
 
-Next we want to inspect how many cells we have per sample.
+Next we want to inspect how many cells we have per sample and count how many
+cells we have for AP and nonAP per sample.
 
 ```{r, message = FALSE, warning=FALSE}
 library(reshape)
@@ -91,9 +97,10 @@ p
 We see that we have in the range of cell counts in the range of $\approx$ 1000 up
 to $\approx$ 5000. Over the two conditions AP and nonAP we see that the
 distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
-cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells, which again
-points to a well balanced dataset.
+cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells. One thing to
+note is, that for each patient both conditions (AP and nonAP) were recorded.
 
+In a last step the cumulative fraction of AP cells vs nonAP cells is analysed.
 ```{r, message = FALSE}
 #showing the proportion of the cumulative sum of AP vs nonAP cells
 summary.df <- data.frame()
@@ -108,6 +115,16 @@ p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
   ggtitle("Proportion of overall AP vs nonAP cells")
 p
 ```
+
+Overall we see that the dataset is wellbalanced and we have similar amounts of 
+patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have similar
+amounts of cells per condition (AP vs nonAP). Furthermore, it is not the case that
+one patient accounts for the majority of cells per condition but that these cells
+are quite nicely mixed from different samples. Since we recorded from each
+patient both AP and nonAP samples we are in a paired setting. From the 
+cell counts visible in the plot above it is not clearly visible whether the data
+is parametric, therefore we will employ a nonparametric statistical test, being
+the wilcoxon rank test for paired samples. 
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
 # clean up to free up memory

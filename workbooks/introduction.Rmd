@@ -67,3 +67,6 @@ This report is structured as follows: first, we perform an exploratory data
 analysis on the data where we lay out the experimental setting; second, we
 expound our preprocessing pipeline using BraCer; third, we perform an analysis
 of clonotype frequency in AP and nonAP.
+
+Our null hypothesis is, that there is no difference between the two conditions
+AP and nonAP in terms of clonal expansion. 

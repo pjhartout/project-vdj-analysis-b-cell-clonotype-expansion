@@ -1,5 +1,10 @@
 # project-vdj-analysis
-Repo for the final project of STA426 to be completed by Richard Affolter, Martin Emons and Philip Hartout
+This repository contains the final project of STA426, completed by Richard Affolter, Martin
+Emons and Philip Hartout. The goal of this project is to investigate clonal
+expansion among B cells donated by patients affected by RRMS (treated with
+Natalizumab and untreated), as well as healthy donors. Prior to being subject to
+single-cell RNA sequencing, the B cells were incubated with CFSE to assess _in
+vitro_ autoproliferation.
 
 ## Outline
 This project is set up as follows:

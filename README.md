@@ -17,6 +17,15 @@ This project is set up as follows:
 
 A full overview, analysis and summary of this project can be found in the [workbooks  directory](/workbooks/).
 
+## Dependencies
+
+### R
+Most dependencies are managed through [Packrat](https://rstudio.github.io/packrat/). Use `packrat::restore()` to install R dependencies.
+
+### Python
+
+Python dependencies are managed through [poetry](https://python-poetry.org/). Use `poetry install` to install python dependencies.
+
 ## Acknowledgments
 
 The scRNA-seq data was provided by [F. Hoffmann-La Roche Ltd](https://www.roche.com/) and supervised by [Prof. Dr. Mark Robinson](https://www.sib.swiss/mark-robinson-group).

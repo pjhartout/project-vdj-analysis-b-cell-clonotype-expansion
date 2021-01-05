@@ -182,11 +182,9 @@ isotype_df = merge(isotype_df, simplified_annotation, by.x = "lib_id", by.y = "l
 ```{r}
 library(ggplot2)
 p <- ggplot(isotype_df %>% subset(Isotype != "Unknown"), aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
-  geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")
-  #facet_grid(.~Sample.Type, scales = "free_x") +
-    
-#theme_bw() + 
-  #theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")+
+  theme_bw() + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
 ```
 

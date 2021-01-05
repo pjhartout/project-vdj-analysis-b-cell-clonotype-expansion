@@ -15,47 +15,47 @@ file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
 # determine the highest clonotype size in the data
 max_clonotype_size = 0
 for (i in list.files(path = file_path)){
-  
+
   tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
   tmp = read.table(tmp_path, header = TRUE)
-  
-  
+
+
   if (max(tmp$clonotype_size) > max_clonotype_size){
     max_clonotype_size = max(tmp$clonotype_size)
   }
 }
 
 # prepare empty data frame (df for frequency and df_complete for clonotype counts)
-df = data.frame(lib_id = character(), expansion_frequency = double())  
+df = data.frame(lib_id = character(), expansion_frequency = double())
 df_complete = data.frame()
 lib_ids = c()
 
 # loop over all files and fill the dataframes
 for (i in list.files(path = file_path)){
-  
+
   tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
   tmp = read.table(tmp_path, header = TRUE)
-  
+
   # calculate frequency of clonal expansion (clonotype size >= 2)
   freq=tmp$clonotype_size*tmp$clonotype_count
   sum_freq=sum(freq)
   freq=(sum_freq - freq[1])/sum_freq
-  
-  #split the string at "-" or "_" to remove "-preprocessed" and "POOL*" and 
-  # remove the "B
+
+  #split the string at "-" or "_" to remove "-preprocessed" and "POOL*" and
+  # remove the "B"
   lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
   lib_name = sub("B","",lib_name)
-  
+
   expand_tmp = list(lib_id = lib_name, expansion_frequency = freq)
   df = rbind(df,expand_tmp)
-  
-  lib_ids = c(lib_ids,lib_name) 
-  
+
+  lib_ids = c(lib_ids,lib_name)
+
   # fill vector with zeros up to max clonotype size to have equal lengths
-  adjusted_clonotype_count = c(tmp$clonotype_count, 
+  adjusted_clonotype_count = c(tmp$clonotype_count,
                               rep(0,(max_clonotype_size -
                               max(tmp$clonotype_size))))
-  
+
   df_complete = rbind(df_complete, adjusted_clonotype_count)
   }
 
@@ -89,7 +89,7 @@ experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type, Diagnosis
 separate(data = annotation_df, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
 
 # change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
-simplified_annotation = simplified_annotation %>% 
+simplified_annotation = simplified_annotation %>%
   mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
 # merge the annotation with the data frames
@@ -106,9 +106,9 @@ df_summarized = subset(df_summarized, select = -Row.names)
 ```{r, plot the clonal expansion}
 library(ggplot2)
 melted = melt(df_summarized, id.vars = c("lib_id", "Sample.Type", "Diagnosis", "HLADR15"))
-ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) + 
-  geom_bar(stat="identity", position = position_stack(reverse = TRUE)) + 
-  theme(axis.text.x = element_text(angle = 90)) + 
+ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
+  geom_bar(stat="identity", position = position_stack(reverse = TRUE)) +
+  theme(axis.text.x = element_text(angle = 90)) +
   facet_grid(.~Sample.Type, scales = "free_x") +
   labs(fill = "Clonal expansion") +
   xlab("Sample Id") + ylab("Clonotype Count")
@@ -119,21 +119,21 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
 ```{r plot the frequencies, message=FALSE, warning=FALSE}
 library(ggplot2)
 p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)) + geom_point() +
-  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) + 
-  theme_bw() + 
+  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) +
+  theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
 ```
 
 ```{r Mann-Whitney-Wilcoxon Test}
-wilcox.test(expansion_frequency ~ Sample.Type, data=df) 
+wilcox.test(expansion_frequency ~ Sample.Type, data=df)
 ```
 
 ```{r plot frequency for HLADR15}
 library(ggplot2)
 p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)) + geom_point() +
-  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) + 
-  theme_bw() + 
+  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) +
+  theme_bw() +
   facet_grid(.~HLADR15, scales = "free_x") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
@@ -146,32 +146,32 @@ isotype_df = data.frame()
 # loop over all files and fill the dataframes
 for (i in list.files(path = file_path)){
   tmp_path = paste0(file_path,"/",i,"/BCR_summary.txt")
-  
+
   # read the file line by line
   l = readLines(tmp_path)
-  
+
   # find the start about the section about the isotypes
   start_line = grep("##Isotype of cells with productive heavy chain##",l)+2
-  
+
   # find empty lines in file
   empty_lines = which(!nzchar(l))
-  
+
   # find first empty line after starting line
   end_line = empty_lines[empty_lines > start_line][1]-1
 
   tmp_table = read.table(tmp_path, skip = start_line, nrows =
                           (end_line-start_line), header = FALSE) %>%
     as.data.frame()
-  
+
   colnames(tmp_table) = c("Isotype", "cells", "% of cells")
-  
+
   #split the string at "-" or "_" to remove "-preprocessed" and "POOL*"
-  # and remove the "B
+  # and remove the "B"
   lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
   lib_name = sub("B","",lib_name)
-  
+
   tmp_table$lib_id = lib_name
-  
+
   isotype_df = rbind(isotype_df, tmp_table)
 }
 
@@ -191,10 +191,10 @@ df <- isotype_df[isotype_df$Isotype=="Unknown",]
 
 p <- ggplot(isotype_df, aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
   geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")+
-  theme_bw() + 
+  theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  stat_compare_means(method = "wilcox", aes(label = ..p.adj..), label = "p.signif", 
-         symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), 
+  stat_compare_means(method = "wilcox", aes(label = ..p.adj..), label = "p.signif",
+         symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
          symbols = c("****", "***", "**", "*", "ns")))
 p
 ```

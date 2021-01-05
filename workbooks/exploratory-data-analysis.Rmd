@@ -109,6 +109,7 @@ p <- ggplot(countlabel, aes(sample = value)) +
   ggtitle("Normal Q-Q plot")
 p
 ```
+
 From our QQ plot above we see that the data is not normally distributed showing
 the need for a nonparametric statistical test later on.
 

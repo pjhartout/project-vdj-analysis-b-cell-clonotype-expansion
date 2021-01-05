@@ -139,7 +139,7 @@ p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_fr
 p
 ```
 
-```{r Isotype analysis}
+```{r Isotype analysis, message = FALSE}
 # prepare empty df
 isotype_df = data.frame()
 
@@ -179,12 +179,23 @@ for (i in list.files(path = file_path)){
 isotype_df = merge(isotype_df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
-p <- ggplot(isotype_df %>% subset(Isotype != "Unknown"), aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
+library(ggpubr)
+library(rstatix)
+library(stringr)
+
+#unmapped isotypes = unmapped
+unmapped <- sum(str_count(isotype_df$Isotype, "Unknown"))
+df <- isotype_df[isotype_df$Isotype=="Unknown",]
+
+p <- ggplot(isotype_df, aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
   geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")+
   theme_bw() + 
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  stat_compare_means(method = "wilcox", aes(label = ..p.adj..), label = "p.signif", 
+         symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), 
+         symbols = c("****", "***", "**", "*", "ns")))
 p
 ```
 

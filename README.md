@@ -26,6 +26,10 @@ Most dependencies are managed through [renv](https://rstudio.github.io/renv). Us
 
 Python dependencies are managed through [poetry](https://python-poetry.org/). Use `poetry install` to install python dependencies.
 
+### .env support
+
+All the scripts in this project use a `.env` file for host-agnostic execution.
+
 ## Acknowledgments
 
 The scRNA-seq data was provided by [F. Hoffmann-La Roche Ltd](https://www.roche.com/) and supervised by [Prof. Dr. Mark Robinson](https://www.sib.swiss/mark-robinson-group).

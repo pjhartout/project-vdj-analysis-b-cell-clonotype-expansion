@@ -1,12 +1,12 @@
 # BraCeR
 
-With these demultiplexed cells one could run the BraCeR workflow with the two
-functionalities `assemble` and `summarise`.
+With these demultiplexed cells one could run the BraCeR workflow [@lindemann] 
+with the two functionalities `assemble` and `summarise`.
 
 ## Assemble
 
-Assemble was performed by using the pre-assembled file from the cellranger
-output and preparing the necessary files for the subsequent summarise step to
+Assemble was performed by using the pre-assembled file from the `CellRanger`
+output and preparing the necessary files for the subsequent `summarise` step to
 function. Further documentation is provided in the code.
 
 ```{python, eval = FALSE}
@@ -173,11 +173,19 @@ if __name__ == "__main__":
     main()
 ```
 
+From the `summarise` output we are interested in two files for our downstream
+analysis, `BCR_summary.txt` and `clonotype_sizes.txt`. The former contains a 
+summary statistics describing successful BCR reconstruction rates and the 
+numbers of cells with 0, 1, 2 or more recombinants for each locus. The 
+latter contains the distribution of clonotype sizes as a tabulated text file. 
+Other files were generated but not used; refer to the [bracer
+documentation](https://github.com/Teichlab/bracer) for further information
+regarding the pipeline.
+
 ## Packaging for downstream analysis
 
-To reduce folder size, only the files containing summarized information useful
-for the downstream analysis were selected an packaged. This was done with the
-script below.
+To reduce folder size, only the files mentioned above were selected and packaged. 
+This was done with the script below.
 
 ```{python, eval = FALSE}
 #!/usr/bin/env python
@@ -234,12 +242,3 @@ def main():
 if __name__ == "__main__":
     main()
 ````
-
-We therefore have two relevant files for our downstream analysis,
-`BCR_summary.txt` and `clonotype_sizes.txt`. The former contains a summary
-statistics describing successful BCR reconstruction rates and the numbers of
-cells with 0, 1, 2 or more recombinants for each locus, and the latter contains
-the distribution of clonotype sizes as a tabulated text file. Other files were
-generated but not used; refer to the [bracer
-documentation](https://github.com/Teichlab/bracer) for further information
-regarding the pipeline.

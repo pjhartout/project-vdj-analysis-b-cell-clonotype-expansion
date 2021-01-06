@@ -3,7 +3,7 @@
 ## Demultiplexing
 
 The files presented were derived from 10x-genomics. Since the pipeline BraCeR 
-requires single cells in separate files the 10x genomics data had to be 
+requires single cells in separate files the 10x-genomics data had to be 
 demultiplexed, i.e. separate each cell data in a separate directory containing 
 the mapped sequences related to that cell. This was done using the following 
 python script. 

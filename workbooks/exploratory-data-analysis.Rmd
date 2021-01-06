@@ -1,10 +1,11 @@
 # Exploratory Data Analysis
 
-In the following section the composition of the data will be analysed and
-discussed.
+In the following section we perform an exploratory data analysis to better 
+understand the makeup of the meta-data related to the patients.
 
-The patient meta-data was provided in an Rds file and was prepared with the
-following commands:
+## Sample-level Descriptive Statistics
+
+The patient meta-data was provided as a `SingleCellExperiment` format.
 ```{r, message=FALSE, warning=FALSE}
 library(dotenv)
 load_dot_env(file = ".env")
@@ -28,12 +29,11 @@ count_nonap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEhi CD19+"))
 count_ap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEdim CD19+"))
 ```
 
-The number of AP samples in the dataset is `r count_ap` and the number of nonAP
-samples is `r count_nonap`.
+There are `r count_ap` AP patients and `r count_nonap` nonAP patients
+in the dataset.
 
-Next the composition of the dataset will be visualised. First we set CFSEdim to
-be AP and CFSEhi to be nonAP. Then the total number of patients per condition
-(Healthy Donor, RRMS nihil, RRMS NAT) was visualised.
+Next the population statistics is visualised. First we set CFSEdim to
+be AP and CFSEhi to be nonAP (see introduction for a rationale).
 
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -50,12 +50,12 @@ p <- ggplot(cellUMI2SampleType, aes(x = Sample.Type, fill = Diagnosis)) +
 p
 ```
 
-We see that the composition is quite homogeneous, we have a similar number of
-samples for both conditions (AP vs. nonAP) and for the diagnosis/treatment
-(RRMS (NAT), RMS (REM; nihil), Healthy Donor).
+We see that the proportion of samples is  homogeneous with respect to Diagnosis
+and treatment combinations in AP and nonAP sample types.
 
-Next we want to inspect how many cells we have per sample and count how many
-cells we have for AP and nonAP per sample.
+## Cell-level Descriptive Statistics
+
+Next we want to inspect how many cells we have per AP and nonAP sample.
 
 ```{r, message = FALSE, warning=FALSE}
 library(reshape)
@@ -94,26 +94,32 @@ p <- ggplot(countlabel, aes(x = variable, y= value, colour = label)) +
 p
 ```
 
-We see that we have in the range of cell counts in the range of $\approx$ 1000 up
-to $\approx$ 5000. Over the two conditions AP and nonAP we see that the
+We see that we have cell counts in the range of $\approx$ 1000 up
+to $\approx$ 5000 per sample. Over the two conditions AP and nonAP the
 distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
-cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells. One thing to
-note is, that for each patient both conditions (AP and nonAP) were recorded.
+cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells.
 
-A check for normality is done via a QQ plot
+A check for normality is done via a Q-Q plot and a Shapiro-Wilk normality test.
 ```{r, message = FALSE}
-#adding Q-Q plot to check for normality of data
+#histogram of count_data
+hist(countlabel$value, xlab = "Cell Count per Sample", 
+     main = "Histogram of Cell Count")
 
+#adding Q-Q plot to check for normality of data
 p <- ggplot(countlabel, aes(sample = value)) +
   stat_qq(col = "blue") + stat_qq_line(col = "red" ) +
   ggtitle("Normal Q-Q plot")
 p
+
+#doing shapiro wilk test for normality
+shapiro.test(countlabel$value)
 ```
 
-From our QQ plot above we see that the data is not normally distributed showing
-the need for a nonparametric statistical test later on.
+From our Q-Q plot and the Shapiro-Wilk test above we see that the cell count per 
+sample is not normally distributed.
 
-In a last step the cumulative fraction of AP cells vs nonAP cells is analysed.
+In a last step the proportion of AP cells vs nonAP cells over all samples
+is analysed.
 ```{r, message = FALSE}
 #showing the proportion of the cumulative sum of AP vs nonAP cells
 summary.df <- data.frame()
@@ -129,15 +135,14 @@ p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
 p
 ```
 
-Overall we see that the dataset is wellbalanced and we have similar amounts of 
+Overall we see that the dataset is well-balanced and we have similar amounts of 
 patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have similar
 amounts of cells per condition (AP vs nonAP). Furthermore, it is not the case that
 one patient accounts for the majority of cells per condition but that these cells
-are quite nicely mixed from different samples. Since we recorded from each
-patient both AP and nonAP samples we are in a paired setting. From the 
-cell counts visible in the plot above it is not clearly visible whether the data
-is parametric. In the QQ plot we see though quite clearly that the data is not
-normally distributed, indicating the need for a nonparametric test.
+are quite nicely mixed from different samples (see Cell Count per Sample plot). 
+In the Q-Q plot we clearly see that the data is not
+normally distributed, and the Shapiro-Wilk test gives a p-value $\geq 0.05$ 
+motivating the use of non-parametric test in downstream analyses.
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
 # clean up to free up memory

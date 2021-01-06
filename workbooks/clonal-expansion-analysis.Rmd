@@ -127,6 +127,14 @@ p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)
 p
 ```
 
+```{r}
+#Shapiro-Wilk test to assess whether expansion frequencies are normal or not
+shapiro.test(df$expansion_frequency)
+```
+
+The Shapiro-Wilk test justifies the usage of a nonparameteric test as the
+Wilcoxon test used here.
+
 ```{r Mann-Whitney-Wilcoxon Test}
 wilcox.test(expansion_frequency ~ Sample.Type, data=df)
 ```

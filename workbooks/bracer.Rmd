@@ -1,6 +1,6 @@
 # BraCeR
 
-With these demultiplexed cells one could run the BraCeR workflow [@lindemann] 
+With these demultiplexed cells one could run the BraCeR workflow [@lindeman] 
 with the two functionalities `assemble` and `summarise`.
 
 ## Assemble

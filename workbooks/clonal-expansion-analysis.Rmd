@@ -64,7 +64,7 @@ colnames(df_complete) = 1:max_clonotype_size
 rownames(df_complete) = lib_ids
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 #plotting the clustering of id's according to their clonotype
 library(dendextend)
 

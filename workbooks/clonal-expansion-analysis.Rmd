@@ -6,6 +6,7 @@ library(dplyr)
 library(SummarizedExperiment)
 library(reshape2)
 
+load("annotation.RData")
 load_dot_env(file = ".env")
 
 
@@ -65,12 +66,22 @@ rownames(df_complete) = lib_ids
 
 ```{r}
 #plotting the clustering of id's according to their clonotype
+library(dendextend)
+
+#get rid of sample 43 that we couldn't summarise
+simplified_annotation_cut <- simplified_annotation[-19,]
+
+
 dist_mat = dist(df_complete, method = 'euclidean')
 hclust_avg = hclust(dist_mat, method = 'average')
-plot(hclust_avg)
-
 avg_dend_obj = as.dendrogram(hclust_avg)
-#av_col_dend = color_branches()
+
+colors_to_use <- as.numeric(as.factor(simplified_annotation_cut$Sample.Type))
+colors_to_use <- colors_to_use[order.dendrogram(avg_dend_obj)]
+
+labels_colors(avg_dend_obj) <- colors_to_use
+
+plot(avg_dend_obj, main = "Dendrogram of Samples coloured by AP vs nonAP")
 ```
 
 
@@ -84,8 +95,6 @@ colnames(df_summarized) = c(1:4, "> 4")
 ```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
 library(tidyr)
 library(gtable)
-
-load("annotation.RData")
 
 # cut the lib id string and keep only the first part
 separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
@@ -112,8 +121,6 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
   labs(fill = "Clonal expansion") +
   xlab("Sample Id") + ylab("Clonotype Count")
 ```
-
-
 
 ```{r plot the frequencies, message=FALSE, warning=FALSE}
 library(ggplot2)

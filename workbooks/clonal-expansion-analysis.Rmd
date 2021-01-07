@@ -63,6 +63,17 @@ colnames(df_complete) = 1:max_clonotype_size
 rownames(df_complete) = lib_ids
 ```
 
+```{r}
+#plotting the clustering of id's according to their clonotype sizes
+
+dist_mat = dist(df_complete, method = 'euclidean')
+hclust_avg = hclust(dist_mat, method = 'average')
+plot(hclust_avg)
+
+avg_dend_obj = as.dendrogram(hclust_avg)
+av_col_dend = color_branches()
+```
+
 
 ```{r condensing dataframe}
 # condense all clonotypes > 4 into one category and make a new data frame
@@ -71,26 +82,12 @@ df_summarized = cbind(df_complete[c(1:4)],condensed_sum)
 colnames(df_summarized) = c(1:4, "> 4")
 ```
 
-
-```{r load the annotation data, message=FALSE, warning=FALSE}
-library(SingleCellExperiment)
-experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
-                     refhook = NULL)
-```
-
 ```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
 library(tidyr)
 library(gtable)
 
-# make an annotation data frame
-experiment@colData %>% as.data.frame() %>% select(lib_id, Sample.Type, Diagnosis, HLADR15) %>% unique() -> annotation_df
-
-# cut the lib id string and keep only the first part
-separate(data = annotation_df, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
-
-# change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
-simplified_annotation = simplified_annotation %>%
-  mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
+#load annotations
+load("annotation.RData")
 
 # merge the annotation with the data frames
 df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
@@ -100,8 +97,6 @@ df_summarized = merge(df_summarized, simplified_annotation, by = "row.names")
 
 rownames(df_summarized) = df_summarized$Row.names
 df_summarized = subset(df_summarized, select = -Row.names)
-
-save(simplified_annotation, file = "annotation.RData")
 ```
 
 

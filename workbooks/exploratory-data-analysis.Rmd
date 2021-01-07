@@ -39,15 +39,17 @@ be AP and CFSEhi to be nonAP (see introduction for a rationale).
 library(ggplot2)
 
 # change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
-cellUMI2SampleType = cellUMI2SampleType %>%
+simplified_annotation = cellUMI2SampleType %>%
   mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
 #visualisation of the patient composition
-p <- ggplot(cellUMI2SampleType, aes(x = Sample.Type, fill = Diagnosis)) +
+p <- ggplot(simplified_annotation, aes(x = Sample.Type, fill = Diagnosis)) +
     geom_bar(position="dodge")  +
     ggtitle("Sample Dataset (n = 31)")
 
 p
+
+save(simplified_annotation, file = "annotation.RData")
 ```
 
 We see that the proportion of samples is  homogeneous with respect to Diagnosis
@@ -60,7 +62,7 @@ Next we want to inspect how many cells we have per AP and nonAP sample.
 ```{r, message = FALSE, warning=FALSE}
 library(reshape)
 
-labels <- cellUMI2SampleType$lib_id
+labels <- simplified_annotation$lib_id
 countlabel <- t(c(rep(0,31))) %>% as.data.frame()
 colnames(countlabel) <- labels
 rownames(countlabel) <- "count"
@@ -72,7 +74,7 @@ for(label in labels){
 
 countlabel <- melt(countlabel)
 
-countlabel$label <- cellUMI2SampleType$Sample.Type
+countlabel$label <- simplified_annotation$Sample.Type
 
 #counting the number of cells per condition
 cells_ap = 0

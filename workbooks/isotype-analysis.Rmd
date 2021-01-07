@@ -5,6 +5,9 @@
 #load annotations
 load("annotation.RData")
 
+# cut the lib id string and keep only the first part
+separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
+
 # Load data, note that summarise_data should be in data/
 file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
 

@@ -20,9 +20,9 @@ experiment = readRDS(paste0(Sys.getenv(c("HOME_DIR")), "data/sce_B.rds"),
 cellUMI2SampleType_raw = colData(experiment) %>% as.data.frame
 
 
-cellUMI2SampleType = cellUMI2SampleType_raw %>% select(lib_id, patient_id,
+cellUMI2SampleType = cellUMI2SampleType_raw %>% select(lib_id,
                                                        Sample.Type,
-                                                       Diagnosis) %>% unique()
+                                                       Diagnosis, HLADR15) %>% unique()
 
 #counting the number of AP and nonAP patients
 count_nonap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEhi CD19+"))

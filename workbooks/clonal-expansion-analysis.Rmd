@@ -64,14 +64,13 @@ rownames(df_complete) = lib_ids
 ```
 
 ```{r}
-#plotting the clustering of id's according to their clonotype sizes
-
+#plotting the clustering of id's according to their clonotype
 dist_mat = dist(df_complete, method = 'euclidean')
 hclust_avg = hclust(dist_mat, method = 'average')
 plot(hclust_avg)
 
 avg_dend_obj = as.dendrogram(hclust_avg)
-av_col_dend = color_branches()
+#av_col_dend = color_branches()
 ```
 
 
@@ -86,8 +85,10 @@ colnames(df_summarized) = c(1:4, "> 4")
 library(tidyr)
 library(gtable)
 
-#load annotations
 load("annotation.RData")
+
+# cut the lib id string and keep only the first part
+separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
 
 # merge the annotation with the data frames
 df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
@@ -97,6 +98,7 @@ df_summarized = merge(df_summarized, simplified_annotation, by = "row.names")
 
 rownames(df_summarized) = df_summarized$Row.names
 df_summarized = subset(df_summarized, select = -Row.names)
+
 ```
 
 

@@ -1,7 +1,7 @@
 # Isotype Analysis 
 
 The files `BCR_summary.txt`from `summarize` contain a section *Isotype of cells with productive heavy chain*. As the name says it counts the isotype of the B-cell receptor of each cell in the sample. The section is a table with the columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown below, and use for downstream analysis.
-```{r Isotype analysis, message = FALSE}
+```{r Isotype analysis, message = FALSE, warning=FALSE}
 library(dplyr)
 library(tidyr)
 
@@ -38,7 +38,7 @@ for (i in list.files(path = file_path)){
                           (end_line-start_line), header = FALSE) %>%
     as.data.frame()
 
-  colnames(tmp_table) = c("Isotype", "cells", "% of cells")
+  colnames(tmp_table) = c("Isotype", "cells", "percent_of_cells")
 
   #split the string at "-" or "_" to remove "-preprocessed" and "POOL*"
   # and remove the "B"
@@ -64,27 +64,49 @@ head(isotype_df)
 ```
 We can plot the proportion of the isotype (% of cells) for each isotype as a boxplot and compare the sample types.
 
-```{r, message=FALSE, warning=FALSE}
+```{r calculate comparisons, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(ggpubr)
 library(rstatix)
-library(stringr)
 
-#unmapped isotypes = unmapped
-unmapped <- sum(str_count(isotype_df$Isotype, "Unknown"))
-df <- isotype_df[isotype_df$Isotype=="Unknown",]
+stat.test <- isotype_df %>%
+  group_by(Isotype) %>%
+  wilcox_test(percent_of_cells ~ Sample.Type) %>%
+  adjust_pvalue(method = "BH") %>%
+  add_significance("p.adj") %>%
+  add_xy_position(x = "Isotype") %>%
+  mutate(y.position = 100)
+```
 
-p <- ggplot(isotype_df, aes(x = Isotype, y = `% of cells`, color = Sample.Type, fill = Sample.Type)) +
-  geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")+
+```{r convert adjusted p value to symbol}
+symbols = symnum(stat.test$p.adj, cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                        symbols = c("****", "***", "**", "*", "ns"))
+stat.test$symbol = symbols
+```
+
+
+```{r isotype boxplots, warning=FALSE, message=FALSE}
+p <- ggplot(isotype_df, aes(x = Isotype, y = percent_of_cells, color = Sample.Type)) +
+  geom_boxplot()+ xlab("Isotype") + ylab("proportion (%)") +
   theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  stat_compare_means(method = "wilcox.test", p.adjust.methods = "fdr", 
-                     aes(label = ..p.adj..), label = "p.signif",
-                     symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-                                        symbols = c("****", "***", "**", "*", "ns")))
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  stat_pvalue_manual(stat.test,  label = "symbol", tip.length = 0) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))+
+  ylim(0,100)
+
+
 p
 ```
 
-The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars ($**** \widehat{=}0.0001, ***\widehat{=}0.001, ** \widehat{=}0.01, * \widehat{=} 0.05, \text{ns } \widehat{=} \text{ not significant}$).
+The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars 
+
+
+| symbol | meaning      |
+|--------|--------------|
+| ns     | P > 0.05     |
+| *      | P $\le$ 0.05 |
+| **     | P $\le$ 0.01 |
+| ***    | P $\le$ 0.001|
+
 
 We see that when comparing `AP`with `nonAP` we have a significant increase in *Unknown* isotypes (isotype could not be determined by bracer), although the effect size is small. We also have a increase in isotypes *IGHG2* and *IGHA2*. We have a significant decrease in isotypes *IGHD*, *IGHDM* and *IGHM*.

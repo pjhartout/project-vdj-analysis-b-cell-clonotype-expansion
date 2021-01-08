@@ -27,5 +27,8 @@ bibliography: ["citations.bib"]
 ```{r child = 'isotype-analysis.Rmd'}
 ```
 
-```{r child = 'conclusion.Rmd'}
+```{r child = 'discussion.Rmd'}
+```
+
+```{r child = 'summary.Rmd'}
 ```

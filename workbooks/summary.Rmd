@@ -1,4 +1,4 @@
-# Conclusion
+# Summary
 
 In this project, we have preprocessed scRNA-seq data of B cells sampled from a
 population of healthy donors and patients affected by RRMS. A fraction of these

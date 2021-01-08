@@ -45,19 +45,19 @@ def execute_docker_bracer(patient):
             "teichlab/bracer",
             "summarise",
             f"{patient}-out",
+            "--no_networks",
         ]
     )
 
 
 def main():
     """Main function - lists patients and run summarise via docker in parallel
-        for each patient.
+    for each patient.
 
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
     )
-    print(list_of_patients)
     Parallel(n_jobs=N_JOBS, verbose=1)(
         delayed(execute_docker_bracer)(row) for row in list_of_patients
     )

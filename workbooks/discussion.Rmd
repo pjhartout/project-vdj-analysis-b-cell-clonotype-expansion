@@ -45,5 +45,5 @@ of AP and nonAP cells.
 
 In a very last step we visualised the isotype proportions between the AP and 
 nonAP samples. We saw that there were significant differences between AP and 
-nonAP isotypes IGHA1, IGHA2, IGHD, IGHDM, IGHG2, IGHM and a difference in the 
+nonAP isotypes IGHD, IGHDM, IGHG2, IGHM and a difference in the 
 isotypes that couldn't be assigned. 

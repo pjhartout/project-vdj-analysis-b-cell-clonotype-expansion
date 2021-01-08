@@ -109,4 +109,4 @@ The comparisons were done with the Wilcoxon test, correction for multiple testin
 | ***    | P $\le$ 0.001|
 
 
-We see that when comparing `AP`with `nonAP` we have a significant increase in *Unknown* isotypes (isotype could not be determined by bracer), although the effect size is small. We also have a increase in isotypes *IGHG2* and *IGHA2*. We have a significant decrease in isotypes *IGHD*, *IGHDM* and *IGHM*.
+We see that when comparing `AP`with `nonAP` we have a significant increase in *Unknown* isotypes (isotype could not be determined by bracer), although the effect size is small. We also have a increase in isotypes *IGHG2*. We have a significant decrease in isotypes *IGHD*, *IGHDM* and *IGHM*.

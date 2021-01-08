@@ -1,12 +1,16 @@
 # Isotype Analysis 
 
+The files `BCR_summary.txt`from `summarize` contain a section *Isotype of cells with productive heavy chain*. As the name says it counts the isotype of the B-cell receptor of each cell in the sample. The section is a table with the columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown below, and use for downstream analysis.
 ```{r Isotype analysis, message = FALSE}
+library(dplyr)
+library(tidyr)
 
 #load annotations
 load("annotation.RData")
 
 # cut the lib id string and keep only the first part
-separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% select(-rest) -> simplified_annotation
+separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>%
+  select(-rest) -> simplified_annotation
 
 # Load data, note that summarise_data should be in data/
 file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
@@ -40,7 +44,7 @@ for (i in list.files(path = file_path)){
   # and remove the "B"
   lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
   lib_name = sub("B","",lib_name)
-
+  
   tmp_table$lib_id = lib_name
 
   isotype_df = rbind(isotype_df, tmp_table)
@@ -49,6 +53,16 @@ for (i in list.files(path = file_path)){
 # merge the annotation with the data frames
 isotype_df = merge(isotype_df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
 ```
+
+An example of such a table is shown below.
+```{r, echo=FALSE}
+head(tmp_table[,-4])
+```
+The tables were combined into a new data frame `isotype_df` and annotated. A section of the data frame is shown below.
+```{r, echo=FALSE}
+head(isotype_df)
+```
+We can plot the proportion of the isotype (% of cells) for each isotype as a boxplot and compare the sample types.
 
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -64,8 +78,13 @@ p <- ggplot(isotype_df, aes(x = Isotype, y = `% of cells`, color = Sample.Type, 
   geom_boxplot()+ ylim(0,100) + xlab("Isotype") + ylab("proportion (%)")+
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  stat_compare_means(method = "wilcox", aes(label = ..p.adj..), label = "p.signif",
-         symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
-         symbols = c("****", "***", "**", "*", "ns")))
+  stat_compare_means(method = "wilcox.test", p.adjust.methods = "fdr", 
+                     aes(label = ..p.adj..), label = "p.signif",
+                     symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1),
+                                        symbols = c("****", "***", "**", "*", "ns")))
 p
 ```
+
+The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars ($**** \widehat{=}0.0001, ***\widehat{=}0.001, ** \widehat{=}0.01, * \widehat{=} 0.05, \text{ns } \widehat{=} \text{ not significant}$).
+
+We see that when comparing `AP`with `nonAP` we have a significant increase in *Unknown* isotypes (isotype could not be determined by bracer), although the effect size is small. We also have a increase in isotypes *IGHG2* and *IGHA2*. We have a significant decrease in isotypes *IGHD*, *IGHDM* and *IGHM*.

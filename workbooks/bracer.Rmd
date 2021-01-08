@@ -1,6 +1,6 @@
 # BraCeR
 
-With these demultiplexed cells one could run the BraCeR workflow [@lindeman] 
+With these demultiplexed cells one could run the BraCeR workflow [@lindeman]
 with the two functionalities `assemble` and `summarise`.
 
 ## Assemble
@@ -42,23 +42,23 @@ def execute_docker_bracer(row, list_of_cells, patient):
         None
     """
     cell = list_of_cells[row].split(".")[0:1]
-    os.chdir(
-        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
-        f"{patient}-out"
-    )
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}")
     subprocess.call(
         [
             "docker",
             "run",
             "--rm",
             "-v",
-            f"$PWD:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
-            "summarise",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+            "assemble",
+            f"{cell[0]}",
+            "-r",
             f"{patient}-out",
+            "--assembled_file",
+            f"{cell[0]}.fasta",
         ]
     )
 
@@ -174,17 +174,17 @@ if __name__ == "__main__":
 ```
 
 From the `summarise` output we are interested in two files for our downstream
-analysis, `BCR_summary.txt` and `clonotype_sizes.txt`. The former contains a 
-summary statistics describing successful BCR reconstruction rates and the 
-numbers of cells with 0, 1, 2 or more recombinants for each locus. The 
-latter contains the distribution of clonotype sizes as a tabulated text file. 
+analysis, `BCR_summary.txt` and `clonotype_sizes.txt`. The former contains a
+summary statistics describing successful BCR reconstruction rates and the
+numbers of cells with 0, 1, 2 or more recombinants for each locus. The
+latter contains the distribution of clonotype sizes as a tabulated text file.
 Other files were generated but not used; refer to the [bracer
 documentation](https://github.com/Teichlab/bracer) for further information
 regarding the pipeline.
 
 ## Packaging for downstream analysis
 
-To reduce folder size, only the files mentioned above were selected and packaged. 
+To reduce folder size, only the files mentioned above were selected and packaged.
 This was done with the script below.
 
 ```{python, eval = FALSE}

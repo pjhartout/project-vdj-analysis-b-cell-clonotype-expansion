@@ -20,7 +20,6 @@ N_JOBS = -1
 
 def execute_docker_bracer(row, list_of_cells, patient):
     """Call docker in a subprocess for each cell
-
     Args:
         row (list): row containing the cell to be processed
         list_of_cells (list): list of cells containing all UMIs belonging to
@@ -30,37 +29,28 @@ def execute_docker_bracer(row, list_of_cells, patient):
         None
     """
     cell = list_of_cells[row].split(".")[0:1]
-    os.chdir(
-        f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
-        f"{patient}-out"
-    )
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}")
     subprocess.call(
         [
             "docker",
             "run",
             "--rm",
             "-v",
-            f"$PWD:/scratch",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}:/scratch",
             "-w",
             "/scratch",
             "teichlab/bracer",
-            "summarise",
-            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+            "assemble",
+            f"{cell[0]}",
+            "-r",
             f"{patient}-out",
+            "--assembled_file",
+            f"{cell[0]}.fasta",
         ]
     )
 
 
 def files(path):
-    """Adds all files in current directory to a list that is returned
-
-    Args:
-        path (str): path to file returned
-
-    Returns:
-        (list) list of files in path
-    """
-
     list_of_files = list()
     for file in os.listdir(path):
         if os.path.isfile(os.path.join(path, file)):
@@ -71,6 +61,10 @@ def files(path):
 def main():
     """Main function - lists patients and loop through patients. Each cell is
     processed in parallel using joblib
+    Args:
+        None
+    Returns:
+        None
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"

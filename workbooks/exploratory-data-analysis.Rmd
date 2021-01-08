@@ -42,14 +42,24 @@ library(ggplot2)
 simplified_annotation = cellUMI2SampleType %>%
   mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
+#saving the annotations so that we don't have to load it several times
+save(simplified_annotation, file = "annotation.RData")
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+head(simplified_annotation)
+```
+
+Above we see a part of the dataset with the most important features for the 
+future analysis.
+
+```{r}
 #visualisation of the patient composition
 p <- ggplot(simplified_annotation, aes(x = Sample.Type, fill = Diagnosis)) +
     geom_bar(position="dodge")  +
     ggtitle("Sample Dataset (n = 31)")
 
 p
-
-save(simplified_annotation, file = "annotation.RData")
 ```
 
 We see that the proportion of samples is  homogeneous with respect to Diagnosis
@@ -75,6 +85,9 @@ for(label in labels){
 countlabel <- melt(countlabel)
 
 countlabel$label <- simplified_annotation$Sample.Type
+
+#showing the head of the table
+head(countlabel)
 
 #counting the number of cells per condition
 cells_ap = 0

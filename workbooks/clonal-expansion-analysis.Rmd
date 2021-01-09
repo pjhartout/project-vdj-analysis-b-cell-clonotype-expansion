@@ -8,6 +8,13 @@ library(SummarizedExperiment)
 library(reshape2)
 
 load("annotation.RData")
+
+# cut the lib id string and keep only the first part
+separate(data = simplified_annotation, 
+         col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% 
+  select(-rest) -> simplified_annotation
+rownames(simplified_annotation) = simplified_annotation$lib_id
+
 load_dot_env(file = ".env")
 
 
@@ -89,12 +96,15 @@ library(dendextend)
 #get rid of sample 43 that we couldn't summarise
 simplified_annotation_cut <- simplified_annotation[-19,]
 
+df_cluster = merge(df_complete, simplified_annotation, by = "row.names")
 
-dist_mat = dist(df_complete, method = 'euclidean')
+rownames(df_cluster) = df_cluster$lib_id
+
+dist_mat = dist(df_cluster[,2:148], method = 'euclidean')
 hclust_avg = hclust(dist_mat, method = 'average')
 avg_dend_obj = as.dendrogram(hclust_avg)
 
-colors_to_use <- as.numeric(as.factor(simplified_annotation_cut$Sample.Type))
+colors_to_use <- as.numeric(as.factor(df_cluster$Sample.Type))
 colors_to_use <- colors_to_use[order.dendrogram(avg_dend_obj)]
 
 labels_colors(avg_dend_obj) <- colors_to_use
@@ -120,11 +130,6 @@ After we add the annotation data to the dataframes we are ready for plotting.
 ```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
 library(tidyr)
 library(gtable)
-
-# cut the lib id string and keep only the first part
-separate(data = simplified_annotation, 
-         col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% 
-  select(-rest) -> simplified_annotation
 
 # merge the annotation with the data frames
 df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")

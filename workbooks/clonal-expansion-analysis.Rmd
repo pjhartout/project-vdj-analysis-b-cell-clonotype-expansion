@@ -93,9 +93,6 @@ head(df)
 #plotting the clustering of id's according to their clonotype
 library(dendextend)
 
-#get rid of sample 43 that we couldn't summarise
-simplified_annotation_cut <- simplified_annotation[-19,]
-
 df_cluster = merge(df_complete, simplified_annotation, by = "row.names")
 
 rownames(df_cluster) = df_cluster$lib_id

@@ -76,7 +76,7 @@ This script produces a folder structure with the following structure:
 ```{bash, eval=FALSE}
 demultiplexed/
 ├── IJ009B_POOL1-preprocessed   # Sample ID
-│   ├── AAACCTGAGAAGGGTA.fasta  # Fasta file containing output of 10x genomics data
+│   ├── AAACCTGAGAAGGGTA.fasta  # Fasta file containing output of 10x genomics for one cell.
 │   ├── AAACCTGAGACTACAA.fasta
 │   ├── AAACCTGAGATACACA.fasta
 │   ├── AAACCTGCAAGTCTGT.fasta

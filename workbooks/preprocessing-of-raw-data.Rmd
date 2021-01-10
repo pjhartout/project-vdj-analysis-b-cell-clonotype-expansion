@@ -6,7 +6,7 @@ The files presented were derived from 10x-genomics. Since the pipeline BraCeR
 requires single cells in separate files the 10x-genomics data had to be
 demultiplexed, i.e. separate each cell data in a separate directory containing
 the mapped sequences related to that cell. This was done using the following
-python script.
+python script, inspired by a user on [GitHub](https://github.com/Teichlab/bracer/issues/21).
 
 
 ```{r setup, include = FALSE}
@@ -24,7 +24,7 @@ use_python("usr/local/bin/python")
 This script demultiplex the data, i.e. it creates a separate file for each
 cell containing the contigs.
 
-From: https://github.com/Teichlab/bracer/issues/21
+Adapted from: https://github.com/Teichlab/bracer/issues/21
 
 """
 

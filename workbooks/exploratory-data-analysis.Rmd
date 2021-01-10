@@ -68,11 +68,12 @@ and treatment combinations in AP and nonAP sample types.
 
 ## Cell-level Descriptive Statistics
 
-Next we want to inspect how many cells we have per AP and nonAP sample.
+Next we want to inspect how many cells we have per AP and nonAP sample. This can
+be done by looking at the demultiplexed files, which we discuss in the next section.
 
 ```{r, eval=FALSE, message=FALSE}
-#since we can't upload the entire demultiplexed folder, this chunk is set to not evaluate
-#but is here for completness
+# since we can't upload the entire demultiplexed folder, this chunk is not 
+# evaluated but is here for completeness
 
 library(dplyr)
 library(dotenv)

@@ -1,0 +1,72 @@
+# QC bracer and annotation
+
+## Exploratory data analysis of the data processed by BraCer
+
+
+First, we obtain all the cell counts from the preprocessed files.
+
+```{r, message = FALSE}
+library(dplyr)
+library(dotenv)
+
+load_dot_env(file = ".env")
+
+samples = list.files(paste0(Sys.getenv(c("HOME_DIR")), "data/demultiplexed"))
+cells_for_samples <- data.frame()
+
+for(sample in samples){
+    sample_list = list.files(paste0(Sys.getenv(c("HOME_DIR")), 
+                                   "data/demultiplexed/", 
+                                   sample))
+    sample_list_processed = list()
+    # Remove file extension
+    for(file in sample_list){
+        sample_list_processed = append(sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(file)), 
+               sample_list_processed)
+    }
+
+    sample_list_processed = sample_list_processed %>% unlist() %>% as.data.frame()
+    sample = strsplit(sample, "[_]+") %>% unlist() %>% .[1]
+    sample = sub("B","", sample)
+    sample_list_processed$lib_id = sample
+    cells_for_samples = rbind(cells_for_samples, sample_list_processed)
+}
+colnames(cells_for_samples) = c("cell_id", "lib_id")
+
+```
+
+```{r, message = FALSE}
+save(cells_for_samples, file = "cells_for_samples.rds")
+```
+
+Now, we get the UMIs from the annotation data:
+
+```{r, message = FALSE}
+
+cellUMI2SampleType_raw %>% rownames() %>% strsplit(":") %>% unlist() %>% 
+  .[c(FALSE,TRUE)] -> list_of_barcodes
+
+cellUMI2SampleType_raw$cell_id = list_of_barcodes
+
+
+cellUMI2SampleType_raw$lib_id %>% strsplit("_") %>% unlist() %>% 
+  .[c(TRUE,FALSE)] -> list_of_libs
+
+
+cellUMI2SampleType_raw$lib_id = list_of_libs
+```
+
+Then, we want to a set analysis, showing the overlap
+
+```{r, message = FALSE}
+# overlap
+joined_frame = merge(cellUMI2SampleType_raw, cells_for_samples, by = c("lib_id", "cell_id"))
+```
+
+```{r, message = FALSE}
+list_1 = cellUMI2SampleType_raw$cell_id
+list_2 = cells_for_samples$cell_id
+print(length(list_1))
+print(length(list_2))
+print(length(joined_frame$cell_id))
+```

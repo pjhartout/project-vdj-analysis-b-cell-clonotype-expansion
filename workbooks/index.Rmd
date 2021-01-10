@@ -3,7 +3,7 @@ title: "Autoproliferation Analysis of B Cells"
 author: "Richard Affolter, Martin Emons, Philip Hartout"
 output:
   bookdown::html_book:
-    theme: united
+    theme: paper
     toc: yes
     citation_package: pandoc-citeproc
     split_by: "chapter"

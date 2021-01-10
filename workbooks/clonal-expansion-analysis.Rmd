@@ -126,7 +126,7 @@ df_summarized_normalized = subset(df_summarized_normalized, select = -Row.names)
 
 If we try to analyse the clonotype vectors directly (so a row in df_complete above)
 and look how similar in terms of a euclidean distance they are, we can
-perform a hierarchical clustering and get the dendrogram below.
+perform a hierarchical clustering and get the dendrogram below and perform a PCA
 
 
 ```{r, message=FALSE, warning=FALSE}
@@ -137,7 +137,7 @@ library(ggfortify)
 df_cluster = df_summarized[,1:5]
 
 col = df_summarized$Sample.Type
-col = ifelse(col=="AP","red","black")
+col = ifelse(col=="AP","black","red")
 
 dist_mat = dist(df_cluster, method = 'manhattan')
 hclust_avg = hclust(dist_mat, method = 'average')
@@ -150,17 +150,24 @@ labels_colors(avg_dend_obj) <- colors_to_use
 
 plot(avg_dend_obj, main = "Dendrogram of Samples coloured by AP vs nonAP")
 legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
+```
 
+```{r, message=FALSE, warning=FALSE}
 # plot the PCA of the datapoints
 pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
-plot(pca)
-autoplot(pca, scale = 0, colour = col)
-legend("bottomright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
+plot(pca, main = "Principle Component Analysis", xlab = "PCs")
+autoplot(pca, scale = 0, colour = col, label = TRUE, legend = TRUE) +
+  ggtitle("PCA plot AP (black) vs nonAP (red)")
 ```
 
 
 We find that AP and nonAP samples actually cluster together already in terms of
-the clonotype sizes.
+the clonotype sizes. When looking at the PCA, we see that we can explain
+most of the variability in our data with two principle components. When plotting
+the points, we note that one point (IJ028) prevents our data to be linearly
+separable. In the hierarchical clustering we see as well, that IJ028
+clusters with nonAP cells as well as the sample IJ020, which is the second
+closest point to the putative separation line.
 
 Plotted below are the absoulte counts of clonal expansion grouped by sample type and the proportion of clonal expansion grouped by sample type and diagnosis.
 ```{r, plot the absolute clonal expansion, fig.width=14}
@@ -173,6 +180,10 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
   labs(fill = "Clonal expansion") +
   xlab("Sample Id") + ylab("Clonotype Count")
 ```
+
+Looking at the plots we see that one point in the AP samples is again a bit 
+anomalous, with lesse expansion than the others. It is again IJ028 that we 
+saw clusters with the nonAP samples (see above).
 
 ```{r, plot the relative clonal expansion, fig.width=14, fig.height=10}
 library(ggplot2)
@@ -198,6 +209,9 @@ p
 ```
 
 Here we again see the increase in the frequency of `AP` vs `nonAP` but no pattern with respect to diagnosis.
+There is one AP point that overlaps in its clonal expansion frequency with 
+nonAP and upon checking we find again, that it is  our anomalous sample IJ028
+that has the lowest frequency of all of the samples.
 
 To verify our findings we will do a Mann–Whitney U test.
 ```{r}

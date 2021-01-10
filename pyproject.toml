@@ -11,6 +11,7 @@ joblib = "^1.0.0"
 python-dotenv = "^0.15.0"
 numpy = "^1.19.4"
 tqdm = "^4.55.1"
+ipython = "^7.19.0"
 
 [tool.poetry.dev-dependencies]
 

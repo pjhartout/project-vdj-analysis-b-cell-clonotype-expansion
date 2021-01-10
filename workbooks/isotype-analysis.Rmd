@@ -101,12 +101,12 @@ p
 The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars 
 
 
-| symbol | meaning      |
-|--------|--------------|
-| ns     | P > 0.05     |
-| *      | P $\le$ 0.05 |
-| **     | P $\le$ 0.01 |
-| ***    | P $\le$ 0.001|
+| symbol | meaning       |
+|--------|---------------|
+| ns     | P > 0.05      |
+| *      | P $\le$ 0.05  |
+| **     | P $\le$ 0.01  |
+| ***    | P $\le$ 0.001 |
 | ****   | P $\le$ 0.0001|
 
 

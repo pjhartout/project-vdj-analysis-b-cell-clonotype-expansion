@@ -1,6 +1,6 @@
 # Exploratory Data Analysis
 
-In the following section we perform an exploratory data analysis to better 
+In the following section we perform an exploratory data analysis to better
 understand the makeup of the meta-data related to the patients.
 
 ## Sample-level Descriptive Statistics
@@ -22,7 +22,8 @@ cellUMI2SampleType_raw = colData(experiment) %>% as.data.frame
 
 cellUMI2SampleType = cellUMI2SampleType_raw %>% select(lib_id,
                                                        Sample.Type,
-                                                       Diagnosis, HLADR15) %>% unique()
+                                                       Diagnosis, HLADR15) %>%
+  unique()
 
 #counting the number of AP and nonAP patients
 count_nonap <- sum(str_count(cellUMI2SampleType$Sample.Type, "CFSEhi CD19+"))
@@ -50,7 +51,7 @@ save(simplified_annotation, file = "annotation.RData")
 head(simplified_annotation)
 ```
 
-Above we see a part of the dataset with the most important features for the 
+Above we see a part of the dataset with the most important features for the
 future analysis.
 
 ```{r}
@@ -117,7 +118,7 @@ cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells.
 A check for normality is done via a Q-Q plot and a Shapiro-Wilk normality test.
 ```{r, message = FALSE}
 #histogram of count_data
-hist(countlabel$value, xlab = "Cell Count per Sample", 
+hist(countlabel$value, xlab = "Cell Count per Sample",
      main = "Histogram of Cell Count")
 
 #adding Q-Q plot to check for normality of data
@@ -151,13 +152,13 @@ p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
 p
 ```
 
-Overall we see that the dataset is well-balanced and we have similar amounts of 
-patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have similar
-amounts of cells per condition (AP vs nonAP). Furthermore, it is not the case that
-one patient accounts for the majority of cells per condition but that these cells
-are quite nicely mixed from different samples (see Cell Count per Sample plot). 
-The Q-Q plot and the Shapiro-Wilk don't give a clear-cut decision whether
-the data is normal or not, motivating never the less the more cautious 
+Overall we see that the dataset is well-balanced and we have similar amounts of
+patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have
+similar amounts of cells per condition (AP vs nonAP). Furthermore, it is not the
+case that one patient accounts for the majority of cells per condition but that
+these cells are quite nicely mixed from different samples (see Cell Count per
+Sample plot). The Q-Q plot and the Shapiro-Wilk don't give a clear-cut decision
+whether the data is normal or not, motivating never the less the more cautious
 nonparametric assumption for downstream analysis.
 
 ```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}

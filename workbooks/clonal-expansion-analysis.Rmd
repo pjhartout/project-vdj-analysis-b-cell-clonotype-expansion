@@ -156,7 +156,8 @@ legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,
 # plot the PCA of the datapoints
 pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
 plot(pca, main = "Principle Component Analysis", xlab = "PCs")
-autoplot(pca, scale = 0, colour = col, label = TRUE, legend = TRUE) +
+autoplot(pca, scale = 0, colour = col, label = FALSE, legend = TRUE) +
+  geom_text(vjust=1.5, label=df$lib_id) +
   ggtitle("PCA plot AP (black) vs nonAP (red)")
 ```
 

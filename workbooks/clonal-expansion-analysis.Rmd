@@ -155,6 +155,7 @@ legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,
 pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
 plot(pca)
 autoplot(pca, scale = 0, colour = col)
+legend("bottomright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
 ```
 
 

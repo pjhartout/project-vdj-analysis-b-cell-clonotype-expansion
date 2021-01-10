@@ -92,8 +92,8 @@ head(df)
 For better visualization we also make a data frame where we pool all clonotype counts of size >4 into one category. We also make a separate data frame where we normalize by the number of cells per sample to get a proportion.
 ```{r condensing dataframe}
 # condense all clonotypes > 4 into one category and make a new data frame
-condensed_sum = rowSums(df_complete[-c(1:4)])
-df_summarized = cbind(df_complete[c(1:4)],condensed_sum)
+condensed_sum = rowSums(df_complete[,-c(1:4)])
+df_summarized = cbind(df_complete[,c(1:4)],condensed_sum)
 colnames(df_summarized) = c(1:4, "> 4")
 
 # normalize by rowsum
@@ -134,7 +134,7 @@ perform a hierarchical clustering and get the dendrogram below.
 library(dendextend)
 library(ggfortify)
 
-df_cluster = df_complete
+df_cluster = df_summarized[,1:5]
 
 col = df_summarized$Sample.Type
 col = ifelse(col=="AP","red","black")
@@ -152,7 +152,7 @@ plot(avg_dend_obj, main = "Dendrogram of Samples coloured by AP vs nonAP")
 legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
 
 # plot the PCA of the datapoints
-pca = prcomp(df_cluster, center = TRUE)
+pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
 plot(pca)
 autoplot(pca, scale = 0, colour = col)
 ```

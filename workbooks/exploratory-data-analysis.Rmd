@@ -70,8 +70,44 @@ and treatment combinations in AP and nonAP sample types.
 
 Next we want to inspect how many cells we have per AP and nonAP sample.
 
+```{r, eval=FALSE, message=FALSE}
+#since we can't upload the entire demultiplexed folder, this chunk is set to not evaluate
+#but is here for completness
+
+library(dplyr)
+library(dotenv)
+load_dot_env(file = ".env")
+samples = list.files(paste0(Sys.getenv(c("HOME_DIR")), "data/demultiplexed"))
+cells_for_samples <- data.frame()
+for(sample in samples){
+    sample_list = list.files(paste0(Sys.getenv(c("HOME_DIR")),
+                                   "data/demultiplexed/",
+                                   sample))
+    sample_list_processed = list()
+    # Remove file extension
+    for(file in sample_list){
+        sample_list_processed = append(sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(file)),
+               sample_list_processed)
+    }
+    sample_list_processed = sample_list_processed %>% unlist() %>% as.data.frame()
+    sample = strsplit(sample, "[_]+") %>% unlist() %>% .[1]
+    sample = sub("B","", sample)
+    sample_list_processed$lib_id = sample
+    cells_for_samples = rbind(cells_for_samples, sample_list_processed)
+}
+colnames(cells_for_samples) = c("cell_id", "lib_id")
+save(cells_for_samples, file = "cells_for_samples.RData")
+```
+
+
 ```{r, message = FALSE, warning=FALSE}
 library(reshape)
+library(tidyr)
+
+load("cells_for_samples.RData")
+
+separate(data = simplified_annotation, col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>%
+  select(-rest) -> simplified_annotation
 
 labels <- simplified_annotation$lib_id
 countlabel <- t(c(rep(0,31))) %>% as.data.frame()
@@ -80,7 +116,7 @@ rownames(countlabel) <- "count"
 
 #counting the number of cells per patient ID
 for(label in labels){
- countlabel[label] <- sum(str_count(cellUMI2SampleType_raw$lib_id, label))
+ countlabel[label] <- sum(str_count(cells_for_samples$lib_id, label))
 }
 
 countlabel <- melt(countlabel)
@@ -131,9 +167,9 @@ p
 shapiro.test(countlabel$value)
 ```
 
-From our Q-Q plot we see that the data is only normally distributed in a narrow
-range even though the Shapiro-Wilk test indicates a very weak support for a
-normal distribution.
+From our Q-Q plot we see that the data is only normally distributed and
+the Shapiro-Wilk test indicates a support for a 
+normal distribution of the count data.
 
 In a last step the proportion of A P cells vs nonAP cells over all samples
 is analysed.
@@ -154,7 +190,7 @@ p
 
 Overall we see that the dataset is well-balanced and we have similar amounts of
 patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have
-similar amounts of cells per condition (AP vs nonAP). Furthermore, it is not the
+a little bit more AP than nonAP cells (AP vs nonAP). Furthermore, it is not the
 case that one patient accounts for the majority of cells per condition but that
 these cells are quite nicely mixed from different samples (see Cell Count per
 Sample plot). The Q-Q plot and the Shapiro-Wilk don't give a clear-cut decision

@@ -152,12 +152,18 @@ plot(avg_dend_obj, main = "Dendrogram of Samples coloured by AP vs nonAP")
 legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r plot the contributions of the PCA, message=FALSE, warning=FALSE}
 # plot the PCA of the datapoints
 pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
 plot(pca, main = "Principle Component Analysis", xlab = "PCs")
-autoplot(pca, scale = 0, colour = col, label = FALSE, legend = TRUE) +
-  geom_text(vjust=1.5, label=df$lib_id) +
+```
+```{r plot the PCA, message=FALSE, warning=FALSE, fig.width=14, fig.height=12}
+library(ggrepel)
+labels = df$lib_id
+outlier_labels = c("IJ020","IJ028", "IJ067")
+labels[df$lib_id %in% outlier_labels %>% !.] = ""
+autoplot(pca, scale = 0, colour = col, legend = TRUE) +
+  geom_text_repel(vjust=1.5, label=labels, min.segment.length = Inf) +
   ggtitle("PCA plot AP (black) vs nonAP (red)")
 ```
 

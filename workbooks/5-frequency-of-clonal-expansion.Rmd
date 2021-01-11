@@ -1,6 +1,7 @@
 # Frequency of clonal expansion
 
-The files `clonotype_sizes.txt`from `summarize` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below, and use for downstream analysis. 
+The files `clonotype_sizes.txt`from `summarize` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below,
+and used for downstream analysis. 
 ```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
 library(dotenv)
 library(dplyr)
@@ -73,23 +74,39 @@ colnames(df_complete) = 1:max_clonotype_size
 rownames(df_complete) = lib_ids
 ```
 
-```{r, echo=FALSE}
+```{r tmp table, echo=FALSE}
 head(tmp)
 ```
-Shown above is a part of such a table. A clonotype of size 1 means, that only one cell is in the cluster and is therefore unique.
-The tables of each sample (each folder in the output directory) are combined into a dataframe called `df_complete`. The column index of the dataframe indicates the clonotype size and the rownames specify the lib_id (sample name). Since the table of each lib_id directory has the same number of rows as the highest clonotype_size of that lib_id, the missing entries of `df_complete` are filled with zeros.
+Shown above is a part of such a table. A clonotype of size 1 means, that only 
+one cell is in the cluster and is therefore unique.
+The tables of each sample (each folder in the output directory) are combined 
+into a dataframe called `df_complete`. The column index of the dataframe
+indicates the clonotype size and the rownames specify the lib_id (sample name).
+Since the table of each lib_id directory has the same number of rows as the
+highest clonotype_size of that lib_id, the missing entries of `df_complete` are 
+filled with zeros.
 A section of `df_complete` is shown below.
-```{r, echo=FALSE}
+The highest clonotype_size in our data is `r dim(df_complete)[2]`
+```{r show df_complete, echo=FALSE}
 df_complete[1:3,1:24]
 ```
 
 
-We can also calculate the frequency of clonal expansion, using the definiton of clonal expansion of [@ramesh] of "as a highly similar B cell cluster containing two or more B cells". The clonal expansion frequency of a sample is therefore $\frac{\text{number of cells with clonotype_size >1}}{\text{total number of cell in the sample}}$. The clonal expansion frequencies of each sample are combined in the dataframe `df`.
-```{r, echo=FALSE}
+We can also calculate the frequency of clonal expansion, using the definiton of 
+clonal expansion of [@ramesh]
+"as a highly similar B cell cluster containing two or more B cells".
+The clonal expansion frequency of a sample is therefore
+$$
+\frac{\text{number of cells with clonotype_size >1}}{\text{total number of cell in the sample}}
+$$
+The clonal expansion frequencies of each sample are combined in the
+dataframe `df`.
+```{r show table, echo=FALSE}
 head(df)
 ```
 
-For better visualization we also make a data frame where we pool all clonotype counts of size >4 into one category. We also make a separate data frame where we normalize by the number of cells per sample to get a proportion.
+For better visualization we also make a data frame where we pool all clonotype
+counts of size >4 into one category. We also make a separate data frame where we normalize by the number of cells per sample to get a proportion.
 ```{r condensing dataframe}
 # condense all clonotypes > 4 into one category and make a new data frame
 condensed_sum = rowSums(df_complete[,-c(1:4)])
@@ -129,7 +146,7 @@ and look how similar in terms of a euclidean distance they are, we can
 perform a hierarchical clustering and get the dendrogram below and perform a PCA
 
 
-```{r, message=FALSE, warning=FALSE}
+```{r plot dendogramm, message=FALSE, warning=FALSE}
 #plotting the clustering of id's according to their clonotype
 library(dendextend)
 library(ggfortify)
@@ -221,7 +238,7 @@ nonAP and upon checking we find again, that it is  our anomalous sample IJ028
 that has the lowest frequency of all of the samples.
 
 To verify our findings we will do a Mann–Whitney U test.
-```{r}
+```{r do shapiro test}
 #Shapiro-Wilk test to assess whether expansion frequencies are normal or not
 shapiro.test(df$expansion_frequency)
 ```

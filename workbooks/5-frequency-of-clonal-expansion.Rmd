@@ -1,7 +1,7 @@
 # Frequency of clonal expansion
 
 The files `clonotype_sizes.txt`from `summarize` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below,
-and used for downstream analysis. 
+and used for downstream analysis.
 ```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
 library(dotenv)
 library(dplyr)
@@ -12,8 +12,8 @@ library(tidyr)
 load("annotation.RData")
 
 # cut the lib id string and keep only the first part
-separate(data = simplified_annotation, 
-         col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% 
+separate(data = simplified_annotation,
+         col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>%
   select(-rest) -> simplified_annotation
 rownames(simplified_annotation) = simplified_annotation$lib_id
 
@@ -74,16 +74,16 @@ colnames(df_complete) = 1:max_clonotype_size
 rownames(df_complete) = lib_ids
 ```
 
-```{r tmp table, echo=FALSE}
+```{r show tmp table, echo=FALSE}
 head(tmp)
 ```
-Shown above is a part of such a table. A clonotype of size 1 means, that only 
+Shown above is a part of such a table. A clonotype of size 1 means, that only
 one cell is in the cluster and is therefore unique.
-The tables of each sample (each folder in the output directory) are combined 
+The tables of each sample (each folder in the output directory) are combined
 into a dataframe called `df_complete`. The column index of the dataframe
 indicates the clonotype size and the rownames specify the lib_id (sample name).
 Since the table of each lib_id directory has the same number of rows as the
-highest clonotype_size of that lib_id, the missing entries of `df_complete` are 
+highest clonotype_size of that lib_id, the missing entries of `df_complete` are
 filled with zeros.
 A section of `df_complete` is shown below.
 The highest clonotype_size in our data is `r dim(df_complete)[2]`
@@ -92,7 +92,7 @@ df_complete[1:3,1:24]
 ```
 
 
-We can also calculate the frequency of clonal expansion, using the definiton of 
+We can also calculate the frequency of clonal expansion, using the definiton of
 clonal expansion of [@ramesh]
 "as a highly similar B cell cluster containing two or more B cells".
 The clonal expansion frequency of a sample is therefore
@@ -103,7 +103,7 @@ $$
 
 The clonal expansion frequencies of each sample are combined in the
 dataframe `df`.
-```{r, echo=FALSE}
+```{r show df, echo=FALSE}
 head(df)
 ```
 
@@ -207,8 +207,8 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
   xlab("Sample Id") + ylab("Clonotype Count")
 ```
 
-Looking at the plots we see that one point in the AP samples is again a bit 
-anomalous, with lesse expansion than the others. It is again IJ028 that we 
+Looking at the plots we see that one point in the AP samples is again a bit
+anomalous, with lesse expansion than the others. It is again IJ028 that we
 saw clusters with the nonAP samples (see above).
 
 ```{r, plot the relative clonal expansion, fig.width=14, fig.height=10}
@@ -235,7 +235,7 @@ p
 ```
 
 Here we again see the increase in the frequency of `AP` vs `nonAP` but no pattern with respect to diagnosis.
-There is one AP point that overlaps in its clonal expansion frequency with 
+There is one AP point that overlaps in its clonal expansion frequency with
 nonAP and upon checking we find again, that it is  our anomalous sample IJ028
 that has the lowest frequency of all of the samples.
 

@@ -1,6 +1,6 @@
 # Discussion
 
-We started off with a dataset of B cells of 31 relapsing remitting mutliple 
+We started off with a dataset of B cells of 31 relapsing-remitting mutliple 
 sclerosis (RRMS) patiens that were either treated with the antibody natalizumab 
 or without as well as healthy donors. These were categorised according to two 
 types of conditions (CFSEdim/high) which correspond to autoproliferating (AP)

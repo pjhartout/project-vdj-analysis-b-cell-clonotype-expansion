@@ -1,6 +1,6 @@
 # Frequency of clonal expansion
 
-The files `clonotype_sizes.txt`from `summarize` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below,
+The files `clonotype_sizes.txt`from `summarise` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below,
 and used for downstream analysis.
 ```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
 library(dotenv)

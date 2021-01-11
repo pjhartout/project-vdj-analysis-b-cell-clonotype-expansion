@@ -152,18 +152,19 @@ def execute_docker_bracer(patient):
             "teichlab/bracer",
             "summarise",
             f"{patient}-out",
+            "--no_networks",
         ]
     )
 
 
 def main():
     """Main function - lists patients and run summarise via docker in parallel
-        for each patient.
+    for each patient.
+
     """
     list_of_patients = os.listdir(
         DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
     )
-    print(list_of_patients)
     Parallel(n_jobs=N_JOBS, verbose=1)(
         delayed(execute_docker_bracer)(row) for row in list_of_patients
     )
@@ -213,11 +214,13 @@ def main():
     patients = os.listdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/")
     output_folder = f"{DOTENV_KEY2VAL['HOME_DIR']}/data/summarise_data/"
 
+    # Removes output directory if it already exists
     if os.path.exists(output_folder):
         rmtree(output_folder)
 
     os.mkdir(output_folder)
 
+    # Loop through patients and copy only the files_to_copy.
     for patient in tqdm(patients):
         if os.path.exists(output_folder + f"/{patient}"):
             rmtree(output_folder + f"/{patient}")
@@ -236,7 +239,8 @@ def main():
         for file in files_to_copy:
             copyfile(src + "/" + file, destination + "/" + file)
 
-    make_archive("summarise_data", "zip", "summarize_data")
+    # Make zip archive of destination
+    make_archive(output_folder, "zip", output_folder)
 
 
 if __name__ == "__main__":

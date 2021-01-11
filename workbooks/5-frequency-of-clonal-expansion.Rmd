@@ -210,7 +210,7 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
 ```
 
 Looking at the plots we see that one point in the AP samples is again a bit
-anomalous, with lesse expansion than the others. It is again IJ028 that we
+anomalous, with less expansion than the others. It is again IJ028 that we
 saw clusters with the nonAP samples (see above).
 
 ```{r, plot the relative clonal expansion, fig.width=14, fig.height=10}

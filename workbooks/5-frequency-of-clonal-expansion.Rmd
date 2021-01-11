@@ -183,8 +183,12 @@ library(ggrepel)
 labels = df$lib_id
 outlier_labels = c("IJ020","IJ028", "IJ067")
 labels[df$lib_id %in% outlier_labels %>% !.] = ""
-autoplot(pca, scale = 0, colour = col, legend = TRUE) +
+autoplot(pca, scale = 0, colour = col, data =simplified_annotation) +
   geom_text_repel(vjust=1.5, label=labels, min.segment.length = Inf) +
+  scale_color_manual("Sample.Type",
+                           values = c("black", "red"),
+                           drop = FALSE,
+                           labels = c("AP", "nonAP")) +
   ggtitle("PCA plot AP (black) vs nonAP (red)")
 ```
 
@@ -197,7 +201,7 @@ separable. In the hierarchical clustering we see as well, that IJ028
 clusters with nonAP cells as well as the sample IJ020, which is the second
 closest point to the putative separation line.
 
-Plotted below are the absoulte counts of clonal expansion grouped by sample type and the proportion of clonal expansion grouped by sample type and diagnosis.
+Plotted below are the absolute counts of clonal expansion grouped by sample type and the proportion of clonal expansion grouped by sample type and diagnosis.
 ```{r, plot the absolute clonal expansion, fig.width=14}
 library(ggplot2)
 melted = melt(df_summarized, id.vars = c("lib_id", "Sample.Type", "Diagnosis", "HLADR15"))
@@ -210,7 +214,7 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
 ```
 
 Looking at the plots we see that one point in the AP samples is again a bit
-anomalous, with lesse expansion than the others. It is again IJ028 that we
+anomalous, with less expansion than the others. It is again IJ028 that we
 saw clusters with the nonAP samples (see above).
 
 ```{r, plot the relative clonal expansion, fig.width=14, fig.height=10}
@@ -224,7 +228,9 @@ ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
   xlab("Sample Id") + ylab("Proportion of Clonotype Count")
 ```
 
-If we look at the proportion of clonotype counts and compare the sample types we can see an increase in all clonotype size groups of type `AP`vs type `nonAP`. But we do not see a patten with respect to `diagnosis`.
+If we look at the proportion of clonotype counts and compare the sample types
+we can see an increase in all clonotype size groups of type `AP`vs type `nonAP`.
+But we do not see a pattern with respect to `diagnosis`.
 
 Next we look at the frequencies of clonal expanion.
 ```{r plot the frequencies, message=FALSE, warning=FALSE}
@@ -236,7 +242,8 @@ p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)
 p
 ```
 
-Here we again see the increase in the frequency of `AP` vs `nonAP` but no pattern with respect to diagnosis.
+Here we again see the increase in the frequency of `AP` vs `nonAP` but no 
+pattern with respect to diagnosis.
 There is one AP point that overlaps in its clonal expansion frequency with
 nonAP and upon checking we find again, that it is  our anomalous sample IJ028
 that has the lowest frequency of all of the samples.
@@ -253,9 +260,12 @@ Wilcoxon test used here.
 ```{r Mann-Whitney-Wilcoxon Test}
 wilcox.test(expansion_frequency ~ Sample.Type, data=df)
 ```
-As we can see the null hypothesis of true location shift is equal to 0 can be rejected under the significance level $\alpha = 0.05$.
+As we can see the null hypothesis of true location shift is equal to 0 can be 
+rejected under the significance level $\alpha = 0.05$.
 
-As an additional visualization we want to see if there is a pattern in the clonotype expansion frequency with regard to the haplotype HLA-DR15, but we again do not see a pattern.
+As an additional visualization we want to see if there is a pattern in the 
+clonotype expansion frequency with regard to the haplotype HLA-DR15, 
+but we again do not see a pattern.
 ```{r plot frequency for HLADR15}
 library(ggplot2)
 p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_frequency,

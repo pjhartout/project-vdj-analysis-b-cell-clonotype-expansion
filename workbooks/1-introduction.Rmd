@@ -63,7 +63,7 @@ with the CFSE dye, a validated method to measure lymphocyte proliferation and
 survival [@hawkins2007measuring]. The status of each of the incubated samples
 was then recorded, and either corresponded to autoproliferating (*AP*),
 containing low concentrations of CFSE (*CFSEdim*), or non autoproliferating
-(*nonAP*), containing high concentrations of *CFSE*. The reduction in dye
+(*nonAP*), containing high concentrations of *CFSE* (*CFSEhi*). The reduction in dye
 concentration is attributed to the successive halving of CFSE molecule
 concentration upon each division cycle.
 

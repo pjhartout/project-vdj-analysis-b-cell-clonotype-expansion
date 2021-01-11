@@ -40,12 +40,12 @@ are of the same isotype as the BCR and bind their target antigens [@janeway].
 
 The general process of adaptive immunity is driven by the clonal selection
 theory. This theory states that there are many different B cells in the body,
-each capable of producing specific antibodies and corresponding specific BCRs.
-In this pool of many different B cells, those that bind an antigen upon
-infection are activated and subsequently divide to produce many identical copies
-of themselves --a phenomenon referred to as clonal expansion-- thereby producing
-clonotypes, which are populations of very similar, clonally expanded cells.
-[@janeway].
+each capable of producing antigen-specific antibodies and corresponding
+antigen-specific BCRs. In this pool of many different B cells, those that bind
+an antigen upon infection are activated and subsequently divide to produce many
+identical copies of themselves--a phenomenon referred to as clonal expansion--
+thereby producing clonotypes, which are populations of very similar, clonally
+expanded cells. [@janeway].
 
 In order to make inferences about the size of each clonotype, it is important to
 reconstruct the sequence of the BCR from single cell RNA sequencing data
@@ -57,6 +57,7 @@ previously developed `TraCeR` for TCR reconstruction [@lindeman] [@stubbington].
 
 In the context of this project, we were provided with scRNA-Seq data for B cells
 from 31 patients. The status of each of the patients --*RRMS NAT* - treated with
+<<<<<<< HEAD
 the monoclonal antibody Natalizumab, *RRMS nihil* - untreated and
 *Healthy Donors*--donated lymphocytes, which were then incubated in vitro and
 colored with the CFSE dye, a validated method to measure lymphocyte
@@ -66,12 +67,23 @@ corresponded to autoproliferating (*AP*), containing low
 concentrations of CFSE (*CFSEdim*), or non autoproliferating (*nonAP*),
 containing high concentrations of CFSE(*CFSEhi*). The reduction in dye concentration is attributed to the successive halving of CFSE molecule concentration upon each
 division cycle.
+=======
+the monoclonal antibody Natalizumab, *RRMS nihil* - untreated and *Healthy
+Donors*--donated lymphocytes, which were then incubated in vitro and colored
+with the CFSE dye, a validated method to measure lymphocyte proliferation and
+survival [@hawkins2007measuring]. The status of each of the incubated samples
+was then recorded, and either corresponded to autoproliferating (*AP*),
+containing low concentrations of CFSE (*CFSEdim*), or non autoproliferating
+(*nonAP*), containing high concentrations of *CFSE*. The reduction in dye
+concentration is attributed to the successive halving of CFSE molecule
+concentration upon each division cycle.
+>>>>>>> a70a72b... :pencil: additional intro edits
 
 This report is structured as follows: first, we perform an exploratory data
 analysis on the data where we lay out the experimental setting; second, we
-expound our preprocessing pipeline using BraCer; third, we perform an analysis
-of clonotype frequency in *AP* and *nonAP*; fourth we perform an analysis of the
-isotype frequencies in *AP* and *nonAP*.
+exposit our preprocessing pipeline using BraCer; third, we analyze clonotype
+frequency in *AP* and *nonAP*; fourth we perform an analysis of the isotype
+frequencies in *AP* and *nonAP*.
 
 Our null hypothesis is, that there is no difference between the two conditions
 *AP* and *nonAP* in terms of clonal expansion.

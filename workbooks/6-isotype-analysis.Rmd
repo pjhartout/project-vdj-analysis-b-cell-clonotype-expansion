@@ -1,6 +1,6 @@
 # Isotype Analysis 
 
-The files `BCR_summary.txt`from `summarize` contain a section *Isotype of cells with productive heavy chain*. As the name says it counts the isotype of the B-cell receptor of each cell in the sample. The section is a table with the columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown below, and use for downstream analysis.
+The files `BCR_summary.txt`from `summarise` contain a section *Isotype of cells with productive heavy chain*. As the name says it counts the isotype of the B-cell receptor of each cell in the sample. The section is a table with the columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown below, and use for downstream analysis.
 ```{r Isotype analysis, message = FALSE, warning=FALSE}
 library(dplyr)
 library(tidyr)

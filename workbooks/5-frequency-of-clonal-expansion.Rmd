@@ -96,12 +96,14 @@ We can also calculate the frequency of clonal expansion, using the definiton of
 clonal expansion of [@ramesh]
 "as a highly similar B cell cluster containing two or more B cells".
 The clonal expansion frequency of a sample is therefore
+
 $$
 \frac{\text{number of cells with clonotype_size >1}}{\text{total number of cell in the sample}}
 $$
+
 The clonal expansion frequencies of each sample are combined in the
 dataframe `df`.
-```{r show table, echo=FALSE}
+```{r, echo=FALSE}
 head(df)
 ```
 
@@ -263,7 +265,7 @@ p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_fr
 p
 ```
 
-```{r clean up, include=FALSE}
+```{r, include=FALSE}
 # clean up to free up memory
 rm(list = ls())
 ```

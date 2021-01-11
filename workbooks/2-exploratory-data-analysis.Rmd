@@ -189,8 +189,7 @@ colnames(summary.df) <- c("Type", "X2", "value")
 p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
   geom_bar(stat = "identity") + xlab ("Cumsum of Cells") +
   ggtitle("Proportion of overall AP vs nonAP cells") + 
-  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), 
-                labels = trans_format("log10", scales::math_format(10^.x)))
+   scale_y_continuous(labels = comma)
 p
 ```
 

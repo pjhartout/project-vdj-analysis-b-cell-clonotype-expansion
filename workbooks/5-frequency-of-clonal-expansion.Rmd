@@ -178,7 +178,7 @@ pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
 fviz_eig(pca, main = "Principle Component Analysis, variance explained", 
          xlab = "PCs")
 ```
-```{r plot the PCA, message=FALSE, warning=FALSE, fig.width=14, fig.height=12}
+```{r plot the PCA, message=FALSE, warning=FALSE}
 library(ggrepel)
 labels = df$lib_id
 outlier_labels = c("IJ020","IJ028", "IJ067")

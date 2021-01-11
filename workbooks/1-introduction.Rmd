@@ -2,7 +2,7 @@
 
 Multiple sclerosis (MS) is an automimmune disease affecting the central nervous
 system. It attacks the myelin sheet of neurons and affects $\approx$ 1M patients
-in the US alone. [@ramesh] Patients often experience impairments of visual,
+in the US alone [@ramesh]. Patients often experience impairments of visual,
 sensory, motor, neurocognitive and autonomic functions. The most common form of
 MS is the relapsing-remitting MS (*RRMS*) which is characterised by active
 phases of the disease (relapse; *REL*) and inactive phases (remission; *REM*)
@@ -15,7 +15,7 @@ linked to adaptive immunity associated to MS. One important haplotype is
 HLA-DR proteins on the surface of antigen presenting cells drive the activation
 of T-cells, thereby restricting the space of possible T cells activated, a
 strong argument for HLA-DR15 and the role of adaptive immunity in MS can be
-made. [@jelcic]
+made [@jelcic].
 
 During the relapsing and immunologically active phases of MS, several cells are
 known to be important, including CD4+ T-Cells, CD8+ T-cells, as well as
@@ -55,7 +55,7 @@ reconstruct the sequence of the BCR from single cell RNA sequencing data
 (scRNA-seq). This will allow for the usage of the entire transcriptomic identity
 of the B-cell without the need to use special targeted sequencing protocols like
 repertoire sequencing (Rep-Seq). The tool employed in this project that can
-achieve BCR reconstruction from scRNA-Seq data is BraCeR, an extension of the
+achieve BCR reconstruction from scRNA-Seq data is `BraCeR`, an extension of the
 previously developed TraCeR for TCR reconstruction [@lindeman] [@stubbington].
 
 In the context of this project, we were provided with scRNA-Seq data for B cells
@@ -63,7 +63,7 @@ from 31 patients. The status of each of the patients --*RRMS NAT* - treated with
 the monoclonal antibody Natalizumab, *RRMS nihil* - untreated and 
 *Healthy Donors*--donated lymphocytes, which were then incubated in vitro and 
 colored with the CFSE dye, a validated method to measure lymphocyte 
-proliferation and survival[@hawkins2007measuring]. 
+proliferation and survival [@hawkins2007measuring]. 
 The status of each of the incubated samples was then recorded, and either 
 corresponded to autoproliferating (*AP*), containing low
 concentrations of CFSE (*CFSEdim*), or non autoproliferating (*nonAP*), 

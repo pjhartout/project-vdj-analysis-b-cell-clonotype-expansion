@@ -124,6 +124,7 @@ for(label in labels){
 countlabel <- melt(countlabel)
 
 countlabel$label <- simplified_annotation$Sample.Type
+colnames(countlabel) <- c("lib_id", "cell_count", "Sample.Type")
 
 #showing the head of the table
 head(countlabel)
@@ -132,16 +133,16 @@ head(countlabel)
 cells_ap = 0
 cells_nonap = 0
 for(i in 1:31){
-  if(countlabel[i,"label"] == "AP"){
-    cells_ap = cells_ap + countlabel[i,"value"]
+  if(countlabel[i,"Sample.Type"] == "AP"){
+    cells_ap = cells_ap + countlabel[i,"cell_count"]
   }
   else{
-    cells_nonap = cells_nonap + countlabel[i,"value"]
+    cells_nonap = cells_nonap + countlabel[i,"cell_count"]
   }
 }
 
 #visualisation of the cell counts per patient
-p <- ggplot(countlabel, aes(x = variable, y= value, colour = label)) +
+p <- ggplot(countlabel, aes(x = lib_id, y= cell_count, colour = Sample.Type)) +
   geom_point(stat='identity') + theme(axis.text.x = element_text(angle = 90)) +
   xlab("lib_ID") + ylab ("Count") + ggtitle("Cell count per Sample")
 
@@ -156,17 +157,17 @@ cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells.
 A check for normality is done via a Q-Q plot and a Shapiro-Wilk normality test.
 ```{r, message = FALSE}
 #histogram of count_data
-hist(countlabel$value, xlab = "Cell Count per Sample",
+hist(countlabel$cell_count, xlab = "Cell Count per Sample",
      main = "Histogram of Cell Count")
 
 #adding Q-Q plot to check for normality of data
-p <- ggplot(countlabel, aes(sample = value)) +
+p <- ggplot(countlabel, aes(sample = cell_count)) +
   stat_qq(col = "blue") + stat_qq_line(col = "red" ) +
   ggtitle("Normal Q-Q plot")
 p
 
 #doing shapiro wilk test for normality
-shapiro.test(countlabel$value)
+shapiro.test(countlabel$cell_count)
 ```
 
 From our Q-Q plot we see that the data is normally distributed and

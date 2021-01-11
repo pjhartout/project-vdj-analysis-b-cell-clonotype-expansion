@@ -28,7 +28,7 @@ Most dependencies are managed through [renv](https://rstudio.github.io/renv). Us
 
 ### Python
 
-Python dependencies are managed through [poetry](https://python-poetry.org/). Use `poetry install` to install python dependencies.
+Python dependencies are managed through [poetry](https://python-poetry.org/). Use `poetry install` in the project home directory to install python dependencies.
 
 ### .env support
 

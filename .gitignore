@@ -1,6 +1,6 @@
-/data/
+/data/*
+!/data/summarise_data.zip
 .Rproj.user
-.env
 
 ### Bookdown ###
 # R package: bookdown caching files

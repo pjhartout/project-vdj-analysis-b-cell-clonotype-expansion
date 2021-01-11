@@ -57,17 +57,6 @@ previously developed `TraCeR` for TCR reconstruction [@lindeman] [@stubbington].
 
 In the context of this project, we were provided with scRNA-Seq data for B cells
 from 31 patients. The status of each of the patients --*RRMS NAT* - treated with
-<<<<<<< HEAD
-the monoclonal antibody Natalizumab, *RRMS nihil* - untreated and
-*Healthy Donors*--donated lymphocytes, which were then incubated in vitro and
-colored with the CFSE dye, a validated method to measure lymphocyte
-proliferation and survival [@hawkins2007measuring].
-The status of each of the incubated samples was then recorded, and either
-corresponded to autoproliferating (*AP*), containing low
-concentrations of CFSE (*CFSEdim*), or non autoproliferating (*nonAP*),
-containing high concentrations of CFSE(*CFSEhi*). The reduction in dye concentration is attributed to the successive halving of CFSE molecule concentration upon each
-division cycle.
-=======
 the monoclonal antibody Natalizumab, *RRMS nihil* - untreated and *Healthy
 Donors*--donated lymphocytes, which were then incubated in vitro and colored
 with the CFSE dye, a validated method to measure lymphocyte proliferation and
@@ -77,7 +66,6 @@ containing low concentrations of CFSE (*CFSEdim*), or non autoproliferating
 (*nonAP*), containing high concentrations of *CFSE*. The reduction in dye
 concentration is attributed to the successive halving of CFSE molecule
 concentration upon each division cycle.
->>>>>>> a70a72b... :pencil: additional intro edits
 
 This report is structured as follows: first, we perform an exploratory data
 analysis on the data where we lay out the experimental setting; second, we

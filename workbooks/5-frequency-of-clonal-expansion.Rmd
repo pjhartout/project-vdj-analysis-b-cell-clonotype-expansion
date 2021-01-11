@@ -172,9 +172,11 @@ legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,
 ```
 
 ```{r plot the contributions of the PCA, message=FALSE, warning=FALSE}
+library(factoextra)
 # plot the PCA of the datapoints
 pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
-plot(pca, main = "Principle Component Analysis", xlab = "PCs")
+fviz_eig(pca, main = "Principle Component Analysis, variance explained", 
+         xlab = "PCs")
 ```
 ```{r plot the PCA, message=FALSE, warning=FALSE, fig.width=14, fig.height=12}
 library(ggrepel)

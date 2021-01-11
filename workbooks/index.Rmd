@@ -1,5 +1,5 @@
 ---
-title: "Autoproliferation Analysis of B Cells"
+title: "Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis"
 author: "Richard Affolter, Martin Emons, Philip Hartout"
 output:
   bookdown::html_book:

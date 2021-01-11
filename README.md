@@ -19,6 +19,8 @@ This project is set up as follows:
 
 A full overview, analysis and summary of this project can be found in the [workbooks  directory](/workbooks/).
 
+The project was organised via the `bookdown` package from R. The chapters (as defined above) were added as children to the `index.Rmd`. Knitting this project yields the entire project with chapters. Alternatively you can select the first html `introduction.html` which should allow you to navigate through the project via the outline at the top of the page.
+
 ## Dependencies
 
 ### R

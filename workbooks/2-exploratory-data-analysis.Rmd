@@ -6,7 +6,7 @@ understand the makeup of the meta-data related to the patients.
 ## Sample-level Descriptive Statistics
 
 The patient meta-data was provided as a `SingleCellExperiment` format.
-```{r, message=FALSE, warning=FALSE}
+```{r load the experiment annotation data and count (non)AP, message=FALSE, warning=FALSE}
 library(dotenv)
 load_dot_env(file = ".env")
 
@@ -36,7 +36,7 @@ in the dataset.
 Next the population statistics is visualised. First we set CFSEdim to
 be AP and CFSEhi to be nonAP (see introduction for a rationale).
 
-```{r, message=FALSE, warning=FALSE}
+```{r simplify annotation and save it to disk, message=FALSE, warning=FALSE}
 library(ggplot2)
 
 # change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP
@@ -47,14 +47,14 @@ simplified_annotation = cellUMI2SampleType %>%
 save(simplified_annotation, file = "annotation.RData")
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE}
+```{r show table, message=FALSE, warning=FALSE, echo=FALSE}
 head(simplified_annotation)
 ```
 
 Above we see a part of the dataset with the most important features for the
 future analysis.
 
-```{r}
+```{r plot cell count per sample, message=FALSE, warning=FALSE}
 #visualisation of the patient composition
 p <- ggplot(simplified_annotation, aes(x = Sample.Type, fill = Diagnosis)) +
     geom_bar(position="dodge")  +
@@ -101,7 +101,7 @@ save(cells_for_samples, file = "cells_for_samples.RData")
 ```
 
 
-```{r, message = FALSE, warning=FALSE}
+```{r load the cell counts, count sample type and visualize, message = FALSE, warning=FALSE}
 library(reshape)
 library(tidyr)
 
@@ -155,7 +155,7 @@ distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
 cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells.
 
 A check for normality is done via a Q-Q plot and a Shapiro-Wilk normality test.
-```{r, message = FALSE}
+```{r plot histogram, QQ and do test for normality, message = FALSE}
 #histogram of count_data
 hist(countlabel$cell_count, xlab = "Cell Count per Sample",
      main = "Histogram of Cell Count")
@@ -176,7 +176,7 @@ normal distribution of the count data.
 
 In a last step the proportion of A P cells vs nonAP cells over all samples
 is analysed.
-```{r, message = FALSE}
+```{r plot proportion of (non)AP, message = FALSE}
 #showing the proportion of the cumulative sum of AP vs nonAP cells
 summary.df <- data.frame()
 summary.df <- cbind(c(cells_ap, cells_nonap))
@@ -199,7 +199,7 @@ these cells are quite nicely mixed from different samples (see Cell Count per
 Sample plot). The Q-Q plot and the Shapiro-Wilk show that our cell-count data is 
 more or less normally distributed.
 
-```{r message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
+```{r clean up, message=FALSE, warning=FALSE, include=FALSE, include=FALSE}
 # clean up to free up memory
 rm(list = ls())
 ```

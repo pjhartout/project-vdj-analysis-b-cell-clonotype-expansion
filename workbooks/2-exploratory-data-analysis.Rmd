@@ -150,7 +150,7 @@ p
 ```
 
 We see that we have cell counts in the range of $\approx$ 1000 up
-to $\approx$ 5000 per sample. Over the two conditions AP and nonAP the
+to $\approx$ 6500 per sample. Over the two conditions AP and nonAP the
 distribution is quite similar with `r format(cells_ap, scientific=FALSE)` AP
 cells and `r format(cells_nonap, scientific=FALSE)` nonAP cells.
 
@@ -177,6 +177,7 @@ normal distribution of the count data.
 In a last step the proportion of A P cells vs nonAP cells over all samples
 is analysed.
 ```{r plot proportion of (non)AP, message = FALSE}
+library(scales)
 #showing the proportion of the cumulative sum of AP vs nonAP cells
 summary.df <- data.frame()
 summary.df <- cbind(c(cells_ap, cells_nonap))
@@ -187,7 +188,9 @@ colnames(summary.df) <- c("Type", "X2", "value")
 
 p <- ggplot(summary.df, aes(x = "", y = value, fill = Type)) +
   geom_bar(stat = "identity") + xlab ("Cumsum of Cells") +
-  ggtitle("Proportion of overall AP vs nonAP cells")
+  ggtitle("Proportion of overall AP vs nonAP cells") + 
+  scale_y_log10(breaks = trans_breaks("log10", function(x) 10^x), 
+                labels = trans_format("log10", scales::math_format(10^.x)))
 p
 ```
 

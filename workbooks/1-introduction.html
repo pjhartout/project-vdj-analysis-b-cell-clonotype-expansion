@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis" />
+<meta property="og:type" content="book" />
+
+
+
+
+
+<meta name="author" content="Richard Affolter, Martin Emons, Philip Hartout" />
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis">
+
+<title>Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="1-introduction.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-exploratory-data-analysis.html#exploratory-data-analysis"><span class="toc-section-number">2</span> Exploratory Data Analysis</a><ul>
+<li><a href="2-exploratory-data-analysis.html#sample-level-descriptive-statistics"><span class="toc-section-number">2.1</span> Sample-level Descriptive Statistics</a></li>
+<li><a href="2-exploratory-data-analysis.html#cell-level-descriptive-statistics"><span class="toc-section-number">2.2</span> Cell-level Descriptive Statistics</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-preprocessing-of-raw-data.html#preprocessing-of-raw-data"><span class="toc-section-number">3</span> Preprocessing of raw Data</a><ul>
+<li><a href="3-preprocessing-of-raw-data.html#demultiplexing"><span class="toc-section-number">3.1</span> Demultiplexing</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-bracer.html#bracer"><span class="toc-section-number">4</span> <code>BraCeR</code></a><ul>
+<li><a href="4-bracer.html#assemble"><span class="toc-section-number">4.1</span> Assemble</a></li>
+<li><a href="4-bracer.html#summarise"><span class="toc-section-number">4.2</span> Summarise</a></li>
+<li><a href="4-bracer.html#packaging-for-downstream-analysis"><span class="toc-section-number">4.3</span> Packaging for downstream analysis</a></li>
+</ul></li>
+<li><a href="5-frequency-of-clonal-expansion.html#frequency-of-clonal-expansion"><span class="toc-section-number">5</span> Frequency of clonal expansion</a></li>
+<li><a href="6-isotype-analysis.html#isotype-analysis"><span class="toc-section-number">6</span> Isotype Analysis</a></li>
+<li><a href="7-discussion.html#discussion"><span class="toc-section-number">7</span> Discussion</a></li>
+<li><a href="8-summary.html#summary"><span class="toc-section-number">8</span> Summary</a></li>
+<li><a href="references.html#references">References</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="header">
+<h1 class="title">Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis</h1>
+<h4 class="author"><em>Richard Affolter, Martin Emons, Philip Hartout</em></h4>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Multiple sclerosis (MS) is an automimmune disease affecting the central nervous
+system, where the host immune system attacks the myelin sheath of neurons,
+resulting in various impairments of visual, sensory, motor, neurocognitive and
+autonomic functions. Today, it affects <span class="math inline">\(\approx\)</span> 1M patients in the US alone
+<span class="citation">(Ramesh et al. 2020)</span>. The most common form of MS is the relapsing-remitting MS (<em>RRMS</em>)
+which is characterised by active phases of the disease (relapse; <em>REL</em>) and
+inactive phases (remission; <em>REM</em>) <span class="citation">(Jelcic et al. 2018)</span>.</p>
+<p>There is a broad consensus that MS is due to a dysregulated adaptive immunity,
+since a number of mutations (&gt;100) in genetic loci involved in adaptive immunity
+are linked to MS. One important genetic loci associated with MS is the
+<em>HLA-DR15</em> serotype of the <em>HLA-DR</em> gene, which has been shown to have a strong
+association with MS. Since HLA-DR proteins are located on the surface of antigen
+presenting cells drive the activation of T-cells, they restrict the space of
+possible T cells activated, a strong argument for the involvement of HLA-DR15 in
+MS and the broader role of adaptive immunity in MS can be made <span class="citation">(Jelcic et al. 2018)</span>.</p>
+<p>During the relapsing and immunologically active phases of MS, several cells are
+known to be important, including CD4+ T-Cells, CD8+ T-cells, as well as
+autoantibody-producing B-cells. A phenomenon called autoproliferation (<em>AP</em>) of
+T cells and B cells plays an important role in MS, since it leads to an
+expansion of these self-reacting immune cells. Autoproliferation is mediated by memory
+B-cells, as B cells are known to present autoantigen to T cells (via, for
+instance, HLA-DR15). This mechanism is further corroborated by the fact that the
+depletion of B-cells leads to reduced T cell autoproliferation, and is one of
+the principles behind B cell-depleting therapies <span class="citation">(Dendrou, Fugger, and Friese 2015)</span>.
+Previous studies have found that the frequency of AP cells was different between
+stages of RRMS, being higher in REL than in REM <span class="citation">(Jelcic et al. 2018)</span>. This underpins the
+importance of our choice to focus on B cells in this project.</p>
+<p>B cells are lymphocytes and part of the adaptive immune response. At its surface
+is the B-cell receptor (BCR) that can bind to antigens. The antigen-binding part
+of the BCR is a membrane-bound immunoglobulin which can take on one of several
+classes known as <em>isotypes</em>. The most important isotypes are IgM, IgD, IgG, IgA
+and IgE. Upon binding, the B-cell will differentiate into plasmocytes–a type
+of effector cell–that later on produce immunoglobulins (Ig). The secreted Ig
+are of the same isotype as the BCR and bind their target antigens <span class="citation">(Murphy 2012)</span>.</p>
+<p>The general process of adaptive immunity is driven by the clonal selection
+theory. This theory states that there are many different B cells in the body,
+each capable of producing antigen-specific antibodies and corresponding
+antigen-specific BCRs. In this pool of many different B cells, those that bind
+an antigen upon infection are activated and subsequently divide to produce many
+identical copies of themselves–a phenomenon referred to as clonal
+expansion–thereby producing clonotypes, which are populations of very similar,
+clonally expanded cells. <span class="citation">(Murphy 2012)</span>.</p>
+<p>In order to make inferences about the size of each clonotype, it is important to
+reconstruct the sequence of the BCR from single cell RNA sequencing data
+(scRNA-seq). This will allow for the usage of the entire transcriptomic identity
+of the B-cell without the need to use special targeted sequencing protocols like
+repertoire sequencing (Rep-Seq). The tool employed in this project that can
+achieve BCR reconstruction from scRNA-Seq data is <code>BraCeR</code>, an extension of the
+previously developed <code>TraCeR</code> for TCR reconstruction <span class="citation">(Lindeman et al. 2018)</span> <span class="citation">(Stubbington et al. 2016)</span>.</p>
+<p>In the context of this project, we were provided with scRNA-Seq data for B cells
+from 31 patients. The status of each of the patients –<em>RRMS NAT</em> - treated with
+the monoclonal antibody Natalizumab, <em>RRMS nihil</em> - untreated and <em>Healthy
+Donors</em>–donated lymphocytes, which were then incubated in vitro and colored
+with the CFSE dye, a validated method to measure lymphocyte proliferation and
+survival <span class="citation">(Hawkins et al. 2007)</span>. The status of each of the incubated samples
+was then recorded, and either corresponded to autoproliferating (<em>AP</em>),
+containing low concentrations of CFSE (<em>CFSEdim</em>), or non autoproliferating
+(<em>nonAP</em>), containing high concentrations of CFSE (<em>CFSEhi</em>). The reduction in dye
+concentration is attributed to the successive halving of CFSE molecule
+concentration upon each division cycle.</p>
+<p>This report is structured as follows: first, we perform an exploratory data
+analysis on the data where we lay out the experimental setting; second, we
+exposit our preprocessing pipeline using <code>BraCeR</code>; third, we analyse clonotype
+frequency in <em>AP</em> and <em>nonAP</em>; fourth we perform an analysis of the isotype
+frequencies in <em>AP</em> and <em>nonAP</em>.</p>
+</div>
+<p style="text-align: center;">
+<a href="2-exploratory-data-analysis.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

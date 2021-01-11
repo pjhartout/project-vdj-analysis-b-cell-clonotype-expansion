@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="2 Exploratory Data Analysis | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis" />
+<meta property="og:type" content="book" />
+
+
+
+
+
+<meta name="author" content="Richard Affolter, Martin Emons, Philip Hartout" />
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="2 Exploratory Data Analysis | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis">
+
+<title>2 Exploratory Data Analysis | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="1-introduction.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-exploratory-data-analysis.html#exploratory-data-analysis"><span class="toc-section-number">2</span> Exploratory Data Analysis</a><ul>
+<li><a href="2-exploratory-data-analysis.html#sample-level-descriptive-statistics"><span class="toc-section-number">2.1</span> Sample-level Descriptive Statistics</a></li>
+<li><a href="2-exploratory-data-analysis.html#cell-level-descriptive-statistics"><span class="toc-section-number">2.2</span> Cell-level Descriptive Statistics</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-preprocessing-of-raw-data.html#preprocessing-of-raw-data"><span class="toc-section-number">3</span> Preprocessing of raw Data</a><ul>
+<li><a href="3-preprocessing-of-raw-data.html#demultiplexing"><span class="toc-section-number">3.1</span> Demultiplexing</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-bracer.html#bracer"><span class="toc-section-number">4</span> <code>BraCeR</code></a><ul>
+<li><a href="4-bracer.html#assemble"><span class="toc-section-number">4.1</span> Assemble</a></li>
+<li><a href="4-bracer.html#summarise"><span class="toc-section-number">4.2</span> Summarise</a></li>
+<li><a href="4-bracer.html#packaging-for-downstream-analysis"><span class="toc-section-number">4.3</span> Packaging for downstream analysis</a></li>
+</ul></li>
+<li><a href="5-frequency-of-clonal-expansion.html#frequency-of-clonal-expansion"><span class="toc-section-number">5</span> Frequency of clonal expansion</a></li>
+<li><a href="6-isotype-analysis.html#isotype-analysis"><span class="toc-section-number">6</span> Isotype Analysis</a></li>
+<li><a href="7-discussion.html#discussion"><span class="toc-section-number">7</span> Discussion</a></li>
+<li><a href="8-summary.html#summary"><span class="toc-section-number">8</span> Summary</a></li>
+<li><a href="references.html#references">References</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="exploratory-data-analysis" class="section level1">
+<h1><span class="header-section-number">2</span> Exploratory Data Analysis</h1>
+<p>In the following section we perform an exploratory data analysis to better
+understand the makeup of the meta-data related to the patients.</p>
+<div id="sample-level-descriptive-statistics" class="section level2">
+<h2><span class="header-section-number">2.1</span> Sample-level Descriptive Statistics</h2>
+<p>The patient meta-data was provided as a <code>SingleCellExperiment</code> format.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="2-exploratory-data-analysis.html#cb1-1"></a><span class="kw">library</span>(dotenv)</span>
+<span id="cb1-2"><a href="2-exploratory-data-analysis.html#cb1-2"></a><span class="kw">load_dot_env</span>(<span class="dt">file =</span> <span class="st">&quot;.env&quot;</span>)</span>
+<span id="cb1-3"><a href="2-exploratory-data-analysis.html#cb1-3"></a></span>
+<span id="cb1-4"><a href="2-exploratory-data-analysis.html#cb1-4"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-5"><a href="2-exploratory-data-analysis.html#cb1-5"></a><span class="kw">library</span>(SummarizedExperiment)</span>
+<span id="cb1-6"><a href="2-exploratory-data-analysis.html#cb1-6"></a><span class="kw">library</span>(stringr)</span>
+<span id="cb1-7"><a href="2-exploratory-data-analysis.html#cb1-7"></a></span>
+<span id="cb1-8"><a href="2-exploratory-data-analysis.html#cb1-8"></a><span class="co"># Load data, note that sce_B.rds should be in data/</span></span>
+<span id="cb1-9"><a href="2-exploratory-data-analysis.html#cb1-9"></a>experiment =<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(<span class="kw">Sys.getenv</span>(<span class="kw">c</span>(<span class="st">&quot;HOME_DIR&quot;</span>)), <span class="st">&quot;data/sce_B.rds&quot;</span>),</span>
+<span id="cb1-10"><a href="2-exploratory-data-analysis.html#cb1-10"></a>                     <span class="dt">refhook =</span> <span class="ot">NULL</span>)</span>
+<span id="cb1-11"><a href="2-exploratory-data-analysis.html#cb1-11"></a>cellUMI2SampleType_raw =<span class="st"> </span><span class="kw">colData</span>(experiment) <span class="op">%&gt;%</span><span class="st"> </span>as.data.frame</span>
+<span id="cb1-12"><a href="2-exploratory-data-analysis.html#cb1-12"></a></span>
+<span id="cb1-13"><a href="2-exploratory-data-analysis.html#cb1-13"></a></span>
+<span id="cb1-14"><a href="2-exploratory-data-analysis.html#cb1-14"></a>cellUMI2SampleType =<span class="st"> </span>cellUMI2SampleType_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(lib_id,</span>
+<span id="cb1-15"><a href="2-exploratory-data-analysis.html#cb1-15"></a>                                                       Sample.Type,</span>
+<span id="cb1-16"><a href="2-exploratory-data-analysis.html#cb1-16"></a>                                                       Diagnosis, HLADR15) <span class="op">%&gt;%</span></span>
+<span id="cb1-17"><a href="2-exploratory-data-analysis.html#cb1-17"></a><span class="st">  </span><span class="kw">unique</span>()</span>
+<span id="cb1-18"><a href="2-exploratory-data-analysis.html#cb1-18"></a></span>
+<span id="cb1-19"><a href="2-exploratory-data-analysis.html#cb1-19"></a><span class="co">#counting the number of AP and nonAP patients</span></span>
+<span id="cb1-20"><a href="2-exploratory-data-analysis.html#cb1-20"></a>count_nonap &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">str_count</span>(cellUMI2SampleType<span class="op">$</span>Sample.Type, <span class="st">&quot;CFSEhi CD19+&quot;</span>))</span>
+<span id="cb1-21"><a href="2-exploratory-data-analysis.html#cb1-21"></a>count_ap &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">str_count</span>(cellUMI2SampleType<span class="op">$</span>Sample.Type, <span class="st">&quot;CFSEdim CD19+&quot;</span>))</span></code></pre></div>
+<p>There are 16 AP patients and 15 nonAP patients
+in the dataset.</p>
+<p>Next the population statistics is visualised. First we set CFSEdim to
+be AP and CFSEhi to be nonAP (see introduction for a rationale).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="2-exploratory-data-analysis.html#cb2-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="2-exploratory-data-analysis.html#cb2-2"></a></span>
+<span id="cb2-3"><a href="2-exploratory-data-analysis.html#cb2-3"></a><span class="co"># change CFSEdim CD19+ to AP and CFSEhi CD19+ to nonAP</span></span>
+<span id="cb2-4"><a href="2-exploratory-data-analysis.html#cb2-4"></a>simplified_annotation =<span class="st"> </span>cellUMI2SampleType <span class="op">%&gt;%</span></span>
+<span id="cb2-5"><a href="2-exploratory-data-analysis.html#cb2-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Sample.Type =</span> <span class="kw">ifelse</span>(Sample.Type <span class="op">==</span><span class="st"> &quot;CFSEdim CD19+&quot;</span>, <span class="st">&quot;AP&quot;</span>, <span class="st">&quot;nonAP&quot;</span>))</span>
+<span id="cb2-6"><a href="2-exploratory-data-analysis.html#cb2-6"></a></span>
+<span id="cb2-7"><a href="2-exploratory-data-analysis.html#cb2-7"></a><span class="co">#saving the annotations so that we do not have to load it several times</span></span>
+<span id="cb2-8"><a href="2-exploratory-data-analysis.html#cb2-8"></a><span class="kw">save</span>(simplified_annotation, <span class="dt">file =</span> <span class="st">&quot;annotation.RData&quot;</span>)</span></code></pre></div>
+<pre><code>##        lib_id Sample.Type         Diagnosis HLADR15
+## 1 IJ009_POOL1       nonAP        RRMS (NAT)     Pos
+## 2 IJ010_POOL2          AP        RRMS (NAT)     Pos
+## 3 IJ013_POOL1       nonAP        RRMS (NAT)     Neg
+## 4 IJ014_POOL1          AP        RRMS (NAT)     Neg
+## 5 IJ015_POOL1       nonAP RRMS (REM; nihil)     Neg
+## 6 IJ016_POOL2          AP RRMS (REM; nihil)     Neg</code></pre>
+<p>Above we see a part of the dataset with the most important features for the
+future analysis.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="2-exploratory-data-analysis.html#cb4-1"></a><span class="co">#visualisation of the patient composition</span></span>
+<span id="cb4-2"><a href="2-exploratory-data-analysis.html#cb4-2"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(simplified_annotation, <span class="kw">aes</span>(<span class="dt">x =</span> Sample.Type, <span class="dt">fill =</span> Diagnosis)) <span class="op">+</span></span>
+<span id="cb4-3"><a href="2-exploratory-data-analysis.html#cb4-3"></a><span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>)  <span class="op">+</span></span>
+<span id="cb4-4"><a href="2-exploratory-data-analysis.html#cb4-4"></a><span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Sample Dataset (n = 31)&quot;</span>)</span>
+<span id="cb4-5"><a href="2-exploratory-data-analysis.html#cb4-5"></a></span>
+<span id="cb4-6"><a href="2-exploratory-data-analysis.html#cb4-6"></a>p</span></code></pre></div>
+<p><img src="index_files/figure-html/plot%20cell%20count%20per%20sample-1.png" width="672" /></p>
+<p>We see that the proportion of samples is homogeneous with respect to Diagnosis
+and treatment combinations in AP and nonAP sample types.</p>
+</div>
+<div id="cell-level-descriptive-statistics" class="section level2">
+<h2><span class="header-section-number">2.2</span> Cell-level Descriptive Statistics</h2>
+<p>Next we want to inspect how many cells we have per AP and nonAP sample. This can
+be done by looking at the demultiplexed files, which we discuss in the next section.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="2-exploratory-data-analysis.html#cb5-1"></a><span class="co"># since we cannot upload the entire demultiplexed folder, this chunk is not </span></span>
+<span id="cb5-2"><a href="2-exploratory-data-analysis.html#cb5-2"></a><span class="co"># evaluated but is here for completeness</span></span>
+<span id="cb5-3"><a href="2-exploratory-data-analysis.html#cb5-3"></a></span>
+<span id="cb5-4"><a href="2-exploratory-data-analysis.html#cb5-4"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb5-5"><a href="2-exploratory-data-analysis.html#cb5-5"></a><span class="kw">library</span>(dotenv)</span>
+<span id="cb5-6"><a href="2-exploratory-data-analysis.html#cb5-6"></a><span class="kw">load_dot_env</span>(<span class="dt">file =</span> <span class="st">&quot;.env&quot;</span>)</span>
+<span id="cb5-7"><a href="2-exploratory-data-analysis.html#cb5-7"></a>samples =<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(<span class="kw">Sys.getenv</span>(<span class="kw">c</span>(<span class="st">&quot;HOME_DIR&quot;</span>)), <span class="st">&quot;data/demultiplexed&quot;</span>))</span>
+<span id="cb5-8"><a href="2-exploratory-data-analysis.html#cb5-8"></a>cells_for_samples &lt;-<span class="st"> </span><span class="kw">data.frame</span>()</span>
+<span id="cb5-9"><a href="2-exploratory-data-analysis.html#cb5-9"></a><span class="cf">for</span>(sample <span class="cf">in</span> samples){</span>
+<span id="cb5-10"><a href="2-exploratory-data-analysis.html#cb5-10"></a>    sample_list =<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(<span class="kw">Sys.getenv</span>(<span class="kw">c</span>(<span class="st">&quot;HOME_DIR&quot;</span>)),</span>
+<span id="cb5-11"><a href="2-exploratory-data-analysis.html#cb5-11"></a>                                   <span class="st">&quot;data/demultiplexed/&quot;</span>,</span>
+<span id="cb5-12"><a href="2-exploratory-data-analysis.html#cb5-12"></a>                                   sample))</span>
+<span id="cb5-13"><a href="2-exploratory-data-analysis.html#cb5-13"></a>    sample_list_processed =<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb5-14"><a href="2-exploratory-data-analysis.html#cb5-14"></a>    <span class="co"># Remove file extension</span></span>
+<span id="cb5-15"><a href="2-exploratory-data-analysis.html#cb5-15"></a>    <span class="cf">for</span>(file <span class="cf">in</span> sample_list){</span>
+<span id="cb5-16"><a href="2-exploratory-data-analysis.html#cb5-16"></a>        sample_list_processed =<span class="st"> </span><span class="kw">append</span>(<span class="kw">sub</span>(<span class="dt">pattern =</span> <span class="st">&quot;(.*)</span><span class="ch">\\</span><span class="st">..*$&quot;</span>, <span class="dt">replacement =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, <span class="kw">basename</span>(file)),</span>
+<span id="cb5-17"><a href="2-exploratory-data-analysis.html#cb5-17"></a>               sample_list_processed)</span>
+<span id="cb5-18"><a href="2-exploratory-data-analysis.html#cb5-18"></a>    }</span>
+<span id="cb5-19"><a href="2-exploratory-data-analysis.html#cb5-19"></a>    sample_list_processed =<span class="st"> </span>sample_list_processed <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unlist</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>()</span>
+<span id="cb5-20"><a href="2-exploratory-data-analysis.html#cb5-20"></a>    sample =<span class="st"> </span><span class="kw">strsplit</span>(sample, <span class="st">&quot;[_]+&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unlist</span>() <span class="op">%&gt;%</span><span class="st"> </span>.[<span class="dv">1</span>]</span>
+<span id="cb5-21"><a href="2-exploratory-data-analysis.html#cb5-21"></a>    sample =<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;B&quot;</span>,<span class="st">&quot;&quot;</span>, sample)</span>
+<span id="cb5-22"><a href="2-exploratory-data-analysis.html#cb5-22"></a>    sample_list_processed<span class="op">$</span>lib_id =<span class="st"> </span>sample</span>
+<span id="cb5-23"><a href="2-exploratory-data-analysis.html#cb5-23"></a>    cells_for_samples =<span class="st"> </span><span class="kw">rbind</span>(cells_for_samples, sample_list_processed)</span>
+<span id="cb5-24"><a href="2-exploratory-data-analysis.html#cb5-24"></a>}</span>
+<span id="cb5-25"><a href="2-exploratory-data-analysis.html#cb5-25"></a><span class="kw">colnames</span>(cells_for_samples) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;cell_id&quot;</span>, <span class="st">&quot;lib_id&quot;</span>)</span>
+<span id="cb5-26"><a href="2-exploratory-data-analysis.html#cb5-26"></a><span class="kw">save</span>(cells_for_samples, <span class="dt">file =</span> <span class="st">&quot;cells_for_samples.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="2-exploratory-data-analysis.html#cb6-1"></a><span class="kw">library</span>(reshape)</span>
+<span id="cb6-2"><a href="2-exploratory-data-analysis.html#cb6-2"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb6-3"><a href="2-exploratory-data-analysis.html#cb6-3"></a></span>
+<span id="cb6-4"><a href="2-exploratory-data-analysis.html#cb6-4"></a><span class="co">#load the provided data file</span></span>
+<span id="cb6-5"><a href="2-exploratory-data-analysis.html#cb6-5"></a><span class="kw">load</span>(<span class="st">&quot;cells_for_samples.RData&quot;</span>)</span>
+<span id="cb6-6"><a href="2-exploratory-data-analysis.html#cb6-6"></a></span>
+<span id="cb6-7"><a href="2-exploratory-data-analysis.html#cb6-7"></a><span class="kw">separate</span>(<span class="dt">data =</span> simplified_annotation, <span class="dt">col =</span> lib_id, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;lib_id&quot;</span>, <span class="st">&quot;rest&quot;</span>), <span class="dt">extra =</span> <span class="st">&quot;merge&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-8"><a href="2-exploratory-data-analysis.html#cb6-8"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>rest) -&gt;<span class="st"> </span>simplified_annotation</span>
+<span id="cb6-9"><a href="2-exploratory-data-analysis.html#cb6-9"></a></span>
+<span id="cb6-10"><a href="2-exploratory-data-analysis.html#cb6-10"></a>labels &lt;-<span class="st"> </span>simplified_annotation<span class="op">$</span>lib_id</span>
+<span id="cb6-11"><a href="2-exploratory-data-analysis.html#cb6-11"></a>countlabel &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">31</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.data.frame</span>()</span>
+<span id="cb6-12"><a href="2-exploratory-data-analysis.html#cb6-12"></a><span class="kw">colnames</span>(countlabel) &lt;-<span class="st"> </span>labels</span>
+<span id="cb6-13"><a href="2-exploratory-data-analysis.html#cb6-13"></a><span class="kw">rownames</span>(countlabel) &lt;-<span class="st"> &quot;count&quot;</span></span>
+<span id="cb6-14"><a href="2-exploratory-data-analysis.html#cb6-14"></a></span>
+<span id="cb6-15"><a href="2-exploratory-data-analysis.html#cb6-15"></a><span class="co">#counting the number of cells per patient ID</span></span>
+<span id="cb6-16"><a href="2-exploratory-data-analysis.html#cb6-16"></a><span class="cf">for</span>(label <span class="cf">in</span> labels){</span>
+<span id="cb6-17"><a href="2-exploratory-data-analysis.html#cb6-17"></a> countlabel[label] &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">str_count</span>(cells_for_samples<span class="op">$</span>lib_id, label))</span>
+<span id="cb6-18"><a href="2-exploratory-data-analysis.html#cb6-18"></a>}</span>
+<span id="cb6-19"><a href="2-exploratory-data-analysis.html#cb6-19"></a></span>
+<span id="cb6-20"><a href="2-exploratory-data-analysis.html#cb6-20"></a>countlabel &lt;-<span class="st"> </span><span class="kw">melt</span>(countlabel)</span>
+<span id="cb6-21"><a href="2-exploratory-data-analysis.html#cb6-21"></a></span>
+<span id="cb6-22"><a href="2-exploratory-data-analysis.html#cb6-22"></a>countlabel<span class="op">$</span>label &lt;-<span class="st"> </span>simplified_annotation<span class="op">$</span>Sample.Type</span>
+<span id="cb6-23"><a href="2-exploratory-data-analysis.html#cb6-23"></a><span class="kw">colnames</span>(countlabel) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lib_id&quot;</span>, <span class="st">&quot;cell_count&quot;</span>, <span class="st">&quot;Sample.Type&quot;</span>)</span>
+<span id="cb6-24"><a href="2-exploratory-data-analysis.html#cb6-24"></a></span>
+<span id="cb6-25"><a href="2-exploratory-data-analysis.html#cb6-25"></a><span class="co">#showing the head of the table</span></span>
+<span id="cb6-26"><a href="2-exploratory-data-analysis.html#cb6-26"></a><span class="kw">head</span>(countlabel)</span></code></pre></div>
+<pre><code>##   lib_id cell_count Sample.Type
+## 1  IJ009       3963       nonAP
+## 2  IJ010       3960          AP
+## 3  IJ013       3537       nonAP
+## 4  IJ014       5156          AP
+## 5  IJ015       4116       nonAP
+## 6  IJ016       4528          AP</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="2-exploratory-data-analysis.html#cb8-1"></a><span class="co">#counting the number of cells per condition</span></span>
+<span id="cb8-2"><a href="2-exploratory-data-analysis.html#cb8-2"></a>cells_ap =<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb8-3"><a href="2-exploratory-data-analysis.html#cb8-3"></a>cells_nonap =<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb8-4"><a href="2-exploratory-data-analysis.html#cb8-4"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">31</span>){</span>
+<span id="cb8-5"><a href="2-exploratory-data-analysis.html#cb8-5"></a>  <span class="cf">if</span>(countlabel[i,<span class="st">&quot;Sample.Type&quot;</span>] <span class="op">==</span><span class="st"> &quot;AP&quot;</span>){</span>
+<span id="cb8-6"><a href="2-exploratory-data-analysis.html#cb8-6"></a>    cells_ap =<span class="st"> </span>cells_ap <span class="op">+</span><span class="st"> </span>countlabel[i,<span class="st">&quot;cell_count&quot;</span>]</span>
+<span id="cb8-7"><a href="2-exploratory-data-analysis.html#cb8-7"></a>  }</span>
+<span id="cb8-8"><a href="2-exploratory-data-analysis.html#cb8-8"></a>  <span class="cf">else</span>{</span>
+<span id="cb8-9"><a href="2-exploratory-data-analysis.html#cb8-9"></a>    cells_nonap =<span class="st"> </span>cells_nonap <span class="op">+</span><span class="st"> </span>countlabel[i,<span class="st">&quot;cell_count&quot;</span>]</span>
+<span id="cb8-10"><a href="2-exploratory-data-analysis.html#cb8-10"></a>  }</span>
+<span id="cb8-11"><a href="2-exploratory-data-analysis.html#cb8-11"></a>}</span>
+<span id="cb8-12"><a href="2-exploratory-data-analysis.html#cb8-12"></a></span>
+<span id="cb8-13"><a href="2-exploratory-data-analysis.html#cb8-13"></a><span class="co">#visualisation of the cell counts per patient</span></span>
+<span id="cb8-14"><a href="2-exploratory-data-analysis.html#cb8-14"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(countlabel, <span class="kw">aes</span>(<span class="dt">x =</span> lib_id, <span class="dt">y=</span> cell_count, <span class="dt">colour =</span> Sample.Type)) <span class="op">+</span></span>
+<span id="cb8-15"><a href="2-exploratory-data-analysis.html#cb8-15"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">stat=</span><span class="st">&#39;identity&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>)) <span class="op">+</span></span>
+<span id="cb8-16"><a href="2-exploratory-data-analysis.html#cb8-16"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;lib_ID&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span> (<span class="st">&quot;Count&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Cell count per Sample&quot;</span>)</span>
+<span id="cb8-17"><a href="2-exploratory-data-analysis.html#cb8-17"></a></span>
+<span id="cb8-18"><a href="2-exploratory-data-analysis.html#cb8-18"></a>p</span></code></pre></div>
+<p><img src="index_files/figure-html/load%20the%20cell%20counts,%20count%20sample%20type%20and%20visualize-1.png" width="672" /></p>
+<p>We see that we have cell counts in the range of <span class="math inline">\(\approx\)</span> 1000 up
+to <span class="math inline">\(\approx\)</span> 6500 per sample. Over the two conditions AP and nonAP the
+distribution is quite similar with 78513 AP
+cells and 53322 nonAP cells.</p>
+<p>A check for normality is done via a Q-Q plot and a Shapiro-Wilk normality test.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="2-exploratory-data-analysis.html#cb9-1"></a><span class="co">#histogram of count_data</span></span>
+<span id="cb9-2"><a href="2-exploratory-data-analysis.html#cb9-2"></a><span class="kw">hist</span>(countlabel<span class="op">$</span>cell_count, <span class="dt">xlab =</span> <span class="st">&quot;Cell Count per Sample&quot;</span>,</span>
+<span id="cb9-3"><a href="2-exploratory-data-analysis.html#cb9-3"></a>     <span class="dt">main =</span> <span class="st">&quot;Histogram of Cell Count&quot;</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/plot%20histogram,%20QQ%20and%20do%20test%20for%20normality-1.png" width="672" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="2-exploratory-data-analysis.html#cb10-1"></a><span class="co">#adding Q-Q plot to check for normality of data</span></span>
+<span id="cb10-2"><a href="2-exploratory-data-analysis.html#cb10-2"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(countlabel, <span class="kw">aes</span>(<span class="dt">sample =</span> cell_count)) <span class="op">+</span></span>
+<span id="cb10-3"><a href="2-exploratory-data-analysis.html#cb10-3"></a><span class="st">  </span><span class="kw">stat_qq</span>(<span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>(<span class="dt">col =</span> <span class="st">&quot;red&quot;</span> ) <span class="op">+</span></span>
+<span id="cb10-4"><a href="2-exploratory-data-analysis.html#cb10-4"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Normal Q-Q plot&quot;</span>)</span>
+<span id="cb10-5"><a href="2-exploratory-data-analysis.html#cb10-5"></a>p</span></code></pre></div>
+<p><img src="index_files/figure-html/plot%20histogram,%20QQ%20and%20do%20test%20for%20normality-2.png" width="672" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="2-exploratory-data-analysis.html#cb11-1"></a><span class="co">#doing shapiro wilk test for normality</span></span>
+<span id="cb11-2"><a href="2-exploratory-data-analysis.html#cb11-2"></a><span class="kw">shapiro.test</span>(countlabel<span class="op">$</span>cell_count)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  countlabel$cell_count
+## W = 0.94253, p-value = 0.09699</code></pre>
+<p>From our Q-Q plot we see that the data is normally distributed and
+the Shapiro-Wilk test indicates a support for a
+normal distribution of the count data.</p>
+<p>In a last step the proportion of A P cells vs nonAP cells over all samples
+is analysed.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="2-exploratory-data-analysis.html#cb13-1"></a><span class="kw">library</span>(scales)</span>
+<span id="cb13-2"><a href="2-exploratory-data-analysis.html#cb13-2"></a><span class="co">#showing the proportion of the cumulative sum of AP vs nonAP cells</span></span>
+<span id="cb13-3"><a href="2-exploratory-data-analysis.html#cb13-3"></a>summary.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>()</span>
+<span id="cb13-4"><a href="2-exploratory-data-analysis.html#cb13-4"></a>summary.df &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">c</span>(cells_ap, cells_nonap))</span>
+<span id="cb13-5"><a href="2-exploratory-data-analysis.html#cb13-5"></a><span class="kw">rownames</span>(summary.df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AP&quot;</span>, <span class="st">&quot;nonAP&quot;</span>)</span>
+<span id="cb13-6"><a href="2-exploratory-data-analysis.html#cb13-6"></a>summary.df &lt;-<span class="st"> </span><span class="kw">melt</span>(summary.df)</span>
+<span id="cb13-7"><a href="2-exploratory-data-analysis.html#cb13-7"></a></span>
+<span id="cb13-8"><a href="2-exploratory-data-analysis.html#cb13-8"></a><span class="kw">colnames</span>(summary.df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Type&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;value&quot;</span>)</span>
+<span id="cb13-9"><a href="2-exploratory-data-analysis.html#cb13-9"></a></span>
+<span id="cb13-10"><a href="2-exploratory-data-analysis.html#cb13-10"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(summary.df, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> value, <span class="dt">fill =</span> Type)) <span class="op">+</span></span>
+<span id="cb13-11"><a href="2-exploratory-data-analysis.html#cb13-11"></a><span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span> (<span class="st">&quot;Cumsum of Cells&quot;</span>) <span class="op">+</span></span>
+<span id="cb13-12"><a href="2-exploratory-data-analysis.html#cb13-12"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Proportion of overall AP vs nonAP cells&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb13-13"><a href="2-exploratory-data-analysis.html#cb13-13"></a><span class="st">   </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> comma)</span>
+<span id="cb13-14"><a href="2-exploratory-data-analysis.html#cb13-14"></a>p</span></code></pre></div>
+<p><img src="index_files/figure-html/plot%20proportion%20of%20(non)AP-1.png" width="672" /></p>
+<p>Overall we see that the dataset is well-balanced and we have similar amounts of
+patients per diagnosis (Healty Donor, RRMS nihil and RRMS NAT) and we have
+a little bit more AP than nonAP cells (AP vs nonAP). Furthermore, it is not the
+case that one patient accounts for the majority of cells per condition but that
+these cells are quite nicely mixed from different samples (see Cell Count per
+Sample plot). The Q-Q plot and the Shapiro-Wilk show that our cell-count data is
+more or less normally distributed.</p>
+</div>
+</div>
+<p style="text-align: center;">
+<a href="1-introduction.html"><button class="btn btn-default">Previous</button></a>
+<a href="3-preprocessing-of-raw-data.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

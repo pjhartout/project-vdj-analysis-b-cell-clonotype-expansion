@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="4 BraCeR | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis" />
+<meta property="og:type" content="book" />
+
+
+
+
+
+<meta name="author" content="Richard Affolter, Martin Emons, Philip Hartout" />
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+<meta name="description" content="4 BraCeR | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis">
+
+<title>4 BraCeR | Autoproliferation Analysis of B Cells in the context of Multiple Sclerosis</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="1-introduction.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li class="has-sub"><a href="2-exploratory-data-analysis.html#exploratory-data-analysis"><span class="toc-section-number">2</span> Exploratory Data Analysis</a><ul>
+<li><a href="2-exploratory-data-analysis.html#sample-level-descriptive-statistics"><span class="toc-section-number">2.1</span> Sample-level Descriptive Statistics</a></li>
+<li><a href="2-exploratory-data-analysis.html#cell-level-descriptive-statistics"><span class="toc-section-number">2.2</span> Cell-level Descriptive Statistics</a></li>
+</ul></li>
+<li class="has-sub"><a href="3-preprocessing-of-raw-data.html#preprocessing-of-raw-data"><span class="toc-section-number">3</span> Preprocessing of raw Data</a><ul>
+<li><a href="3-preprocessing-of-raw-data.html#demultiplexing"><span class="toc-section-number">3.1</span> Demultiplexing</a></li>
+</ul></li>
+<li class="has-sub"><a href="4-bracer.html#bracer"><span class="toc-section-number">4</span> <code>BraCeR</code></a><ul>
+<li><a href="4-bracer.html#assemble"><span class="toc-section-number">4.1</span> Assemble</a></li>
+<li><a href="4-bracer.html#summarise"><span class="toc-section-number">4.2</span> Summarise</a></li>
+<li><a href="4-bracer.html#packaging-for-downstream-analysis"><span class="toc-section-number">4.3</span> Packaging for downstream analysis</a></li>
+</ul></li>
+<li><a href="5-frequency-of-clonal-expansion.html#frequency-of-clonal-expansion"><span class="toc-section-number">5</span> Frequency of clonal expansion</a></li>
+<li><a href="6-isotype-analysis.html#isotype-analysis"><span class="toc-section-number">6</span> Isotype Analysis</a></li>
+<li><a href="7-discussion.html#discussion"><span class="toc-section-number">7</span> Discussion</a></li>
+<li><a href="8-summary.html#summary"><span class="toc-section-number">8</span> Summary</a></li>
+<li><a href="references.html#references">References</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="bracer" class="section level1">
+<h1><span class="header-section-number">4</span> <code>BraCeR</code></h1>
+<p>With these demultiplexed cells one could run the <code>BraCeR</code> workflow <span class="citation">(Lindeman et al. 2018)</span>
+with the two functionalities <code>assemble</code> and <code>summarise</code>.</p>
+<div id="assemble" class="section level2">
+<h2><span class="header-section-number">4.1</span> Assemble</h2>
+<p>Assemble was performed by using the pre-assembled file from the <code>CellRanger</code>
+output and preparing the necessary files for the subsequent <code>summarise</code> step to
+function. Further documentation is provided in the code.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="4-bracer.html#cb16-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb16-2"><a href="4-bracer.html#cb16-2"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb16-3"><a href="4-bracer.html#cb16-3"></a></span>
+<span id="cb16-4"><a href="4-bracer.html#cb16-4"></a><span class="co">&quot;&quot;&quot;parallel_bracer_assemble.py</span></span>
+<span id="cb16-5"><a href="4-bracer.html#cb16-5"></a></span>
+<span id="cb16-6"><a href="4-bracer.html#cb16-6"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer</span></span>
+<span id="cb16-7"><a href="4-bracer.html#cb16-7"></a><span class="co">pipeline</span></span>
+<span id="cb16-8"><a href="4-bracer.html#cb16-8"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb16-9"><a href="4-bracer.html#cb16-9"></a></span>
+<span id="cb16-10"><a href="4-bracer.html#cb16-10"></a><span class="im">import</span> subprocess</span>
+<span id="cb16-11"><a href="4-bracer.html#cb16-11"></a><span class="im">import</span> os</span>
+<span id="cb16-12"><a href="4-bracer.html#cb16-12"></a><span class="im">import</span> dotenv</span>
+<span id="cb16-13"><a href="4-bracer.html#cb16-13"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
+<span id="cb16-14"><a href="4-bracer.html#cb16-14"></a></span>
+<span id="cb16-15"><a href="4-bracer.html#cb16-15"></a><span class="co"># Load values from .env</span></span>
+<span id="cb16-16"><a href="4-bracer.html#cb16-16"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
+<span id="cb16-17"><a href="4-bracer.html#cb16-17"></a></span>
+<span id="cb16-18"><a href="4-bracer.html#cb16-18"></a>N_JOBS <span class="op">=</span> <span class="dv">-1</span></span>
+<span id="cb16-19"><a href="4-bracer.html#cb16-19"></a></span>
+<span id="cb16-20"><a href="4-bracer.html#cb16-20"></a></span>
+<span id="cb16-21"><a href="4-bracer.html#cb16-21"></a><span class="kw">def</span> execute_docker_bracer(row, list_of_cells, patient):</span>
+<span id="cb16-22"><a href="4-bracer.html#cb16-22"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
+<span id="cb16-23"><a href="4-bracer.html#cb16-23"></a></span>
+<span id="cb16-24"><a href="4-bracer.html#cb16-24"></a><span class="co">    Args:</span></span>
+<span id="cb16-25"><a href="4-bracer.html#cb16-25"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
+<span id="cb16-26"><a href="4-bracer.html#cb16-26"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
+<span id="cb16-27"><a href="4-bracer.html#cb16-27"></a><span class="co">        patients</span></span>
+<span id="cb16-28"><a href="4-bracer.html#cb16-28"></a><span class="co">        patient (str): patient to be processed</span></span>
+<span id="cb16-29"><a href="4-bracer.html#cb16-29"></a><span class="co">    Returns:</span></span>
+<span id="cb16-30"><a href="4-bracer.html#cb16-30"></a><span class="co">        None</span></span>
+<span id="cb16-31"><a href="4-bracer.html#cb16-31"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb16-32"><a href="4-bracer.html#cb16-32"></a>    cell <span class="op">=</span> list_of_cells[row].split(<span class="st">&quot;.&quot;</span>)[<span class="dv">0</span>:<span class="dv">1</span>]</span>
+<span id="cb16-33"><a href="4-bracer.html#cb16-33"></a>    os.chdir(<span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb16-34"><a href="4-bracer.html#cb16-34"></a>    subprocess.call(</span>
+<span id="cb16-35"><a href="4-bracer.html#cb16-35"></a>        [</span>
+<span id="cb16-36"><a href="4-bracer.html#cb16-36"></a>            <span class="st">&quot;docker&quot;</span>,</span>
+<span id="cb16-37"><a href="4-bracer.html#cb16-37"></a>            <span class="st">&quot;run&quot;</span>,</span>
+<span id="cb16-38"><a href="4-bracer.html#cb16-38"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
+<span id="cb16-39"><a href="4-bracer.html#cb16-39"></a>            <span class="st">&quot;-v&quot;</span>,</span>
+<span id="cb16-40"><a href="4-bracer.html#cb16-40"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">:/scratch&quot;</span>,</span>
+<span id="cb16-41"><a href="4-bracer.html#cb16-41"></a>            <span class="st">&quot;-w&quot;</span>,</span>
+<span id="cb16-42"><a href="4-bracer.html#cb16-42"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
+<span id="cb16-43"><a href="4-bracer.html#cb16-43"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
+<span id="cb16-44"><a href="4-bracer.html#cb16-44"></a>            <span class="st">&quot;assemble&quot;</span>,</span>
+<span id="cb16-45"><a href="4-bracer.html#cb16-45"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>cell[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb16-46"><a href="4-bracer.html#cb16-46"></a>            <span class="st">&quot;-r&quot;</span>,</span>
+<span id="cb16-47"><a href="4-bracer.html#cb16-47"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
+<span id="cb16-48"><a href="4-bracer.html#cb16-48"></a>            <span class="st">&quot;--assembled_file&quot;</span>,</span>
+<span id="cb16-49"><a href="4-bracer.html#cb16-49"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>cell[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">.fasta&quot;</span>,</span>
+<span id="cb16-50"><a href="4-bracer.html#cb16-50"></a>        ]</span>
+<span id="cb16-51"><a href="4-bracer.html#cb16-51"></a>    )</span>
+<span id="cb16-52"><a href="4-bracer.html#cb16-52"></a></span>
+<span id="cb16-53"><a href="4-bracer.html#cb16-53"></a></span>
+<span id="cb16-54"><a href="4-bracer.html#cb16-54"></a><span class="kw">def</span> files(path):</span>
+<span id="cb16-55"><a href="4-bracer.html#cb16-55"></a>    <span class="co">&quot;&quot;&quot;Adds all files in current directory to a list that is returned</span></span>
+<span id="cb16-56"><a href="4-bracer.html#cb16-56"></a></span>
+<span id="cb16-57"><a href="4-bracer.html#cb16-57"></a><span class="co">    Args:</span></span>
+<span id="cb16-58"><a href="4-bracer.html#cb16-58"></a><span class="co">        path (str): path to file returned</span></span>
+<span id="cb16-59"><a href="4-bracer.html#cb16-59"></a></span>
+<span id="cb16-60"><a href="4-bracer.html#cb16-60"></a><span class="co">    Returns:</span></span>
+<span id="cb16-61"><a href="4-bracer.html#cb16-61"></a><span class="co">        (list) list of files in path</span></span>
+<span id="cb16-62"><a href="4-bracer.html#cb16-62"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb16-63"><a href="4-bracer.html#cb16-63"></a></span>
+<span id="cb16-64"><a href="4-bracer.html#cb16-64"></a>    list_of_files <span class="op">=</span> <span class="bu">list</span>()</span>
+<span id="cb16-65"><a href="4-bracer.html#cb16-65"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> os.listdir(path):</span>
+<span id="cb16-66"><a href="4-bracer.html#cb16-66"></a>        <span class="cf">if</span> os.path.isfile(os.path.join(path, <span class="bu">file</span>)):</span>
+<span id="cb16-67"><a href="4-bracer.html#cb16-67"></a>            list_of_files.append(<span class="bu">file</span>)</span>
+<span id="cb16-68"><a href="4-bracer.html#cb16-68"></a>    <span class="cf">return</span> list_of_files</span>
+<span id="cb16-69"><a href="4-bracer.html#cb16-69"></a></span>
+<span id="cb16-70"><a href="4-bracer.html#cb16-70"></a></span>
+<span id="cb16-71"><a href="4-bracer.html#cb16-71"></a><span class="kw">def</span> main():</span>
+<span id="cb16-72"><a href="4-bracer.html#cb16-72"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and loop through patients. Each cell is</span></span>
+<span id="cb16-73"><a href="4-bracer.html#cb16-73"></a><span class="co">    processed in parallel using joblib</span></span>
+<span id="cb16-74"><a href="4-bracer.html#cb16-74"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb16-75"><a href="4-bracer.html#cb16-75"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
+<span id="cb16-76"><a href="4-bracer.html#cb16-76"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
+<span id="cb16-77"><a href="4-bracer.html#cb16-77"></a>    )</span>
+<span id="cb16-78"><a href="4-bracer.html#cb16-78"></a>    <span class="cf">for</span> patient <span class="kw">in</span> list_of_patients:</span>
+<span id="cb16-79"><a href="4-bracer.html#cb16-79"></a>        list_of_cells <span class="op">=</span> files(</span>
+<span id="cb16-80"><a href="4-bracer.html#cb16-80"></a>            DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="ss">f&quot;/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb16-81"><a href="4-bracer.html#cb16-81"></a>        )</span>
+<span id="cb16-82"><a href="4-bracer.html#cb16-82"></a>        Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
+<span id="cb16-83"><a href="4-bracer.html#cb16-83"></a>            delayed(execute_docker_bracer)(row, list_of_cells, patient)</span>
+<span id="cb16-84"><a href="4-bracer.html#cb16-84"></a>            <span class="cf">for</span> row <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(list_of_cells))</span>
+<span id="cb16-85"><a href="4-bracer.html#cb16-85"></a>        )</span>
+<span id="cb16-86"><a href="4-bracer.html#cb16-86"></a></span>
+<span id="cb16-87"><a href="4-bracer.html#cb16-87"></a></span>
+<span id="cb16-88"><a href="4-bracer.html#cb16-88"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb16-89"><a href="4-bracer.html#cb16-89"></a>    main()</span></code></pre></div>
+</div>
+<div id="summarise" class="section level2">
+<h2><span class="header-section-number">4.2</span> Summarise</h2>
+<p>This documented script shows how the summary of each patient is obtained</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="4-bracer.html#cb17-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb17-2"><a href="4-bracer.html#cb17-2"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb17-3"><a href="4-bracer.html#cb17-3"></a></span>
+<span id="cb17-4"><a href="4-bracer.html#cb17-4"></a><span class="co">&quot;&quot;&quot;parallel_bracer_summarise.py</span></span>
+<span id="cb17-5"><a href="4-bracer.html#cb17-5"></a></span>
+<span id="cb17-6"><a href="4-bracer.html#cb17-6"></a><span class="co">This executes multiple instances of docker in parallel to execute the bracer</span></span>
+<span id="cb17-7"><a href="4-bracer.html#cb17-7"></a><span class="co">summarise pipeline</span></span>
+<span id="cb17-8"><a href="4-bracer.html#cb17-8"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb17-9"><a href="4-bracer.html#cb17-9"></a></span>
+<span id="cb17-10"><a href="4-bracer.html#cb17-10"></a><span class="im">import</span> subprocess</span>
+<span id="cb17-11"><a href="4-bracer.html#cb17-11"></a><span class="im">import</span> os</span>
+<span id="cb17-12"><a href="4-bracer.html#cb17-12"></a><span class="im">import</span> dotenv</span>
+<span id="cb17-13"><a href="4-bracer.html#cb17-13"></a><span class="im">from</span> joblib <span class="im">import</span> Parallel, delayed</span>
+<span id="cb17-14"><a href="4-bracer.html#cb17-14"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb17-15"><a href="4-bracer.html#cb17-15"></a></span>
+<span id="cb17-16"><a href="4-bracer.html#cb17-16"></a></span>
+<span id="cb17-17"><a href="4-bracer.html#cb17-17"></a><span class="co"># Load values from .env</span></span>
+<span id="cb17-18"><a href="4-bracer.html#cb17-18"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
+<span id="cb17-19"><a href="4-bracer.html#cb17-19"></a></span>
+<span id="cb17-20"><a href="4-bracer.html#cb17-20"></a>N_JOBS <span class="op">=</span> <span class="dv">-1</span></span>
+<span id="cb17-21"><a href="4-bracer.html#cb17-21"></a></span>
+<span id="cb17-22"><a href="4-bracer.html#cb17-22"></a></span>
+<span id="cb17-23"><a href="4-bracer.html#cb17-23"></a><span class="kw">def</span> execute_docker_bracer(patient):</span>
+<span id="cb17-24"><a href="4-bracer.html#cb17-24"></a>    <span class="co">&quot;&quot;&quot;Call docker in a subprocess for each cell</span></span>
+<span id="cb17-25"><a href="4-bracer.html#cb17-25"></a></span>
+<span id="cb17-26"><a href="4-bracer.html#cb17-26"></a><span class="co">    Args:</span></span>
+<span id="cb17-27"><a href="4-bracer.html#cb17-27"></a><span class="co">        row (list): row containing the cell to be processed</span></span>
+<span id="cb17-28"><a href="4-bracer.html#cb17-28"></a><span class="co">        list_of_cells (list): list of cells containing all UMIs belonging to</span></span>
+<span id="cb17-29"><a href="4-bracer.html#cb17-29"></a><span class="co">        patients</span></span>
+<span id="cb17-30"><a href="4-bracer.html#cb17-30"></a><span class="co">        patient (str): patient to be processed</span></span>
+<span id="cb17-31"><a href="4-bracer.html#cb17-31"></a><span class="co">    Returns:</span></span>
+<span id="cb17-32"><a href="4-bracer.html#cb17-32"></a><span class="co">        envokes docker instance for summarise</span></span>
+<span id="cb17-33"><a href="4-bracer.html#cb17-33"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-34"><a href="4-bracer.html#cb17-34"></a>    os.chdir(<span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/&quot;</span>)</span>
+<span id="cb17-35"><a href="4-bracer.html#cb17-35"></a>    subprocess.call(</span>
+<span id="cb17-36"><a href="4-bracer.html#cb17-36"></a>        [</span>
+<span id="cb17-37"><a href="4-bracer.html#cb17-37"></a>            <span class="st">&quot;docker&quot;</span>,</span>
+<span id="cb17-38"><a href="4-bracer.html#cb17-38"></a>            <span class="st">&quot;run&quot;</span>,</span>
+<span id="cb17-39"><a href="4-bracer.html#cb17-39"></a>            <span class="st">&quot;--rm&quot;</span>,</span>
+<span id="cb17-40"><a href="4-bracer.html#cb17-40"></a>            <span class="st">&quot;-v&quot;</span>,</span>
+<span id="cb17-41"><a href="4-bracer.html#cb17-41"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/&quot;</span></span>
+<span id="cb17-42"><a href="4-bracer.html#cb17-42"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/:/scratch&quot;</span>,</span>
+<span id="cb17-43"><a href="4-bracer.html#cb17-43"></a>            <span class="st">&quot;-w&quot;</span>,</span>
+<span id="cb17-44"><a href="4-bracer.html#cb17-44"></a>            <span class="st">&quot;/scratch&quot;</span>,</span>
+<span id="cb17-45"><a href="4-bracer.html#cb17-45"></a>            <span class="st">&quot;teichlab/bracer&quot;</span>,</span>
+<span id="cb17-46"><a href="4-bracer.html#cb17-46"></a>            <span class="st">&quot;summarise&quot;</span>,</span>
+<span id="cb17-47"><a href="4-bracer.html#cb17-47"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out&quot;</span>,</span>
+<span id="cb17-48"><a href="4-bracer.html#cb17-48"></a>            <span class="st">&quot;--no_networks&quot;</span>,</span>
+<span id="cb17-49"><a href="4-bracer.html#cb17-49"></a>        ]</span>
+<span id="cb17-50"><a href="4-bracer.html#cb17-50"></a>    )</span>
+<span id="cb17-51"><a href="4-bracer.html#cb17-51"></a></span>
+<span id="cb17-52"><a href="4-bracer.html#cb17-52"></a></span>
+<span id="cb17-53"><a href="4-bracer.html#cb17-53"></a><span class="kw">def</span> main():</span>
+<span id="cb17-54"><a href="4-bracer.html#cb17-54"></a>    <span class="co">&quot;&quot;&quot;Main function - lists patients and run summarise via docker in parallel</span></span>
+<span id="cb17-55"><a href="4-bracer.html#cb17-55"></a><span class="co">    for each patient.</span></span>
+<span id="cb17-56"><a href="4-bracer.html#cb17-56"></a></span>
+<span id="cb17-57"><a href="4-bracer.html#cb17-57"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-58"><a href="4-bracer.html#cb17-58"></a>    list_of_patients <span class="op">=</span> os.listdir(</span>
+<span id="cb17-59"><a href="4-bracer.html#cb17-59"></a>        DOTENV_KEY2VAL[<span class="st">&quot;HOME_DIR&quot;</span>] <span class="op">+</span> <span class="st">&quot;/data/demultiplexed&quot;</span></span>
+<span id="cb17-60"><a href="4-bracer.html#cb17-60"></a>    )</span>
+<span id="cb17-61"><a href="4-bracer.html#cb17-61"></a>    Parallel(n_jobs<span class="op">=</span>N_JOBS, verbose<span class="op">=</span><span class="dv">1</span>)(</span>
+<span id="cb17-62"><a href="4-bracer.html#cb17-62"></a>        delayed(execute_docker_bracer)(row) <span class="cf">for</span> row <span class="kw">in</span> list_of_patients</span>
+<span id="cb17-63"><a href="4-bracer.html#cb17-63"></a>    )</span>
+<span id="cb17-64"><a href="4-bracer.html#cb17-64"></a></span>
+<span id="cb17-65"><a href="4-bracer.html#cb17-65"></a></span>
+<span id="cb17-66"><a href="4-bracer.html#cb17-66"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb17-67"><a href="4-bracer.html#cb17-67"></a>    main()</span></code></pre></div>
+<p>From the <code>summarise</code> output we are interested in two files for our downstream
+analysis, <code>BCR_summary.txt</code> and <code>clonotype_sizes.txt</code>. The former contains a
+summary statistics describing successful BCR reconstruction rates and the
+numbers of cells with 0, 1, 2 or more recombinants for each locus. The
+latter contains the distribution of clonotype sizes as a tabulated text file.
+Other files were generated but not used; refer to the <a href="https://github.com/Teichlab/bracer">bracer
+documentation</a> for further information
+regarding the pipeline.</p>
+</div>
+<div id="packaging-for-downstream-analysis" class="section level2">
+<h2><span class="header-section-number">4.3</span> Packaging for downstream analysis</h2>
+<p>To reduce folder size, only the files mentioned above were selected and packaged.
+This was done with the script below.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="4-bracer.html#cb18-1"></a><span class="co">#!/usr/bin/env python</span></span>
+<span id="cb18-2"><a href="4-bracer.html#cb18-2"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<span id="cb18-3"><a href="4-bracer.html#cb18-3"></a></span>
+<span id="cb18-4"><a href="4-bracer.html#cb18-4"></a><span class="co">&quot;&quot;&quot;package_relevant_data.py</span></span>
+<span id="cb18-5"><a href="4-bracer.html#cb18-5"></a></span>
+<span id="cb18-6"><a href="4-bracer.html#cb18-6"></a><span class="co">This script packages the relevant data from the filtered_BCR_summary folder</span></span>
+<span id="cb18-7"><a href="4-bracer.html#cb18-7"></a><span class="co">to a separate archive.</span></span>
+<span id="cb18-8"><a href="4-bracer.html#cb18-8"></a></span>
+<span id="cb18-9"><a href="4-bracer.html#cb18-9"></a><span class="co">&quot;&quot;&quot;</span></span>
+<span id="cb18-10"><a href="4-bracer.html#cb18-10"></a></span>
+<span id="cb18-11"><a href="4-bracer.html#cb18-11"></a><span class="im">import</span> os</span>
+<span id="cb18-12"><a href="4-bracer.html#cb18-12"></a><span class="im">import</span> dotenv</span>
+<span id="cb18-13"><a href="4-bracer.html#cb18-13"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb18-14"><a href="4-bracer.html#cb18-14"></a><span class="im">from</span> shutil <span class="im">import</span> copyfile, rmtree, make_archive</span>
+<span id="cb18-15"><a href="4-bracer.html#cb18-15"></a></span>
+<span id="cb18-16"><a href="4-bracer.html#cb18-16"></a><span class="co"># Load values from .env</span></span>
+<span id="cb18-17"><a href="4-bracer.html#cb18-17"></a>DOTENV_KEY2VAL <span class="op">=</span> dotenv.dotenv_values()</span>
+<span id="cb18-18"><a href="4-bracer.html#cb18-18"></a></span>
+<span id="cb18-19"><a href="4-bracer.html#cb18-19"></a></span>
+<span id="cb18-20"><a href="4-bracer.html#cb18-20"></a><span class="kw">def</span> main():</span>
+<span id="cb18-21"><a href="4-bracer.html#cb18-21"></a>    <span class="co">&quot;&quot;&quot;Main function</span></span>
+<span id="cb18-22"><a href="4-bracer.html#cb18-22"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb18-23"><a href="4-bracer.html#cb18-23"></a>    patients <span class="op">=</span> os.listdir(<span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/&quot;</span>)</span>
+<span id="cb18-24"><a href="4-bracer.html#cb18-24"></a>    output_folder <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/summarise_data/&quot;</span></span>
+<span id="cb18-25"><a href="4-bracer.html#cb18-25"></a></span>
+<span id="cb18-26"><a href="4-bracer.html#cb18-26"></a>    <span class="co"># Removes output directory if it already exists</span></span>
+<span id="cb18-27"><a href="4-bracer.html#cb18-27"></a>    <span class="cf">if</span> os.path.exists(output_folder):</span>
+<span id="cb18-28"><a href="4-bracer.html#cb18-28"></a>        rmtree(output_folder)</span>
+<span id="cb18-29"><a href="4-bracer.html#cb18-29"></a></span>
+<span id="cb18-30"><a href="4-bracer.html#cb18-30"></a>    os.mkdir(output_folder)</span>
+<span id="cb18-31"><a href="4-bracer.html#cb18-31"></a></span>
+<span id="cb18-32"><a href="4-bracer.html#cb18-32"></a>    <span class="co"># Loop through patients and copy only the files_to_copy.</span></span>
+<span id="cb18-33"><a href="4-bracer.html#cb18-33"></a>    <span class="cf">for</span> patient <span class="kw">in</span> tqdm(patients):</span>
+<span id="cb18-34"><a href="4-bracer.html#cb18-34"></a>        <span class="cf">if</span> os.path.exists(output_folder <span class="op">+</span> <span class="ss">f&quot;/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span>):</span>
+<span id="cb18-35"><a href="4-bracer.html#cb18-35"></a>            rmtree(output_folder <span class="op">+</span> <span class="ss">f&quot;/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb18-36"><a href="4-bracer.html#cb18-36"></a></span>
+<span id="cb18-37"><a href="4-bracer.html#cb18-37"></a>        src <span class="op">=</span> (</span>
+<span id="cb18-38"><a href="4-bracer.html#cb18-38"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>DOTENV_KEY2VAL[<span class="st">&#39;HOME_DIR&#39;</span>]<span class="sc">}</span><span class="ss">/data/demultiplexed/</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/&quot;</span></span>
+<span id="cb18-39"><a href="4-bracer.html#cb18-39"></a>            <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">-out/filtered_BCR_summary&quot;</span></span>
+<span id="cb18-40"><a href="4-bracer.html#cb18-40"></a>        )</span>
+<span id="cb18-41"><a href="4-bracer.html#cb18-41"></a></span>
+<span id="cb18-42"><a href="4-bracer.html#cb18-42"></a>        destination <span class="op">=</span> output_folder <span class="op">+</span> <span class="ss">f&quot;</span><span class="sc">{</span>patient<span class="sc">}</span><span class="ss">/&quot;</span></span>
+<span id="cb18-43"><a href="4-bracer.html#cb18-43"></a></span>
+<span id="cb18-44"><a href="4-bracer.html#cb18-44"></a>        <span class="cf">if</span> <span class="kw">not</span> os.path.exists(destination):</span>
+<span id="cb18-45"><a href="4-bracer.html#cb18-45"></a>            os.mkdir(destination)</span>
+<span id="cb18-46"><a href="4-bracer.html#cb18-46"></a></span>
+<span id="cb18-47"><a href="4-bracer.html#cb18-47"></a>        files_to_copy <span class="op">=</span> [<span class="st">&quot;BCR_summary.txt&quot;</span>, <span class="st">&quot;clonotype_sizes.txt&quot;</span>]</span>
+<span id="cb18-48"><a href="4-bracer.html#cb18-48"></a>        <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files_to_copy:</span>
+<span id="cb18-49"><a href="4-bracer.html#cb18-49"></a>            copyfile(src <span class="op">+</span> <span class="st">&quot;/&quot;</span> <span class="op">+</span> <span class="bu">file</span>, destination <span class="op">+</span> <span class="st">&quot;/&quot;</span> <span class="op">+</span> <span class="bu">file</span>)</span>
+<span id="cb18-50"><a href="4-bracer.html#cb18-50"></a></span>
+<span id="cb18-51"><a href="4-bracer.html#cb18-51"></a>    <span class="co"># Make zip archive of destination</span></span>
+<span id="cb18-52"><a href="4-bracer.html#cb18-52"></a>    make_archive(output_folder, <span class="st">&quot;zip&quot;</span>, output_folder)</span>
+<span id="cb18-53"><a href="4-bracer.html#cb18-53"></a></span>
+<span id="cb18-54"><a href="4-bracer.html#cb18-54"></a></span>
+<span id="cb18-55"><a href="4-bracer.html#cb18-55"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb18-56"><a href="4-bracer.html#cb18-56"></a>    main()</span></code></pre></div>
+</div>
+</div>
+<p style="text-align: center;">
+<a href="3-preprocessing-of-raw-data.html"><button class="btn btn-default">Previous</button></a>
+<a href="5-frequency-of-clonal-expansion.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

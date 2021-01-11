@@ -1,0 +1,244 @@
+# BraCeR
+
+With these demultiplexed cells one could run the BraCeR workflow [@lindeman]
+with the two functionalities `assemble` and `summarise`.
+
+## Assemble
+
+Assemble was performed by using the pre-assembled file from the `CellRanger`
+output and preparing the necessary files for the subsequent `summarise` step to
+function. Further documentation is provided in the code.
+
+```{python, eval = FALSE}
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""parallel_bracer_assemble.py
+
+This executes multiple instances of docker in parallel to execute the bracer
+pipeline
+"""
+
+import subprocess
+import os
+import dotenv
+from joblib import Parallel, delayed
+
+# Load values from .env
+DOTENV_KEY2VAL = dotenv.dotenv_values()
+
+N_JOBS = -1
+
+
+def execute_docker_bracer(row, list_of_cells, patient):
+    """Call docker in a subprocess for each cell
+
+    Args:
+        row (list): row containing the cell to be processed
+        list_of_cells (list): list of cells containing all UMIs belonging to
+        patients
+        patient (str): patient to be processed
+    Returns:
+        None
+    """
+    cell = list_of_cells[row].split(".")[0:1]
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}")
+    subprocess.call(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}:/scratch",
+            "-w",
+            "/scratch",
+            "teichlab/bracer",
+            "assemble",
+            f"{cell[0]}",
+            "-r",
+            f"{patient}-out",
+            "--assembled_file",
+            f"{cell[0]}.fasta",
+        ]
+    )
+
+
+def files(path):
+    """Adds all files in current directory to a list that is returned
+
+    Args:
+        path (str): path to file returned
+
+    Returns:
+        (list) list of files in path
+    """
+
+    list_of_files = list()
+    for file in os.listdir(path):
+        if os.path.isfile(os.path.join(path, file)):
+            list_of_files.append(file)
+    return list_of_files
+
+
+def main():
+    """Main function - lists patients and loop through patients. Each cell is
+    processed in parallel using joblib
+    """
+    list_of_patients = os.listdir(
+        DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
+    )
+    for patient in list_of_patients:
+        list_of_cells = files(
+            DOTENV_KEY2VAL["HOME_DIR"] + f"/data/demultiplexed/{patient}"
+        )
+        Parallel(n_jobs=N_JOBS, verbose=1)(
+            delayed(execute_docker_bracer)(row, list_of_cells, patient)
+            for row in range(len(list_of_cells))
+        )
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Summarise
+This documented script shows how the summary of each patient is obtained
+
+```{python, eval = FALSE}
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""parallel_bracer_summarise.py
+
+This executes multiple instances of docker in parallel to execute the bracer
+summarise pipeline
+"""
+
+import subprocess
+import os
+import dotenv
+from joblib import Parallel, delayed
+from tqdm import tqdm
+
+
+# Load values from .env
+DOTENV_KEY2VAL = dotenv.dotenv_values()
+
+N_JOBS = -1
+
+
+def execute_docker_bracer(patient):
+    """Call docker in a subprocess for each cell
+
+    Args:
+        row (list): row containing the cell to be processed
+        list_of_cells (list): list of cells containing all UMIs belonging to
+        patients
+        patient (str): patient to be processed
+    Returns:
+        envokes docker instance for summarise
+    """
+    os.chdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/")
+    subprocess.call(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/"
+            f"{patient}/:/scratch",
+            "-w",
+            "/scratch",
+            "teichlab/bracer",
+            "summarise",
+            f"{patient}-out",
+        ]
+    )
+
+
+def main():
+    """Main function - lists patients and run summarise via docker in parallel
+        for each patient.
+    """
+    list_of_patients = os.listdir(
+        DOTENV_KEY2VAL["HOME_DIR"] + "/data/demultiplexed"
+    )
+    print(list_of_patients)
+    Parallel(n_jobs=N_JOBS, verbose=1)(
+        delayed(execute_docker_bracer)(row) for row in list_of_patients
+    )
+
+
+if __name__ == "__main__":
+    main()
+```
+
+From the `summarise` output we are interested in two files for our downstream
+analysis, `BCR_summary.txt` and `clonotype_sizes.txt`. The former contains a
+summary statistics describing successful BCR reconstruction rates and the
+numbers of cells with 0, 1, 2 or more recombinants for each locus. The
+latter contains the distribution of clonotype sizes as a tabulated text file.
+Other files were generated but not used; refer to the [bracer
+documentation](https://github.com/Teichlab/bracer) for further information
+regarding the pipeline.
+
+## Packaging for downstream analysis
+
+To reduce folder size, only the files mentioned above were selected and packaged.
+This was done with the script below.
+
+```{python, eval = FALSE}
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""package_relevant_data.py
+
+This script packages the relevant data from the filtered_BCR_summary folder
+to a separate archive.
+
+"""
+
+import os
+import dotenv
+from tqdm import tqdm
+from shutil import copyfile, rmtree, make_archive
+
+# Load values from .env
+DOTENV_KEY2VAL = dotenv.dotenv_values()
+
+
+def main():
+    """Main function
+    """
+    patients = os.listdir(f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/")
+    output_folder = f"{DOTENV_KEY2VAL['HOME_DIR']}/data/summarise_data/"
+
+    if os.path.exists(output_folder):
+        rmtree(output_folder)
+
+    os.mkdir(output_folder)
+
+    for patient in tqdm(patients):
+        if os.path.exists(output_folder + f"/{patient}"):
+            rmtree(output_folder + f"/{patient}")
+
+        src = (
+            f"{DOTENV_KEY2VAL['HOME_DIR']}/data/demultiplexed/{patient}/"
+            f"{patient}-out/filtered_BCR_summary"
+        )
+
+        destination = output_folder + f"{patient}/"
+
+        if not os.path.exists(destination):
+            os.mkdir(destination)
+
+        files_to_copy = ["BCR_summary.txt", "clonotype_sizes.txt"]
+        for file in files_to_copy:
+            copyfile(src + "/" + file, destination + "/" + file)
+
+    make_archive("summarise_data", "zip", "summarize_data")
+
+
+if __name__ == "__main__":
+    main()
+````

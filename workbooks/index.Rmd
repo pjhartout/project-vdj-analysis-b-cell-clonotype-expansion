@@ -6,30 +6,30 @@ output:
     theme: paper
     toc: yes
     citation_package: pandoc-citeproc
-    split_by: "chapter"
+    split_by: "chapter+number"
 bibliography: ["citations.bib"]
 ---
 
-```{r child = 'introduction.Rmd'}
+```{r child = '1-introduction.Rmd'}
 ```
 
-```{r child = 'exploratory-data-analysis.Rmd'}
+```{r child = '2-exploratory-data-analysis.Rmd'}
 ```
 
-```{r child = 'preprocessing-of-raw-data.Rmd'}
+```{r child = '3-preprocessing-of-raw-data.Rmd'}
 ```
 
-```{r child = 'bracer.Rmd'}
+```{r child = '4-bracer.Rmd'}
 ```
 
-```{r child = 'clonal-expansion-analysis.Rmd'}
+```{r child = '5-frequency-of-clonal-expansion.Rmd'}
 ```
 
-```{r child = 'isotype-analysis.Rmd'}
+```{r child = '6-isotype-analysis.Rmd'}
 ```
 
-```{r child = 'discussion.Rmd'}
+```{r child = '7-discussion.Rmd'}
 ```
 
-```{r child = 'summary.Rmd'}
+```{r child = '8-summary.Rmd'}
 ```

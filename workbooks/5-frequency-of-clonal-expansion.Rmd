@@ -1,0 +1,252 @@
+# Frequency of clonal expansion
+
+The files `clonotype_sizes.txt`from `summarize` contain a table with the columns clonotype_sizes and clonotype_count. They can be read into R, as shown below, and use for downstream analysis. 
+```{r load summarized data and calculate annotation frequencies, message=FALSE, warning=FALSE}
+library(dotenv)
+library(dplyr)
+library(SummarizedExperiment)
+library(reshape2)
+library(tidyr)
+
+load("annotation.RData")
+
+# cut the lib id string and keep only the first part
+separate(data = simplified_annotation, 
+         col = lib_id, into = c("lib_id", "rest"), extra = "merge") %>% 
+  select(-rest) -> simplified_annotation
+rownames(simplified_annotation) = simplified_annotation$lib_id
+
+load_dot_env(file = ".env")
+
+
+# Load data, note that summarise_data should be in data/
+file_path = paste0(Sys.getenv(c("HOME_DIR")),"data/summarise_data")
+
+# determine the highest clonotype size in the data
+max_clonotype_size = 0
+for (i in list.files(path = file_path)){
+
+  tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
+  tmp = read.table(tmp_path, header = TRUE)
+
+
+  if (max(tmp$clonotype_size) > max_clonotype_size){
+    max_clonotype_size = max(tmp$clonotype_size)
+  }
+}
+
+# prepare empty data frame (df for frequency and df_complete for clonotype counts)
+df = data.frame(lib_id = character(), expansion_frequency = double())
+df_complete = data.frame()
+lib_ids = c()
+
+# loop over all files and fill the dataframes
+for (i in list.files(path = file_path)){
+
+  tmp_path = paste0(file_path,"/",i,"/clonotype_sizes.txt")
+  tmp = read.table(tmp_path, header = TRUE)
+
+  # calculate frequency of clonal expansion (clonotype size >= 2)
+  freq=tmp$clonotype_size*tmp$clonotype_count
+  sum_freq=sum(freq)
+  freq=(sum_freq - freq[1])/sum_freq
+
+  #split the string at "-" or "_" to remove "-preprocessed" and "POOL*" and
+  # remove the "B"
+  lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
+  lib_name = sub("B","",lib_name)
+
+  expand_tmp = list(lib_id = lib_name, expansion_frequency = freq)
+  df = rbind(df,expand_tmp)
+
+  lib_ids = c(lib_ids,lib_name)
+
+  # fill vector with zeros up to max clonotype size to have equal lengths
+  adjusted_clonotype_count = c(tmp$clonotype_count,
+                              rep(0,(max_clonotype_size -
+                              max(tmp$clonotype_size))))
+
+  df_complete = rbind(df_complete, adjusted_clonotype_count)
+  }
+
+colnames(df_complete) = 1:max_clonotype_size
+rownames(df_complete) = lib_ids
+```
+
+```{r, echo=FALSE}
+head(tmp)
+```
+Shown above is a part of such a table. A clonotype of size 1 means, that only one cell is in the cluster and is therefore unique.
+The tables of each sample (each folder in the output directory) are combined into a dataframe called `df_complete`. The column index of the dataframe indicates the clonotype size and the rownames specify the lib_id (sample name). Since the table of each lib_id directory has the same number of rows as the highest clonotype_size of that lib_id, the missing entries of `df_complete` are filled with zeros.
+A section of `df_complete` is shown below.
+```{r, echo=FALSE}
+df_complete[1:3,1:24]
+```
+
+
+We can also calculate the frequency of clonal expansion, using the definiton of clonal expansion of [@ramesh] of "as a highly similar B cell cluster containing two or more B cells". The clonal expansion frequency of a sample is therefore $\frac{\text{number of cells with clonotype_size >1}}{\text{total number of cell in the sample}}$. The clonal expansion frequencies of each sample are combined in the dataframe `df`.
+```{r, echo=FALSE}
+head(df)
+```
+
+For better visualization we also make a data frame where we pool all clonotype counts of size >4 into one category. We also make a separate data frame where we normalize by the number of cells per sample to get a proportion.
+```{r condensing dataframe}
+# condense all clonotypes > 4 into one category and make a new data frame
+condensed_sum = rowSums(df_complete[,-c(1:4)])
+df_summarized = cbind(df_complete[,c(1:4)],condensed_sum)
+colnames(df_summarized) = c(1:4, "> 4")
+
+# normalize by rowsum
+df_summarized_normalized = df_summarized/rowSums(df_summarized)
+head(df_summarized)
+```
+
+
+
+After we add the annotation data to the dataframes we are ready for plotting.
+```{r add the sample type to the dataframe, message=FALSE, warning=FALSE}
+library(tidyr)
+library(gtable)
+
+# merge the annotation with the data frames
+df = merge(df, simplified_annotation, by.x = "lib_id", by.y = "lib_id")
+rownames(simplified_annotation) = simplified_annotation$lib_id
+
+df_summarized = merge(df_summarized, simplified_annotation, by = "row.names")
+
+rownames(df_summarized) = df_summarized$Row.names
+df_summarized = subset(df_summarized, select = -Row.names)
+
+df_summarized_normalized = merge(df_summarized_normalized, simplified_annotation, by = "row.names")
+
+rownames(df_summarized_normalized) = df_summarized_normalized$Row.names
+df_summarized_normalized = subset(df_summarized_normalized, select = -Row.names)
+```
+
+
+If we try to analyse the clonotype vectors directly (so a row in df_complete above)
+and look how similar in terms of a euclidean distance they are, we can
+perform a hierarchical clustering and get the dendrogram below and perform a PCA
+
+
+```{r, message=FALSE, warning=FALSE}
+#plotting the clustering of id's according to their clonotype
+library(dendextend)
+library(ggfortify)
+
+df_cluster = df_summarized[,1:5]
+
+col = df_summarized$Sample.Type
+col = ifelse(col=="AP","black","red")
+
+dist_mat = dist(df_cluster, method = 'manhattan')
+hclust_avg = hclust(dist_mat, method = 'average')
+avg_dend_obj = as.dendrogram(hclust_avg)
+
+colors_to_use <- as.numeric(as.factor(col))
+colors_to_use <- colors_to_use[order.dendrogram(avg_dend_obj)]
+
+labels_colors(avg_dend_obj) <- colors_to_use
+
+plot(avg_dend_obj, main = "Dendrogram of Samples coloured by AP vs nonAP")
+legend("topright", legend = c("AP", "nonAP"), col = c("black", "red"), pch=c(20,20))
+```
+
+```{r plot the contributions of the PCA, message=FALSE, warning=FALSE}
+# plot the PCA of the datapoints
+pca = prcomp(df_cluster, center = TRUE, scale = TRUE)
+plot(pca, main = "Principle Component Analysis", xlab = "PCs")
+```
+```{r plot the PCA, message=FALSE, warning=FALSE, fig.width=14, fig.height=12}
+library(ggrepel)
+labels = df$lib_id
+outlier_labels = c("IJ020","IJ028", "IJ067")
+labels[df$lib_id %in% outlier_labels %>% !.] = ""
+autoplot(pca, scale = 0, colour = col, legend = TRUE) +
+  geom_text_repel(vjust=1.5, label=labels, min.segment.length = Inf) +
+  ggtitle("PCA plot AP (black) vs nonAP (red)")
+```
+
+
+We find that AP and nonAP samples actually cluster together already in terms of
+the clonotype sizes. When looking at the PCA, we see that we can explain
+most of the variability in our data with two principle components. When plotting
+the points, we note that one point (IJ028) prevents our data to be linearly
+separable. In the hierarchical clustering we see as well, that IJ028
+clusters with nonAP cells as well as the sample IJ020, which is the second
+closest point to the putative separation line.
+
+Plotted below are the absoulte counts of clonal expansion grouped by sample type and the proportion of clonal expansion grouped by sample type and diagnosis.
+```{r, plot the absolute clonal expansion, fig.width=14}
+library(ggplot2)
+melted = melt(df_summarized, id.vars = c("lib_id", "Sample.Type", "Diagnosis", "HLADR15"))
+ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
+  geom_bar(stat="identity", position = position_stack(reverse = TRUE)) +
+  theme(axis.text.x = element_text(angle = 90)) +
+  facet_grid(.~Sample.Type, scales = "free_x") +
+  labs(fill = "Clonal expansion") +
+  xlab("Sample Id") + ylab("Clonotype Count")
+```
+
+Looking at the plots we see that one point in the AP samples is again a bit 
+anomalous, with lesse expansion than the others. It is again IJ028 that we 
+saw clusters with the nonAP samples (see above).
+
+```{r, plot the relative clonal expansion, fig.width=14, fig.height=10}
+library(ggplot2)
+melted = melt(df_summarized_normalized, id.vars = c("lib_id", "Sample.Type", "Diagnosis", "HLADR15"))
+ggplot(data = melted, aes(fill=variable, x=lib_id, y=value)) +
+  geom_bar(stat="identity", position = position_stack(reverse = TRUE)) +
+  theme(axis.text.x = element_text(angle = 90)) +
+  facet_wrap(Sample.Type~Diagnosis, scales = "free_x") +
+  labs(fill = "Clonal expansion \nclonotype size") +
+  xlab("Sample Id") + ylab("Proportion of Clonotype Count")
+```
+
+If we look at the proportion of clonotype counts and compare the sample types we can see an increase in all clonotype size groups of type `AP`vs type `nonAP`. But we do not see a patten with respect to `diagnosis`.
+
+Next we look at the frequencies of clonal expanion.
+```{r plot the frequencies, message=FALSE, warning=FALSE}
+library(ggplot2)
+p <- ggplot(df, aes(x = Sample.Type, y = expansion_frequency, color = Diagnosis)) + geom_point() +
+  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+```
+
+Here we again see the increase in the frequency of `AP` vs `nonAP` but no pattern with respect to diagnosis.
+There is one AP point that overlaps in its clonal expansion frequency with 
+nonAP and upon checking we find again, that it is  our anomalous sample IJ028
+that has the lowest frequency of all of the samples.
+
+To verify our findings we will do a Mann–Whitney U test.
+```{r}
+#Shapiro-Wilk test to assess whether expansion frequencies are normal or not
+shapiro.test(df$expansion_frequency)
+```
+
+The Shapiro-Wilk test justifies the usage of a nonparameteric test as the
+Wilcoxon test used here.
+
+```{r Mann-Whitney-Wilcoxon Test}
+wilcox.test(expansion_frequency ~ Sample.Type, data=df)
+```
+As we can see the null hypothesis of true location shift is equal to 0 can be rejected under the significance level $\alpha = 0.05$.
+
+As an additional visualization we want to see if there is a pattern in the clonotype expansion frequency with regard to the haplotype HLA-DR15, but we again do not see a pattern.
+```{r plot frequency for HLADR15}
+library(ggplot2)
+p <- ggplot(df %>% subset(HLADR15 != "?"), aes(x = Sample.Type, y = expansion_frequency,
+                                               color = Diagnosis)) + geom_point() +
+  xlab("Sample Type") + ylab("clonal expansion frequency") + ylim(0,1) +
+  theme_bw() +
+  facet_grid(.~HLADR15, scales = "free_x") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+p
+```
+
+```{r clean up, include=FALSE}
+# clean up to free up memory
+rm(list = ls())
+```

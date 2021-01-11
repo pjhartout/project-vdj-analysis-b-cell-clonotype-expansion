@@ -34,8 +34,8 @@ B cells are lymphocytes and part of the adaptive immune response. At its surface
 is the B-cell receptor (BCR) that can bind to antigens. The antigen-binding part
 of the BCR is a membrane-bound immunoglobulin which can take on one of several
 classes known as *isotypes*. The most important isotypes are IgM, IgD, IgG, IgA
-and IgE. Upon binding, the B-cell will differentiate into plasmocytes --a type
-of effector cell-- that later on produce immunoglobulins (Ig). The secreted Ig
+and IgE. Upon binding, the B-cell will differentiate into plasmocytes--a type
+of effector cell--that later on produce immunoglobulins (Ig). The secreted Ig
 are of the same isotype as the BCR and bind their target antigens [@janeway].
 
 The general process of adaptive immunity is driven by the clonal selection
@@ -43,9 +43,9 @@ theory. This theory states that there are many different B cells in the body,
 each capable of producing antigen-specific antibodies and corresponding
 antigen-specific BCRs. In this pool of many different B cells, those that bind
 an antigen upon infection are activated and subsequently divide to produce many
-identical copies of themselves--a phenomenon referred to as clonal expansion--
-thereby producing clonotypes, which are populations of very similar, clonally
-expanded cells. [@janeway].
+identical copies of themselves--a phenomenon referred to as clonal
+expansion--thereby producing clonotypes, which are populations of very similar,
+clonally expanded cells. [@janeway].
 
 In order to make inferences about the size of each clonotype, it is important to
 reconstruct the sequence of the BCR from single cell RNA sequencing data
@@ -69,9 +69,6 @@ concentration upon each division cycle.
 
 This report is structured as follows: first, we perform an exploratory data
 analysis on the data where we lay out the experimental setting; second, we
-exposit our preprocessing pipeline using BraCer; third, we analyze clonotype
+exposit our preprocessing pipeline using `BraCeR`; third, we analyse clonotype
 frequency in *AP* and *nonAP*; fourth we perform an analysis of the isotype
 frequencies in *AP* and *nonAP*.
-
-Our null hypothesis is, that there is no difference between the two conditions
-*AP* and *nonAP* in terms of clonal expansion.

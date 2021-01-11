@@ -1,6 +1,10 @@
-# Isotype Analysis 
+# Isotype Analysis
 
-The files `BCR_summary.txt`from `summarise` contain a section *Isotype of cells with productive heavy chain*. As the name says it counts the isotype of the B-cell receptor of each cell in the sample. The section is a table with the columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown below, and use for downstream analysis.
+The files `BCR_summary.txt`from `summarise` contain a section "Isotype of cells
+with productive heavy chain". As the name says it counts the isotype of the
+B-cell receptor of each cell in the sample. The section is a table with the
+columns `Isotype`, `cells` and `% of cells`. This can be read into R, as shown
+below, and use for downstream analysis.
 ```{r Isotype analysis, message = FALSE, warning=FALSE}
 library(dplyr)
 library(tidyr)
@@ -44,7 +48,7 @@ for (i in list.files(path = file_path)){
   # and remove the "B"
   lib_name = strsplit(i, "[-_]+") %>% unlist() %>% .[1]
   lib_name = sub("B","",lib_name)
-  
+
   tmp_table$lib_id = lib_name
 
   isotype_df = rbind(isotype_df, tmp_table)
@@ -98,7 +102,7 @@ p <- ggplot(isotype_df, aes(x = Isotype, y = percent_of_cells, color = Sample.Ty
 p
 ```
 
-The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars 
+The comparisons were done with the Wilcoxon test, correction for multiple testing was done with Benjamini–Hochberg. The significance is indicated with stars
 
 
 | symbol | meaning       |

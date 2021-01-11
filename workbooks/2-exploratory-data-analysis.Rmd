@@ -43,7 +43,7 @@ library(ggplot2)
 simplified_annotation = cellUMI2SampleType %>%
   mutate(Sample.Type = ifelse(Sample.Type == "CFSEdim CD19+", "AP", "nonAP"))
 
-#saving the annotations so that we don't have to load it several times
+#saving the annotations so that we do not have to load it several times
 save(simplified_annotation, file = "annotation.RData")
 ```
 
@@ -72,7 +72,7 @@ Next we want to inspect how many cells we have per AP and nonAP sample. This can
 be done by looking at the demultiplexed files, which we discuss in the next section.
 
 ```{r, eval=FALSE, message=FALSE}
-# since we can't upload the entire demultiplexed folder, this chunk is not 
+# since we cannot upload the entire demultiplexed folder, this chunk is not 
 # evaluated but is here for completeness
 
 library(dplyr)

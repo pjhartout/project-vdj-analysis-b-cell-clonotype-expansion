@@ -13,7 +13,9 @@ This project is set up as follows:
 2. EDA
 3. Bracer workflow setup details
 4. Clonal expansion analysis
-5. Conclusion
+5. Isotype analysis
+6. Discussion
+7. Summary
 
 A full overview, analysis and summary of this project can be found in the [workbooks  directory](/workbooks/).
 
